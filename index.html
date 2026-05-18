@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Phase 2 — Tile Prototypes</title>
+  <link rel="stylesheet" href="https://use.typekit.net/ete4szq.css">
+  <script src="https://kit.fontawesome.com/9b51659ddd.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --black-100: #272D30;
+      --neutral-80: #525759;
+      --neutral-60: #7D8183;
+      --neutral-40: #A9ABAC;
+      --neutral-20: #D4D5D6;
+      --neutral-10: #E9EAEA;
+      --neutral-5: #F4F4F5;
+      --white: #FFFFFF;
+      --green-300: #224E04;
+      --green-200: #296401;
+      --green-100: #357A06;
+      --green-old: #3F9107;
+      --green-80: #6A994C;
+      --green-20: #D9E9CD;
+      --green-10: #ECF4E6;
+      --green-5: #F5FAF2;
+      --red-100: #F93A57;
+      --red-10: #FEEBEE;
+      --font-primary: 'proxima-nova', sans-serif;
+      --radius: 4px;
+      --shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-primary); background: var(--neutral-5); color: var(--black-100); padding: 32px; }
+
+    /* Page header / selector */
+    .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .page-header h1 { font-size: 20px; font-weight: 700; line-height: 24px; }
+
+    /* Tile section header */
+    .tile-section-header { margin-bottom: 24px; }
+    .tile-section-header h2 { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); margin-bottom: 4px; }
+    .tile-section-header .notion-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; line-height: 18px; color: var(--neutral-60);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .tile-section-header .notion-link:hover { color: var(--green-old); }
+    .tile-section-header .notion-link i { font-size: 12px; }
+    .tile-selector {
+      font-family: var(--font-primary); font-size: 14px; font-weight: 600; line-height: 18px;
+      padding: 8px 32px 8px 12px; border: 1px solid var(--neutral-20); border-radius: var(--radius);
+      background: var(--white); color: var(--black-100); cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23525759' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .tile-selector:hover { border-color: var(--neutral-40); }
+    .tile-selector:focus { outline: none; border-color: var(--green-old); }
+    .tile-panel { display: none; }
+    .tile-panel.active { display: block; }
+
+    /* Tile */
+    .tile { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: 0px 1px 3px rgba(0,0,0,0.08); width: 812px; height: 424px; max-width: 100%; display: flex; flex-direction: column; }
+    .tile.half { width: 394px; }
+    .tile.wide { width: 900px; height: auto; }
+    .tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
+    .tile-title { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; }
+
+    /* Toggle */
+    .toggle-group { display: flex; }
+    .toggle-btn {
+      font-family: var(--font-primary); font-size: 14px; font-weight: 700; line-height: 18px;
+      height: 28px; padding: 0 16px; border: 1px solid var(--neutral-20); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s; color: var(--black-100);
+    }
+    .toggle-btn:first-child { border-radius: 4px 0 0 4px; }
+    .toggle-btn:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+    .toggle-btn.active { background: var(--neutral-20); }
+    .toggle-btn:not(.active) { background: var(--white); }
+    .toggle-btn:hover:not(.active) { background: var(--neutral-10); }
+
+    /* Chart */
+    .chart-area { position: relative; width: 100%; flex: 1; min-height: 0; margin-bottom: 16px; }
+
+    /* Goal label pill */
+    .goal-label {
+      position: absolute; right: 0; display: flex; align-items: center; gap: 8px;
+      background: var(--black-100); color: var(--white); padding: 4px 8px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 700; line-height: 18px; z-index: 2; cursor: pointer;
+    }
+    .goal-label i { font-size: 14px; opacity: 0.8; }
+    .goal-label:hover { opacity: 0.9; }
+
+    /* Custom tooltip */
+    .custom-tooltip {
+      position: absolute; background: var(--white); border: 0.5px solid var(--neutral-40);
+      padding: 2px 6px 6px; z-index: 10; pointer-events: none; display: none; min-width: 155px;
+    }
+    .custom-tooltip .tt-month { font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); text-align: center; margin-bottom: 6px; }
+    .custom-tooltip .tt-row { display: flex; align-items: center; gap: 12px; padding: 1px 0; }
+    .custom-tooltip .tt-series { display: flex; align-items: center; gap: 2px; }
+    .custom-tooltip .tt-line { width: 17px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+    .custom-tooltip .tt-label { font-size: 14px; line-height: 18px; color: var(--neutral-80); }
+    .custom-tooltip .tt-value { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); margin-left: auto; white-space: nowrap; }
+
+    /* Footer */
+    .tile-footer { display: flex; align-items: center; gap: 16px; }
+    .footer-totals { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .todays-total { font-size: 16px; line-height: 21px; cursor: pointer; }
+    .todays-total:hover { text-decoration: underline; }
+    .todays-total strong { font-weight: 700; }
+    .prior-totals { display: flex; gap: 12px; font-size: 12px; line-height: 18px; color: var(--neutral-60); align-items: center; }
+    .prior-total-item { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+    .prior-total-item:hover { text-decoration: underline; }
+    .delta-chip {
+      display: inline-flex; align-items: center; gap: 2px;
+      font-size: 11px; font-weight: 700; line-height: 14px;
+      padding: 1px 5px; border-radius: 3px;
+    }
+    .delta-chip.up { background: var(--green-10); color: var(--green-200); }
+    .delta-chip.down { background: var(--red-10); color: var(--red-100); }
+
+    .past-goals-btn {
+      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
+      color: var(--green-old); background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: var(--radius);
+    }
+    .past-goals-btn:hover { background: var(--green-5); }
+
+    .legend-box { display: flex; gap: 12px; align-items: flex-start; padding: 6px; border: 0.5px solid var(--neutral-40); font-size: 14px; line-height: 18px; color: var(--neutral-80); }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-line { width: 17px; height: 4px; border-radius: 2px; }
+    .legend-line.fy24 { background: var(--neutral-40); }
+    .legend-line.fy25 { background: var(--neutral-80); }
+    .legend-line.fy26 { background: var(--green-old); }
+
+    /* ===== MoM bar chart ===== */
+    .mom-chart-area { position: relative; width: 100%; flex: 1; min-height: 0; margin-bottom: 16px; }
+    .mom-custom-tooltip {
+      position: absolute; background: var(--white); border: 0.5px solid var(--neutral-40);
+      padding: 2px 6px 6px; z-index: 10; pointer-events: none; display: none; min-width: 155px;
+    }
+    .mom-custom-tooltip .tt-month { font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); text-align: center; margin-bottom: 6px; }
+    .mom-custom-tooltip .tt-row { display: flex; align-items: center; gap: 12px; padding: 1px 0; }
+    .mom-custom-tooltip .tt-series { display: flex; align-items: center; gap: 2px; }
+    .mom-custom-tooltip .tt-line { width: 17px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+    .mom-custom-tooltip .tt-label { font-size: 14px; line-height: 18px; color: var(--neutral-80); }
+    .mom-custom-tooltip .tt-value { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); margin-left: auto; white-space: nowrap; }
+    .mom-footer { display: flex; align-items: center; justify-content: flex-end; }
+
+    /* ===== Donor Retention tile ===== */
+    .dr-header-btn {
+      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
+      color: var(--black-100); background: var(--white); border: 1px solid var(--black-100);
+      border-radius: var(--radius); padding: 4px 8px; cursor: pointer; display: flex;
+      align-items: center; gap: 8px; position: relative; white-space: nowrap;
+    }
+    .dr-header-btn:hover { background: var(--neutral-5); }
+    .dr-header-btn i { font-size: 14px; }
+
+    .dr-charts { display: flex; gap: 16px; flex: 1; min-height: 0; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .dr-chart-card {
+      flex: 1; min-width: 0; height: 100%; background: var(--white); border: 1px solid var(--neutral-20);
+      border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+    }
+    .dr-chart-card.hidden { display: none; }
+    .dr-chart-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); text-align: center; margin-bottom: 6px; }
+    .dr-chart-subtitle { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); text-align: center; }
+    .dr-chart-title-row { display: flex; align-items: center; gap: 4px; justify-content: center; }
+    .dr-chart-title-row .dr-edit-btn {
+      position: relative; width: 24px; height: 24px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; color: var(--neutral-60); font-size: 13px;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s; flex-shrink: 0; margin-top: -4px;
+    }
+    .dr-chart-title-row .dr-edit-btn:hover { background: var(--neutral-20); color: var(--black-100); }
+    .dr-chart-title-row .dr-edit-btn .icon-outline { display: inline; }
+    .dr-chart-title-row .dr-edit-btn .icon-solid { display: none; }
+    .dr-chart-title-row .dr-edit-btn:hover .icon-outline { display: none; }
+    .dr-chart-title-row .dr-edit-btn:hover .icon-solid { display: inline; }
+    .dr-chart-title-row .dr-edit-btn .dr-edit-tooltip {
+      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400;
+      line-height: 18px; padding: 8px 16px; border-radius: 3px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 10;
+    }
+    .dr-chart-title-row .dr-edit-btn:hover .dr-edit-tooltip { opacity: 1; }
+
+    .donut-wrap { position: relative; width: 136px; height: 136px; flex-shrink: 0; }
+    .donut-wrap svg { width: 100%; height: 100%; }
+    .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+    .donut-pct { font-size: 29px; font-weight: 600; line-height: 35px; color: var(--black-100); }
+    .donut-label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+
+    .dr-chart-legend { display: flex; gap: 16px; align-items: center; justify-content: center; }
+    .dr-chart-legend .legend-item { gap: 4px; font-size: 12px; color: var(--neutral-80); }
+    .dr-chart-legend .legend-line { height: 6px; border-radius: 999px; }
+
+    .dr-footer { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .dr-footer-info { flex: 1; display: flex; align-items: center; gap: 8px; }
+    .dr-footer-info i { font-size: 16px; color: var(--black-100); flex-shrink: 0; }
+    .dr-footer-info span { font-size: 12px; line-height: 18px; color: var(--black-100); }
+    .dr-threshold-legend { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .dr-threshold-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--black-100); }
+    .dr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dr-dot.green { background: var(--green-old); }
+    .dr-dot.orange { background: #D96B0C; }
+    .dr-dot.red { background: var(--red-100); }
+
+    /* Show/Hide dropdown */
+    .dr-dropdown {
+      position: absolute; top: calc(100% + 4px); right: 0; background: var(--white);
+      border-radius: var(--radius); box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+      min-width: 260px; z-index: 20; display: none; padding: 8px 0;
+    }
+    .dr-dropdown.open { display: block; }
+    .dr-dropdown-item {
+      display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+      font-size: 16px; line-height: 21px; color: var(--black-100); cursor: pointer;
+      background: none; border: none; width: 100%; text-align: left; font-family: var(--font-primary);
+      position: relative;
+    }
+    .dr-dropdown-item:hover { background: var(--neutral-5); }
+    .dr-checkbox {
+      width: 18px; height: 18px; border: 2px solid var(--neutral-60); border-radius: 2px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s;
+    }
+    .dr-checkbox.checked { background: var(--green-old); border-color: var(--green-old); }
+    .dr-checkbox i { font-size: 10px; color: var(--white); display: none; }
+    .dr-checkbox.checked i { display: block; }
+    .dr-checkbox.disabled { background: var(--neutral-40); border-color: var(--neutral-40); cursor: not-allowed; }
+    .dr-checkbox.disabled i { display: block; }
+    .dr-dropdown-item.disabled { cursor: default; color: var(--neutral-60); }
+    .dr-dropdown-item.disabled:hover { background: var(--white); }
+    .dr-dropdown-item .dr-tooltip {
+      display: none; position: absolute; left: 50%; transform: translateX(-50%);
+      top: calc(100% + 4px); background: var(--black-100); color: var(--white);
+      font-size: 14px; font-weight: 400; line-height: 18px; padding: 8px 16px;
+      border-radius: 3px; white-space: nowrap; z-index: 30; pointer-events: none;
+    }
+    .dr-dropdown-item.disabled:hover .dr-tooltip { display: block; }
+
+    /* ===== Key Metrics tile ===== */
+    .km-badge {
+      background: var(--neutral-10); padding: 3px 6px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
+    }
+    .km-badge.small { font-size: 12px; }
+    .km-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-height: 0; }
+    .km-card {
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px;
+      display: flex; flex-direction: column; gap: 4px; justify-content: center;
+    }
+    .km-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
+    .km-value.clickable { cursor: pointer; }
+    .km-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .km-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
+    .km-trend { display: flex; align-items: center; gap: 2px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 4px; }
+    .km-trend .trend-icon { font-size: 16px; }
+    .km-trend .trend-icon.up { color: var(--green-old); }
+    .km-trend .trend-icon.down { color: var(--red-100); }
+    .km-trend .trend-icon.neutral { color: var(--neutral-60); }
+    .km-trend .trend-change { font-weight: 600; }
+
+    /* ===== Recurring Giving Health tile ===== */
+    .rgh-snapshot { display: flex; gap: 16px; }
+    .rgh-snap-card {
+      flex: 1; background: var(--white); border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 40px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .rgh-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
+    .rgh-snap-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
+    .rgh-snap-value.clickable { cursor: pointer; }
+    .rgh-snap-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .rgh-divider { width: 100%; height: 1px; background: var(--neutral-20); flex-shrink: 0; margin: 32px 0 24px; }
+    .rgh-movement { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+    .rgh-movement-header { display: flex; align-items: center; justify-content: space-between; }
+    .rgh-month { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+    .rgh-net { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; line-height: 18px; color: var(--green-old); }    .rgh-net .net-icon { width: 10px; height: 10px; border: 2px solid var(--green-old); border-radius: 2px; }
+    .rgh-metrics { display: flex; gap: 16px; }
+    .rgh-metric {
+      flex: 1; display: flex; gap: 9px; padding: 6px 10px; border-radius: var(--radius);
+      align-items: center;
+    }
+    .rgh-accent { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+    .rgh-accent.green { background: var(--green-old); }
+    .rgh-accent.orange { background: #D96B0C; }
+    .rgh-metric-content { display: flex; flex-direction: column; }
+    .rgh-metric-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
+    .rgh-metric-value.clickable { cursor: pointer; }
+    .rgh-metric-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .rgh-metric-label { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+    .rgh-last-month { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--green-old); cursor: pointer; }
+    .rgh-last-month:hover { text-decoration: underline; }
+
+    /* ===== Donor Momentum tile ===== */
+    .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
+    .dm-cards { display: flex; flex-direction: column; gap: 6px; }
+    .dm-card {
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 11px 16px;
+      display: flex; align-items: stretch; gap: 8px;
+    }
+    .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .dm-card-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
+    .dm-badge {
+      display: inline-block; padding: 2px 6px; border-radius: var(--radius);
+      font-size: 12px; font-weight: 700; line-height: 18px; white-space: nowrap; width: fit-content;
+    }
+    .dm-badge.green { background: #D9E9CD; color: #317005; }
+    .dm-badge.blue { background: #D4E6FA; color: #10437F; }
+    .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
+    .dm-badge.red { background: #FCEBEB; color: #791F1F; }
+    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 4px; }
+    .dm-big-num:hover { color: var(--green-old); text-decoration: underline; }
+    .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
+    .dm-yoy .trend-change { font-weight: 600; }
+    .dm-yoy .trend-icon.up { color: var(--green-old); }
+    .dm-yoy .trend-icon.down { color: var(--red-100); }
+    .dm-sparkline-label { font-size: 12px; color: var(--neutral-60); text-align: center; }
+    .dm-divider { width: 100%; height: 1px; background: var(--neutral-20); margin: 12px 0; }
+    .dm-at-risk-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 2px; }
+    .dm-stake-row { display: flex; align-items: center; gap: 6px; }
+    .dm-stake-icon { color: #FFC600; font-size: 20px; }
+    .dm-stake-value { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
+    .dm-stake-label { font-size: 12px; color: var(--neutral-60); display: flex; align-items: center; gap: 4px; }
+    .dm-subtitle { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
+
+    /* ===== Donors by Level tile ===== */
+    .dbl-toggle { display: flex; align-items: center; flex-shrink: 0; }
+    .dbl-toggle-btn {
+      font-family: var(--font-primary); font-size: 14px; font-weight: 700; line-height: 18px;
+      color: var(--black-100); border: 1px solid var(--neutral-20); padding: 4px 12px;
+      cursor: pointer; background: var(--white); height: 28px;
+    }
+    .dbl-toggle-btn:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .dbl-toggle-btn:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: none; }
+    .dbl-toggle-btn.active { background: var(--neutral-20); }
+    .dbl-cards { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
+    .dbl-card {
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; justify-content: center;
+    }
+    .dbl-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .dbl-amount { display: flex; flex-direction: column; align-items: flex-end; }
+    .dbl-amount-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); cursor: pointer; }
+    .dbl-amount-value:hover { color: var(--green-old); text-decoration: underline; }
+    .dbl-amount-label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+    .dbl-bottom { display: flex; gap: 12px; }
+    .dbl-col { flex: 1; display: flex; gap: 8px; align-items: center; }
+    .dbl-col-accent { width: 3px; border-radius: 2px; align-self: stretch; min-height: 20px; }
+    .dbl-col-accent.green { background: var(--green-old); }
+    .dbl-col-accent.gray { background: var(--neutral-60); }
+    .dbl-col-text { font-size: 14px; line-height: 18px; color: var(--black-100); }
+    .dbl-col-text strong { font-weight: 700; font-size: 16px; }
+    .dbl-col-text .dbl-link { cursor: pointer; font-size: 16px; font-weight: 700; color: var(--black-100); }
+    .dbl-col-text .dbl-link:hover { color: var(--green-old); text-decoration: underline; }
+
+    /* ===== Giving by Level tile ===== */
+    .gbl-body { display: flex; gap: 0; flex: 1; min-height: 0; }
+    .gbl-left { width: 50%; padding-right: 24px; display: flex; flex-direction: column; }
+    .gbl-right { width: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
+    .gbl-row {
+      display: flex; align-items: center; gap: 40px; padding: 8px;
+      border-bottom: 1px solid var(--neutral-20);
+    }
+    .gbl-row:last-child { border-bottom: none; }
+    .gbl-row-left { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .gbl-row-right { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 16px; color: var(--black-100); }
+    .gbl-period { font-size: 16px; font-weight: 400; line-height: 21px; color: var(--black-100); }
+    .gbl-amount { font-size: 36px; font-weight: 700; line-height: 42px; color: var(--black-100); cursor: pointer; }
+    .gbl-amount:hover { color: var(--green-old); text-decoration: underline; }
+    .gbl-info-icon { color: var(--neutral-40); font-size: 14px; cursor: help; margin-left: 4px; }
+
+    /* ===== State Toggle (Has Data / Empty State) ===== */
+    .state-toggle { display: flex; gap: 0; margin-top: 8px; }
+    .state-toggle-btn {
+      font-family: var(--font-primary); font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--neutral-80); border: 1px solid var(--neutral-20); padding: 4px 12px;
+      cursor: pointer; background: var(--white);
+    }
+    .state-toggle-btn:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .state-toggle-btn:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: none; }
+    .state-toggle-btn.active { background: var(--neutral-20); color: var(--black-100); }
+    .tile-state-data, .tile-state-empty { display: contents; }
+    .tile-state-empty { display: none; }
+    .tile.show-empty .tile-state-data { display: none; }
+    .tile.show-empty .tile-state-empty { display: contents; }
+    .tile.show-empty .dr-header-btn { visibility: hidden; }
+
+    /* ===== Tooltips ===== */
+    .has-tooltip { position: relative; }
+    .has-tooltip .tooltip-text {
+      visibility: hidden; opacity: 0; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%); background: black; color: white;
+      padding: 8px 16px; font-size: 14px; font-weight: 400; line-height: 18px;
+      white-space: normal; width: 220px; text-align: center;
+      border-radius: 3px; z-index: 100; transition: opacity 0.15s;
+    }
+    .has-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+    .info-icon-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--neutral-40); font-size: 14px; cursor: pointer; margin-left: 0; vertical-align: middle;
+    }
+
+    /* ===== Modals ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; display: flex; flex-direction: column; }
+    .modal-header { display: flex; align-items: center; padding: 24px; gap: 4px; }
+    .modal-header h2 { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
+    .modal-close { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--neutral-60); background: none; border: none; font-size: 20px; transition: background .15s, color .15s; }
+    .modal-close:hover { color: var(--black-100); background: var(--neutral-20); }
+    .modal-body { padding: 0 24px; }
+    .modal-footer { display: flex; align-items: center; justify-content: flex-end; padding: 24px; gap: 16px; }
+    .btn { font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
+    .btn-secondary { background: var(--white); border: 1px solid var(--black-100); color: var(--black-100); }
+    .btn-secondary:hover { background: var(--neutral-5); }
+    .btn-primary { background: var(--green-old); color: var(--white); }
+    .btn-primary:hover { background: var(--green-200); }
+
+    .goal-row { display: flex; flex-direction: column; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--neutral-20); }
+    .goal-row + .goal-row { margin-top: 24px; }
+    .goal-row-header { display: flex; align-items: center; justify-content: space-between; }
+    .goal-row-fy { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
+    .goal-row-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); display: flex; align-items: center; gap: 8px; }
+    .goal-row-pct .fa-circle-check { color: var(--green-old); }
+    .goal-progress-bg { width: 100%; height: 8px; background: var(--neutral-10); border-radius: 999px; }
+    .goal-progress-fill { height: 8px; border-radius: 999px; }
+    .goal-progress-fill.current { background: var(--green-old); }
+    .goal-progress-fill.past { background: var(--neutral-60); }
+    .goal-row-meta { display: flex; justify-content: space-between; font-size: 14px; line-height: 18px; color: var(--black-100); }
+
+    /* MUI floating label input */
+    .mui-field { position: relative; width: 100%; }
+    .mui-field input {
+      width: 100%; height: 56px; border: 1px solid var(--neutral-40); border-radius: var(--radius);
+      padding: 0 16px 0 44px; font-family: var(--font-primary); font-size: 16px; font-weight: 400;
+      line-height: 21px; color: var(--black-100); background: var(--white); outline: none; transition: border-color .15s;
+    }
+    .mui-field input:focus { border-color: var(--green-old); border-width: 2px; }
+    .mui-field .field-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: #4E5555; font-size: 16px; pointer-events: none;
+    }
+    .mui-field label {
+      position: absolute; left: 44px; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-primary); font-size: 16px; font-weight: 400; line-height: 21px;
+      color: #4E5555; pointer-events: none; background: transparent; padding: 0;
+      transition: top .15s, font-size .15s, color .15s, left .15s, background .1s, padding .1s;
+      white-space: nowrap;
+    }
+    .mui-field input:focus + label,
+    .mui-field input:not(:placeholder-shown) + label {
+      top: 0; left: 16px; font-size: 12px; line-height: 18px;
+      background: var(--white); padding: 0 4px; transform: translateY(-50%); color: var(--black-100);
+    }
+    .mui-field input:focus + label { color: var(--green-old); }
+    .mui-field.has-error input, .mui-field.has-error input:focus { border-color: var(--red-100); }
+    .mui-field.has-error input:focus + label,
+    .mui-field.has-error input:not(:placeholder-shown) + label { color: var(--red-100); }
+    .mui-field.has-error input:focus + label {
+      top: 0; left: 16px; font-size: 12px; background: var(--white); padding: 0 4px; transform: translateY(-50%);
+    }
+    .field-error-msg { font-size: 14px; line-height: 18px; color: var(--red-100); display: none; padding: 4px 0 4px 16px; }
+    .field-error-msg.visible { display: block; }
+
+    /* Delete button (circular icon) */
+    .btn-danger-text {
+      position: relative; width: 34px; height: 34px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; color: var(--neutral-60);
+      display: inline-flex; align-items: center; justify-content: center; transition: background .15s, color .15s; flex-shrink: 0;
+    }
+    .btn-danger-text:hover { background: var(--neutral-20); color: var(--black-100); }
+    .btn-danger-text i { font-size: 18px; }
+    .btn-danger-text .tooltip-text {
+      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400; line-height: 18px;
+      padding: 8px 12px; border-radius: var(--radius); white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity .15s; z-index: 10;
+    }
+    .btn-danger-text:hover .tooltip-text { opacity: 1; }
+
+    /* Modal animation */
+    .modal-overlay { transition: opacity .2s; }
+    .modal-overlay .modal { transform: translateY(10px); transition: transform .2s; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-footer .spacer { flex: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <h1>Dashboard Phase 2 Tiles</h1>
+    <select class="tile-selector" id="tile-selector">
+      <option value="yoy-pacing" selected>Cumulative Year-Over-Year Pacing</option>
+      <option value="mom-comparison">Month-Over-Month Comparison</option>
+      <option value="donor-retention">Donor Retention</option>
+      <option value="key-metrics">Key Metrics</option>
+      <option value="recurring-health">Recurring Giving Health</option>
+      <option value="donor-momentum">Donor Momentum</option>
+      <option value="donors-by-level">Donors by Level</option>
+      <option value="giving-by-level">Giving by Level</option>
+    </select>
+  </div>
+
+  <!-- ===== YOY PACING ===== -->
+  <div id="yoy-pacing" class="tile-panel active">
+
+    <div class="tile-section-header">
+      <h2>Cumulative Year-Over-Year Pacing</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Product-Statement-Cumulative-Year-Over-Year-Pacing-Tile-35af8da2e76f801aabd5c5766c047f6d" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-a')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-a')">Empty State</button>
+      </div>
+    </div>
+
+    <!-- OPTION A: Chart-Forward -->
+    <div class="tile" id="tile-a">
+      <div class="tile-header">
+        <div class="tile-title">Cumulative Year-Over-Year Pacing</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active">Revenue</button>
+          <button class="toggle-btn">Raised</button>
+        </div>
+      </div>
+      <div class="tile-state-data">
+      <div class="chart-area" id="chart-area-a">
+        <div class="goal-label" id="goal-label-a" style="top:20px;" onclick="openModal('edit-goal-modal')">
+          350K Goal (FY 26) <i class="fa-regular fa-pen-to-square"></i>
+        </div>
+        <div class="custom-tooltip" id="tooltip-a">
+          <div class="tt-month"></div>
+          <div class="tt-row tt-fy26"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">FY26</span></div><span class="tt-value"></span></div>
+          <div class="tt-row tt-fy25"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-80);"></span><span class="tt-label">FY25</span></div><span class="tt-value"></span></div>
+          <div class="tt-row tt-fy24"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-40);"></span><span class="tt-label">FY24</span></div><span class="tt-value"></span></div>
+        </div>
+        <canvas id="chart-a"></canvas>
+      </div>
+      <div class="tile-footer">
+        <div class="footer-totals">
+          <div class="todays-total">Today's Total: <strong>$250,000</strong></div>
+          <div class="prior-totals">
+            <span class="prior-total-item">FY25: $198,200 <span class="delta-chip up"><i class="fa-solid fa-arrow-up" style="font-size:9px;"></i> 26%</span></span>
+            <span class="prior-total-item">FY24: $175,400 <span class="delta-chip up"><i class="fa-solid fa-arrow-up" style="font-size:9px;"></i> 43%</span></span>
+          </div>
+        </div>
+        <button class="past-goals-btn" onclick="openModal('goal-history-modal')">Past Goals <i class="fa-regular fa-arrow-up-right-from-square"></i></button>
+        <div class="legend-box">
+          <div class="legend-item"><span class="legend-line fy24"></span> FY24</div>
+          <div class="legend-item"><span class="legend-line fy25"></span> FY25</div>
+          <div class="legend-item"><span class="legend-line fy26"></span> FY26</div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+        No revenue data to display yet
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+
+  </div>
+
+  <!-- ===== MONTH-OVER-MONTH COMPARISON ===== -->
+  <div id="mom-comparison" class="tile-panel">
+
+    <div class="tile-section-header">
+      <h2>Month-Over-Month Comparison</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Month-Over-Month-Comparison-Tile-35df8da2e76f802d9e5fcd6cb7018b70" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-mom')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-mom')">Empty State</button>
+      </div>
+    </div>
+
+    <div class="tile" id="tile-mom">
+      <div class="tile-header">
+        <div class="tile-title">Month-Over-Month Comparison</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active">Revenue</button>
+          <button class="toggle-btn">Raised</button>
+        </div>
+      </div>
+      <div class="tile-state-data">
+      <div class="mom-chart-area" id="chart-area-mom">
+        <div class="mom-custom-tooltip" id="tooltip-mom">
+          <div class="tt-month"></div>
+          <div class="tt-row tt-fy26"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">FY26</span></div><span class="tt-value"></span></div>
+          <div class="tt-row tt-fy25"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-80);"></span><span class="tt-label">FY25</span></div><span class="tt-value"></span></div>
+          <div class="tt-row tt-fy24"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-60);"></span><span class="tt-label">FY24</span></div><span class="tt-value"></span></div>
+        </div>
+        <canvas id="chart-mom"></canvas>
+      </div>
+      <div class="mom-footer">
+        <div class="legend-box">
+          <div class="legend-item"><span class="legend-line fy24"></span> FY24</div>
+          <div class="legend-item"><span class="legend-line fy25"></span> FY25</div>
+          <div class="legend-item"><span class="legend-line fy26"></span> FY26</div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+        No monthly revenue data to display yet
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== DONOR RETENTION ===== -->
+  <div id="donor-retention" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Donor Retention</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Product-Statement-Donor-Retention-Tile-35df8da2e76f80c6a31bcce8cd4fca96" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dr')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dr')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile" id="tile-dr">
+      <div class="tile-header">
+        <div class="tile-title">Donor Retention</div>
+        <div style="position:relative;">
+          <button class="dr-header-btn" id="dr-toggle-btn" onclick="toggleDrDropdown()">
+            Show/Hide Graphs <i class="fa-solid fa-caret-down"></i>
+          </button>
+          <div class="dr-dropdown" id="dr-dropdown">
+            <button class="dr-dropdown-item" id="ddi-overall" onclick="toggleDrChart('overall')">
+              <span class="dr-checkbox checked" id="cb-overall"><i class="fa-solid fa-check"></i></span>
+              Overall Retention
+              <span class="dr-tooltip">Tile must have at least one chart</span>
+            </button>
+            <button class="dr-dropdown-item" id="ddi-firsttime" onclick="toggleDrChart('firsttime')">
+              <span class="dr-checkbox checked" id="cb-firsttime"><i class="fa-solid fa-check"></i></span>
+              First-time Donor Retention
+              <span class="dr-tooltip">Tile must have at least one chart</span>
+            </button>
+            <button class="dr-dropdown-item" id="ddi-custom" onclick="toggleDrChart('custom')">
+              <span class="dr-checkbox checked" id="cb-custom"><i class="fa-solid fa-check"></i></span>
+              Custom Retention
+              <span class="dr-tooltip">Tile must have at least one chart</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile-state-data">
+      <div class="dr-charts" id="dr-charts">
+        <!-- Overall Retention: 72% green -->
+        <div class="dr-chart-card" id="card-overall">
+          <div>
+            <div class="dr-chart-title">Overall Retention</div>
+            <div class="dr-chart-subtitle">(Rolling)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#3F9107" stroke-width="16"
+                stroke-dasharray="244.3" stroke-dashoffset="67.6"
+                transform="rotate(-90 68 68)" style="cursor:pointer;" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">72%</span><span class="donut-label">Retained</span></div>
+          </div>
+          <div class="dr-chart-legend">
+            <div class="legend-item"><span class="legend-line" style="background:var(--green-old);"></span> Retained</div>
+            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
+          </div>
+        </div>
+
+        <!-- First-Time Donor Retention: 72% green -->
+        <div class="dr-chart-card" id="card-firsttime">
+          <div>
+            <div class="dr-chart-title">First-Time Donor Retention</div>
+            <div class="dr-chart-subtitle">(Rolling)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#3F9107" stroke-width="16"
+                stroke-dasharray="244.3" stroke-dashoffset="67.6"
+                transform="rotate(-90 68 68)" style="cursor:pointer;" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">72%</span><span class="donut-label">Retained</span></div>
+          </div>
+          <div class="dr-chart-legend">
+            <div class="legend-item"><span class="legend-line" style="background:var(--green-old);"></span> Retained</div>
+            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
+          </div>
+        </div>
+
+        <!-- Custom Retention: 46% orange -->
+        <div class="dr-chart-card" id="card-custom">
+          <div>
+            <div class="dr-chart-title-row">
+              <span class="dr-chart-title">Custom Retention</span>
+              <button class="dr-edit-btn" onclick="openModal('edit-custom-modal')">
+                <i class="fa-regular fa-pen icon-outline" aria-hidden="true"></i>
+                <i class="fa-solid fa-pen icon-solid" aria-hidden="true"></i>
+                <span class="dr-edit-tooltip">Edit</span>
+              </button>
+            </div>
+            <div class="dr-chart-subtitle">(Calendar Year)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D96B0C" stroke-width="16"
+                stroke-dasharray="156.1" stroke-dashoffset="0"
+                transform="rotate(-90 68 68)" style="cursor:pointer;" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">46%</span><span class="donut-label">Retained</span></div>
+          </div>
+          <div class="dr-chart-legend">
+            <div class="legend-item"><span class="legend-line" style="background:#D96B0C;"></span> Retained</div>
+            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
+          </div>
+        </div>
+      </div>
+
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="dr-charts">
+        <div class="dr-chart-card">
+          <div>
+            <div class="dr-chart-title">Overall Retention</div>
+            <div class="dr-chart-subtitle">(Rolling)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
+          </div>
+        </div>
+        <div class="dr-chart-card">
+          <div>
+            <div class="dr-chart-title">First-Time Donor Retention</div>
+            <div class="dr-chart-subtitle">(Rolling)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
+          </div>
+        </div>
+        <div class="dr-chart-card">
+          <div>
+            <div class="dr-chart-title">Custom Retention</div>
+            <div class="dr-chart-subtitle">(Rolling)</div>
+          </div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 136 136">
+              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+            </svg>
+            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+
+      <div class="dr-footer">
+        <div class="dr-footer-info">
+          <i class="fa-regular fa-circle-info"></i>
+          <span>Household-level calculations apply. Dashboard totals may differ from constituent report totals.</span>
+        </div>
+        <div class="dr-threshold-legend">
+          <div class="dr-threshold-item"><span class="dr-dot green"></span> &gt; 60%</div>
+          <div class="dr-threshold-item"><span class="dr-dot orange"></span> 40-59%</div>
+          <div class="dr-threshold-item"><span class="dr-dot red"></span> &lt; 40%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KEY METRICS ===== -->
+  <div id="key-metrics" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Key Metrics</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Key-Metrics-Tile-35ef8da2e76f800ea84dc087e262dd3f" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-km')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-km')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile half" id="tile-km">
+      <div class="tile-header">
+        <div class="tile-title">Key Metrics</div>
+        <span class="km-badge">Current FY</span>
+      </div>
+      <div class="tile-state-data">
+      <div class="km-grid">
+        <!-- Total Donor Count -->
+        <div class="km-card">
+          <div class="km-value clickable">13,560</div>
+          <div class="km-label">Total Donor Count</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-down trend-icon down"></i>
+            <span><span class="trend-change">6</span> from last month</span>
+          </div>
+        </div>
+        <!-- New Donor Count -->
+        <div class="km-card">
+          <div class="km-value clickable">4,280</div>
+          <div class="km-label">New Donor Count</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">12</span> from last month</span>
+          </div>
+        </div>
+        <!-- Total Transactions -->
+        <div class="km-card">
+          <div class="km-value clickable">13,560</div>
+          <div class="km-label">Total Transactions</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">5</span> from last month</span>
+          </div>
+        </div>
+        <!-- Avg Gift Size -->
+        <div class="km-card">
+          <div class="km-value">$412</div>
+          <div class="km-label">Avg Gift Size</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">15%</span> from last month</span>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="km-grid">
+        <div class="km-card">
+          <div class="km-value">0</div>
+          <div class="km-label">Total Donor Count</div>
+        </div>
+        <div class="km-card">
+          <div class="km-value">0</div>
+          <div class="km-label">New Donor Count</div>
+        </div>
+        <div class="km-card">
+          <div class="km-value">0</div>
+          <div class="km-label">Total Transactions</div>
+        </div>
+        <div class="km-card">
+          <div class="km-value">$0</div>
+          <div class="km-label">Avg Gift Size</div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== RECURRING GIVING HEALTH ===== -->
+  <div id="recurring-health" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Recurring Giving Health</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Recurring-Giving-Health-Tile-35ef8da2e76f80498042e56ca57db863" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-rgh')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-rgh')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile half" id="tile-rgh">
+      <div class="tile-header">
+        <div class="tile-title">Recurring Giving Health</div>
+        <span class="km-badge">May 2026</span>
+      </div>
+
+      <div class="tile-state-data">
+      <!-- Zone 1: Snapshot -->
+      <div class="rgh-snapshot">
+        <div class="rgh-snap-card">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="rgh-snap-value clickable">412</div>
+            <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explains why count may differ from the Recurring Group.</span></span>
+          </div>
+          <div class="rgh-snap-label">Active recurring donors</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">5</span> from last month</span>
+          </div>
+        </div>
+        <div class="rgh-snap-card">
+          <div class="rgh-snap-value">$135K</div>
+          <div class="rgh-snap-label">Annualized revenue</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">8%</span> from last month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="rgh-divider"></div>
+
+      <!-- Zone 2: Monthly Movement -->
+      <div class="rgh-movement">
+        <div class="rgh-metrics">
+          <div class="rgh-metric">
+            <div class="rgh-accent green"></div>
+            <div class="rgh-metric-content">
+              <div class="rgh-metric-value clickable">10</div>
+              <div class="rgh-metric-label">New schedules</div>
+              <div class="km-trend">
+                <i class="fa-solid fa-caret-up trend-icon up"></i>
+                <span><span class="trend-change">2</span> from last month</span>
+              </div>
+            </div>
+          </div>
+          <div class="rgh-metric">
+            <div class="rgh-accent orange"></div>
+            <div class="rgh-metric-content">
+              <div class="rgh-metric-value clickable">5</div>
+              <div class="rgh-metric-label">Canceled schedules</div>
+              <div class="km-trend">
+                <i class="fa-solid fa-caret-up trend-icon down"></i>
+                <span><span class="trend-change">2</span> from last month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="rgh-snapshot">
+        <div class="rgh-snap-card">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="rgh-snap-value">0</div>
+            <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explains why count may differ from the Recurring Group.</span></span>
+          </div>
+          <div class="rgh-snap-label">Active recurring donors</div>
+        </div>
+        <div class="rgh-snap-card">
+          <div class="rgh-snap-value">$0</div>
+          <div class="rgh-snap-label">Annualized revenue</div>
+        </div>
+      </div>
+      <div class="rgh-divider" style="margin:32px 0 24px;"></div>
+      <div class="rgh-movement">
+        <div class="rgh-metrics">
+          <div class="rgh-metric">
+            <div class="rgh-accent green"></div>
+            <div class="rgh-metric-content">
+              <div class="rgh-metric-value">0</div>
+              <div class="rgh-metric-label">New schedules</div>
+            </div>
+          </div>
+          <div class="rgh-metric">
+            <div class="rgh-accent orange"></div>
+            <div class="rgh-metric-content">
+              <div class="rgh-metric-value">0</div>
+              <div class="rgh-metric-label">Canceled schedules</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== DONOR MOMENTUM ===== -->
+  <div id="donor-momentum" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Donor Momentum</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Donor-Momentum-Tile-35ef8da2e76f80faae87c8b74fc4b845" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dm')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dm')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile half" id="tile-dm">
+      <div class="tile-header">
+        <div class="tile-title">Donor Momentum</div>
+      </div>
+
+      <div class="tile-state-data">
+
+      <!-- Zone 1: Monthly acquisition -->
+      <div class="dm-cards">
+        <!-- New -->
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge green">New</span>
+            <div class="dm-big-num">56</div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">15</span> vs. last year</span>
+            </div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+
+        <!-- Recaptured -->
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-big-num">8,556</div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">15</span> vs. last year</span>
+            </div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+
+        <!-- At Risk -->
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="dm-badge yellow">At risk</span>
+            </div>
+            <div class="dm-big-num">36</div>
+            <div class="dm-subtitle">No gift in 10–13 months</div>
+          </div>
+          <div class="dm-at-risk-right">
+            <div class="dm-stake-row">
+              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
+              <span class="dm-stake-value">$1,650</span>
+            </div>
+            <div class="dm-stake-label" style="margin-left:32px;">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Lorem ipsum dolor sit amet. Total value of each at-risk donor's most recent gift.</span></span></div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="dm-cards">
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge green">New</span>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="dm-badge yellow">At risk</span>
+            </div>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-subtitle">No gift in 10–13 months</div>
+          </div>
+          <div class="dm-at-risk-right">
+            <div class="dm-stake-row">
+              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
+              <span class="dm-stake-value">$0</span>
+            </div>
+            <div class="dm-stake-label" style="margin-left:32px;">at stake</div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== DONORS BY LEVEL ===== -->
+  <div id="donors-by-level" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Donors by Level</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Donors-By-Level-Tile-35ef8da2e76f805e8f53ef2a3c74edd8" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dbl')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dbl')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile half" id="tile-dbl">
+      <div class="tile-header">
+        <div class="tile-title">Donors by Level <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explains giving levels and what the counts represent.</span></span></div>
+        <div class="dbl-toggle">
+          <button class="dbl-toggle-btn active" onclick="setDblToggle(this)">Revenue</button>
+          <button class="dbl-toggle-btn" onclick="setDblToggle(this)">Raised</button>
+        </div>
+      </div>
+
+      <div class="tile-state-data">
+
+      <div class="dbl-cards">
+        <!-- Major -->
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge green">Major</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value">$85,400</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>8</strong> of 12 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><span class="dbl-link">4</span> haven't given</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mid -->
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge blue">Mid</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value">$580,000</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>112</strong> of 127 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><span class="dbl-link">15</span> haven't given</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- General -->
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value">$85,400</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>89</strong> of 210 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><span class="dbl-link">121</span> haven't given</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="dbl-cards">
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge green">Major</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value" style="cursor:default;">$0</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
+            </div>
+          </div>
+        </div>
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge blue">Mid</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value" style="cursor:default;">$0</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
+            </div>
+          </div>
+        </div>
+        <div class="dbl-card">
+          <div class="dbl-top">
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General</span>
+            <div class="dbl-amount">
+              <div class="dbl-amount-value" style="cursor:default;">$0</div>
+              <div class="dbl-amount-label">FYTD</div>
+            </div>
+          </div>
+          <div class="dbl-bottom">
+            <div class="dbl-col">
+              <div class="dbl-col-accent green"></div>
+              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
+            </div>
+            <div class="dbl-col">
+              <div class="dbl-col-accent gray"></div>
+              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== GIVING BY LEVEL ===== -->
+  <div id="giving-by-level" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Giving by Level</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Totals-By-Level-Tile-Updates-35ff8da2e76f806eb430f8b195ed3737" target="_blank">
+        Product Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-gbl')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-gbl')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile" id="tile-gbl">
+      <div class="tile-header">
+        <div class="tile-title">Giving by Level</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active">Revenue</button>
+          <button class="toggle-btn">Raised</button>
+        </div>
+      </div>
+
+      <div class="tile-state-data">
+
+      <div class="gbl-body">
+        <div class="gbl-left">
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This week</div>
+              <div class="gbl-amount">$1</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>1 transaction</span>
+              <span>$1.00 avg</span>
+            </div>
+          </div>
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This month</div>
+              <div class="gbl-amount">$1</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>1 transaction</span>
+              <span>$1.00 avg</span>
+            </div>
+          </div>
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This fiscal year</div>
+              <div class="gbl-amount">$331,571</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>115 transactions</span>
+              <span>$2,883.23 avg</span>
+            </div>
+          </div>
+        </div>
+        <div class="gbl-right">
+          <canvas id="gbl-chart"></canvas>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="gbl-body">
+        <div class="gbl-left">
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This week</div>
+              <div class="gbl-amount" style="cursor:default;">$0</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>0 transactions</span>
+              <span>$0.00 avg</span>
+            </div>
+          </div>
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This month</div>
+              <div class="gbl-amount" style="cursor:default;">$0</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>0 transactions</span>
+              <span>$0.00 avg</span>
+            </div>
+          </div>
+          <div class="gbl-row">
+            <div class="gbl-row-left">
+              <div class="gbl-period">This fiscal year</div>
+              <div class="gbl-amount" style="cursor:default;">$0</div>
+            </div>
+            <div class="gbl-row-right">
+              <span>0 transactions</span>
+              <span>$0.00 avg</span>
+            </div>
+          </div>
+        </div>
+        <div class="gbl-right" style="display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+          No data to display
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== EDIT CUSTOM RETENTION MODAL ===== -->
+  <div class="modal-overlay" id="edit-custom-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:540px;">
+      <div class="modal-header">
+        <h2>Edit Custom Retention</h2>
+        <button class="modal-close" onclick="closeModal('edit-custom-modal')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:16px 24px 0; display:flex; flex-direction:column; gap:24px;">
+        <p style="font-size:16px;line-height:21px;color:var(--black-100);">Custom settings can help your organization get a more accurate picture of success.</p>
+
+        <!-- Excluded Funds -->
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="display:inline-flex; align-items:center; gap:4px; background:var(--neutral-10); border-radius:var(--radius); padding:4px 8px; font-size:14px; line-height:18px; color:var(--black-100);">New for deactivating <i class="fa-solid fa-circle-xmark" style="font-size:12px; color:var(--neutral-40); cursor:pointer;"></i></span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Funds *</label>
+        </div>
+
+        <!-- Excluded Campaigns -->
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="display:inline-flex; align-items:center; gap:4px; background:var(--neutral-10); border-radius:var(--radius); padding:4px 8px; font-size:14px; line-height:18px; color:var(--black-100);">GivingTuesday <i class="fa-solid fa-circle-xmark" style="font-size:12px; color:var(--neutral-40); cursor:pointer;"></i></span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Campaigns *</label>
+        </div>
+
+        <!-- Excluded Appeals -->
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="display:inline-flex; align-items:center; gap:4px; background:var(--neutral-10); border-radius:var(--radius); padding:4px 8px; font-size:14px; line-height:18px; color:var(--black-100);">Unsolicited <i class="fa-solid fa-circle-xmark" style="font-size:12px; color:var(--neutral-40); cursor:pointer;"></i></span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Appeals *</label>
+        </div>
+
+        <!-- Date Range -->
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:0 16px; height:56px; display:flex; align-items:center; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">Calendar Year</span>
+            <i class="fa-solid fa-caret-down" style="font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Date Range *</label>
+        </div>
+
+        <!-- Include Soft Credits -->
+        <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
+          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
+          Include Soft Credits
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-danger-text" aria-label="Reset to defaults">
+          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+          <span class="tooltip-text" aria-hidden="true">Reset to defaults</span>
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="closeModal('edit-custom-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('edit-custom-modal')">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GOAL HISTORY MODAL ===== -->
+  <div class="modal-overlay" id="goal-history-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:600px;">
+      <div class="modal-header">
+        <h2>Revenue Goal History</h2>
+        <div style="flex:1;display:flex;justify-content:flex-end;">
+          <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="goal-row">
+          <div class="goal-row-header"><span class="goal-row-fy">FY 2026</span><span class="goal-row-pct">43%</span></div>
+          <div class="goal-progress-bg"><div class="goal-progress-fill current" style="width:43%;"></div></div>
+          <div class="goal-row-meta"><span>$1,305,780 raised</span><span>$3M goal</span></div>
+        </div>
+        <div class="goal-row">
+          <div class="goal-row-header"><span class="goal-row-fy">FY 2025</span><span class="goal-row-pct"><i class="fa-solid fa-circle-check"></i> 105%</span></div>
+          <div class="goal-progress-bg"><div class="goal-progress-fill past" style="width:100%;"></div></div>
+          <div class="goal-row-meta"><span>$1,092,000 raised</span><span>$1M goal</span></div>
+        </div>
+        <div class="goal-row">
+          <div class="goal-row-header"><span class="goal-row-fy">FY 2024</span><span class="goal-row-pct">82%</span></div>
+          <div class="goal-progress-bg"><div class="goal-progress-fill past" style="width:82%;"></div></div>
+          <div class="goal-row-meta"><span>$980,000 raised</span><span>$1.2M goal</span></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('goal-history-modal')">Close</button></div>
+    </div>
+  </div>
+
+  <!-- ===== EDIT REVENUE GOAL MODAL ===== -->
+  <div class="modal-overlay" id="edit-goal-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:408px;">
+      <div class="modal-header">
+        <h2>Edit Revenue Goal</h2>
+        <button class="modal-close" onclick="closeModal('edit-goal-modal')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:16px 24px 0; display:flex; flex-direction:column; gap:24px;">
+        <p style="font-size:16px;line-height:21px;color:var(--black-100);">Update your fiscal year revenue goal. Your progress will update automatically.</p>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <div class="mui-field" id="edit-field">
+            <input type="text" id="goal-input" placeholder=" " inputmode="numeric" autocomplete="off" aria-describedby="edit-error-msg" aria-label="Fiscal year goal amount">
+            <label for="goal-input">Enter goal amount</label>
+            <i class="fa-regular fa-dollar-sign field-icon" aria-hidden="true"></i>
+          </div>
+          <span class="field-error-msg" id="edit-error-msg" role="alert">Enter a goal amount to continue.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-danger-text" aria-label="Delete goal">
+          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+          <span class="tooltip-text" aria-hidden="true">Delete goal</span>
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="closeModal('edit-goal-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveGoal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State toggle (Has Data / Empty State)
+    function toggleState(btn, tileId) {
+      btn.parentElement.querySelectorAll('.state-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tile = document.getElementById(tileId);
+      if (btn.dataset.state === 'empty') {
+        tile.classList.add('show-empty');
+      } else {
+        tile.classList.remove('show-empty');
+      }
+    }
+
+    // Tile selector
+    document.getElementById('tile-selector').addEventListener('change', function() {
+      document.querySelectorAll('.tile-panel').forEach(p => p.classList.remove('active'));
+      const t = document.getElementById(this.value);
+      if (t) t.classList.add('active');
+    });
+
+    // Toggles (Revenue/Raised data swap)
+    document.querySelectorAll('.toggle-group').forEach(g => {
+      g.querySelectorAll('.toggle-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          g.querySelectorAll('.toggle-btn').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          const mode = b.textContent.trim().toLowerCase();
+          const tile = b.closest('.tile');
+          if (tile) handleRevenueRaisedToggle(tile.id, mode);
+        });
+      });
+    });
+
+    // Modals
+    function openModal(id) {
+      const el = document.getElementById(id);
+      el.classList.add('open');
+      // Pre-fill edit input with current goal
+      if (id === 'edit-goal-modal') {
+        const input = document.getElementById('goal-input');
+        input.value = goalAmount.toLocaleString();
+        document.getElementById('edit-field').classList.remove('has-error');
+        document.getElementById('edit-error-msg').classList.remove('visible');
+      }
+    }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Calculator-style input formatting
+    (function() {
+      const el = document.getElementById('goal-input');
+      function getRaw() { return el.value.replace(/[^0-9]/g, ''); }
+      function setFormatted(raw) {
+        el.value = raw ? parseInt(raw, 10).toLocaleString() : '';
+        const len = el.value.length;
+        el.setSelectionRange(len, len);
+      }
+      ['focus','click','keyup'].forEach(evt =>
+        el.addEventListener(evt, () => { const len = el.value.length; el.setSelectionRange(len, len); })
+      );
+      el.addEventListener('input', () => {
+        setFormatted(getRaw());
+        document.getElementById('edit-field').classList.remove('has-error');
+        document.getElementById('edit-error-msg').classList.remove('visible');
+      });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); saveGoal(); }
+      });
+    })();
+
+    function saveGoal() {
+      const input = document.getElementById('goal-input');
+      const raw = input.value.replace(/[^0-9]/g, '');
+      const val = parseInt(raw, 10);
+      if (!val || val <= 0) {
+        document.getElementById('edit-field').classList.add('has-error');
+        document.getElementById('edit-error-msg').classList.add('visible');
+        input.focus();
+        return;
+      }
+      goalAmount = val;
+      // Update the goal label on the chart
+      const label = document.getElementById('goal-label-a');
+      if (label) {
+        const display = val >= 1e6 ? '$'+(val/1e6).toFixed(val%1e6?1:0)+'M' : val >= 1e3 ? '$'+Math.round(val/1e3)+'K' : '$'+val;
+        label.innerHTML = display + ' Goal (FY 26) <i class="fa-regular fa-pen-to-square"></i>';
+      }
+      closeModal('edit-goal-modal');
+    }
+
+    // Data
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fy24 = [18000,38000,52000,68000,85000,105000,132000,162000,195000,240000,290000,350200];
+    const fy25 = [22000,45000,62000,80000,100000,125000,155000,188000,225000,272000,330000,390800];
+    const fy26 = [30000,58000,152000,185000,250000];
+    let goalAmount = 350000;
+
+    Chart.defaults.font.family = "'proxima-nova', sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = '#7D8183';
+
+    function formatK(v) { return v >= 1e6 ? '$'+(v/1e6).toFixed(1)+'M' : v >= 1000 ? '$'+Math.round(v/1000)+'k' : '$'+v; }
+    function formatDollar(v) { return '$' + v.toLocaleString(); }
+
+    // Shared chart config factory
+    function makeChartConfig(goalLabelId) {
+      return {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            { label:'FY26', data:[...fy26,...Array(7).fill(null)], borderColor:'#3F9107', borderWidth:3, pointRadius:0, pointHoverRadius:5, pointHoverBackgroundColor:'#3F9107', tension:0.3, spanGaps:false },
+            { label:'FY25', data:fy25, borderColor:'#525759', borderWidth:2, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:'#525759', tension:0.3 },
+            { label:'FY24', data:fy24, borderColor:'#A9ABAC', borderWidth:1.5, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:'#A9ABAC', tension:0.3 },
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          layout: { padding: { left: 0, right: 0 } },
+          scales: {
+            x: {
+              offset: true,
+              grid: { color: '#D4D5D6', drawBorder: false, lineWidth: 0.5, drawTicks: false },
+              ticks: { color: '#525759', font: { size: 13 }, padding: 8 },
+              border: { display: false }
+            },
+            y: {
+              grid: { color: '#D4D5D6', drawBorder: false, lineWidth: 0.5, drawTicks: false },
+              ticks: { color: '#525759', font: { size: 13 }, callback: v => formatK(v), padding: 8 },
+              border: { display: false },
+              beginAtZero: true, max: 400000,
+              afterBuildTicks(axis) { axis.ticks = [0, 100000, 200000, 300000, 400000].map(v => ({ value: v })); }
+            }
+          }
+        },
+        plugins: [{
+          id: 'dashedBorders',
+          afterDraw(chart) {
+            const { left, right, top, bottom } = chart.chartArea;
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = '#D4D5D6';
+            ctx.lineWidth = 1;
+            // Left border
+            ctx.beginPath(); ctx.moveTo(left, top); ctx.lineTo(left, bottom); ctx.stroke();
+            // Right border
+            ctx.beginPath(); ctx.moveTo(right, top); ctx.lineTo(right, bottom); ctx.stroke();
+            ctx.restore();
+          }
+        }, {
+          id: 'goalLine',
+          afterDraw(chart) {
+            const goalY = chart.scales.y.getPixelForValue(goalAmount);
+            const ctx = chart.ctx;
+            ctx.save(); ctx.setLineDash([8, 6]); ctx.strokeStyle = '#272D30'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(chart.chartArea.left, goalY); ctx.lineTo(chart.chartArea.right, goalY); ctx.stroke(); ctx.restore();
+            const label = document.getElementById(goalLabelId);
+            if (label) label.style.top = (goalY - 14) + 'px';
+          }
+        }, {
+          id: 'hoverLine',
+          afterDraw(chart) {
+            const active = chart.tooltip?.getActiveElements();
+            if (active?.length) {
+              const x = active[0].element.x;
+              const ctx = chart.ctx;
+              ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = '#272D30'; ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(x, chart.chartArea.top); ctx.lineTo(x, chart.chartArea.bottom); ctx.stroke(); ctx.restore();
+            }
+          }
+        }]
+      };
+    }
+
+    // Tooltip handler factory
+    function makeTooltipHandler(tooltipElId, chartAreaId) {
+      const el = document.getElementById(tooltipElId);
+      document.getElementById(chartAreaId).addEventListener('mouseleave', () => { el.style.display = 'none'; });
+
+      return function(context) {
+        const { chart, tooltip } = context;
+        if (tooltip.opacity === 0) { el.style.display = 'none'; return; }
+        const di = tooltip.dataPoints[0].dataIndex;
+        el.querySelector('.tt-month').textContent = months[di];
+
+        const v26 = chart.data.datasets[0].data[di];
+        const r26 = el.querySelector('.tt-fy26');
+        if (v26 != null) { r26.style.display = 'flex'; r26.querySelector('.tt-value').textContent = formatDollar(v26); } else { r26.style.display = 'none'; }
+        el.querySelector('.tt-fy25 .tt-value').textContent = formatDollar(chart.data.datasets[1].data[di]);
+        el.querySelector('.tt-fy24 .tt-value').textContent = formatDollar(chart.data.datasets[2].data[di]);
+
+        let left = tooltip.caretX + 16;
+        if (left + 170 > chart.chartArea.right + 40) left = tooltip.caretX - 186;
+        el.style.display = 'block'; el.style.left = left + 'px'; el.style.top = (chart.chartArea.top + 10) + 'px';
+      };
+    }
+
+    // ===== Chart A =====
+    const cfgA = makeChartConfig('goal-label-a');
+    cfgA.options.plugins.tooltip.external = makeTooltipHandler('tooltip-a', 'chart-area-a');
+    const chartA = new Chart(document.getElementById('chart-a').getContext('2d'), cfgA);
+
+    // ===== MoM: Month-Over-Month Comparison =====
+    // Monthly (non-cumulative) revenue data
+    const momFy24 = [28000, 38000, 50489, 55000, 38000, 22000, 12000, 10000, 28000, 38000, 22000, 38000];
+    const momFy25 = [38000, 48000, 58901, 58000, 40000, 28000, 18000, 20000, 35000, 55000, 98000, 48000];
+    const momFy26Monthly = [60000, 28000, 365000, 55000, 55000]; // through May
+
+    // Pad FY26 with nulls for future months
+    const momFy26 = [...momFy26Monthly, ...Array(7).fill(null)];
+
+    const momTooltipEl = document.getElementById('tooltip-mom');
+    document.getElementById('chart-area-mom').addEventListener('mouseleave', () => { momTooltipEl.style.display = 'none'; });
+
+    const chartMom = new Chart(document.getElementById('chart-mom').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'FY24', data: momFy24,
+            backgroundColor: '#7D8183',
+            borderRadius: { topLeft: 4, topRight: 4 },
+            borderSkipped: 'bottom',
+            barPercentage: 0.75,
+            categoryPercentage: 0.7,
+          },
+          {
+            label: 'FY25', data: momFy25,
+            backgroundColor: '#525759',
+            borderRadius: { topLeft: 4, topRight: 4 },
+            borderSkipped: 'bottom',
+            barPercentage: 0.75,
+            categoryPercentage: 0.7,
+          },
+          {
+            label: 'FY26', data: momFy26,
+            backgroundColor: '#3F9107',
+            borderRadius: { topLeft: 4, topRight: 4 },
+            borderSkipped: 'bottom',
+            barPercentage: 0.75,
+            categoryPercentage: 0.7,
+          },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            enabled: false,
+            external: function(context) {
+              const { chart, tooltip } = context;
+              if (tooltip.opacity === 0) { momTooltipEl.style.display = 'none'; return; }
+              const di = tooltip.dataPoints[0].dataIndex;
+              momTooltipEl.querySelector('.tt-month').textContent = months[di];
+
+              const r26 = momTooltipEl.querySelector('.tt-fy26');
+              const v26 = chart.data.datasets[2].data[di];
+              if (v26 != null) { r26.style.display = 'flex'; r26.querySelector('.tt-value').textContent = formatDollar(v26); } else { r26.style.display = 'none'; }
+              momTooltipEl.querySelector('.tt-fy25 .tt-value').textContent = formatDollar(chart.data.datasets[1].data[di]);
+              momTooltipEl.querySelector('.tt-fy24 .tt-value').textContent = formatDollar(chart.data.datasets[0].data[di]);
+
+              let left = tooltip.caretX + 16;
+              if (left + 170 > chart.chartArea.right + 40) left = tooltip.caretX - 186;
+              momTooltipEl.style.display = 'block';
+              momTooltipEl.style.left = left + 'px';
+              momTooltipEl.style.top = (chart.chartArea.top + 10) + 'px';
+            }
+          }
+        },
+        scales: {
+          x: {
+            offset: true,
+            grid: { display: false },
+            ticks: { color: '#525759', font: { size: 13 }, padding: 8 },
+            border: { display: false }
+          },
+          y: {
+            grid: { color: '#D4D5D6', drawBorder: false, lineWidth: 0.5, drawTicks: false },
+            ticks: { color: '#525759', font: { size: 13 }, callback: v => formatK(v), padding: 8 },
+            border: { display: false },
+            beginAtZero: true, max: 400000,
+            afterBuildTicks(axis) { axis.ticks = [0, 100000, 200000, 300000, 400000].map(v => ({ value: v })); }
+          }
+        },
+        onClick: function(evt, elements) {
+          if (elements.length > 0) {
+            const el = elements[0];
+            const ds = this.data.datasets[el.datasetIndex];
+            const month = months[el.index];
+            alert('Drill down → ' + ds.label + ' ' + month + ': ' + formatDollar(ds.data[el.index]) + '\n\nWould open transaction report with filters pre-applied.');
+          }
+        },
+        onHover: function(evt, elements) {
+          evt.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+        }
+      },
+      plugins: [{
+        id: 'dashedBordersMom',
+        afterDraw(chart) {
+          const { left, right, top, bottom } = chart.chartArea;
+          const ctx = chart.ctx;
+          ctx.save();
+          ctx.setLineDash([4, 4]);
+          ctx.strokeStyle = '#D4D5D6';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(left, top); ctx.lineTo(left, bottom); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(right, top); ctx.lineTo(right, bottom); ctx.stroke();
+          ctx.restore();
+        }
+      }, {
+        // Column highlight on hover (Figma shows a subtle bg behind the hovered month group)
+        id: 'columnHighlight',
+        beforeDraw(chart) {
+          const active = chart.tooltip?.getActiveElements();
+          if (active?.length) {
+            const di = active[0].index;
+            const meta0 = chart.getDatasetMeta(0); // FY24 (leftmost)
+            const meta2 = chart.getDatasetMeta(2); // FY26 (rightmost)
+            const barLeft = meta0.data[di];
+            const barRight = meta2.data[di];
+            if (barLeft && barRight) {
+              const ctx = chart.ctx;
+              const halfW = barLeft.width / 2;
+              const left = barLeft.x - halfW - 8;
+              const right = barRight.x + halfW + 8;
+              ctx.save();
+              ctx.fillStyle = 'rgba(39,45,48,0.06)';
+              ctx.fillRect(left, chart.chartArea.top, right - left, chart.chartArea.bottom - chart.chartArea.top);
+              ctx.restore();
+            }
+          }
+        }
+      }]
+    });
+
+    // ===== Donor Retention: Show/Hide dropdown =====
+    const drVisible = { overall: true, custom: true, firsttime: true };
+
+    function toggleDrDropdown() {
+      document.getElementById('dr-dropdown').classList.toggle('open');
+    }
+    // Close dropdown on outside click
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#dr-toggle-btn') && !e.target.closest('#dr-dropdown')) {
+        document.getElementById('dr-dropdown').classList.remove('open');
+      }
+    });
+
+    function toggleDrChart(key) {
+      const visibleCount = Object.values(drVisible).filter(Boolean).length;
+      if (drVisible[key] && visibleCount <= 1) return;
+
+      drVisible[key] = !drVisible[key];
+      document.getElementById('cb-' + key).classList.toggle('checked', drVisible[key]);
+      document.getElementById('card-' + key).classList.toggle('hidden', !drVisible[key]);
+      updateDrDisabledState();
+    }
+
+    function updateDrDisabledState() {
+      const visibleCount = Object.values(drVisible).filter(Boolean).length;
+      ['overall', 'custom', 'firsttime'].forEach(key => {
+        const cb = document.getElementById('cb-' + key);
+        const item = document.getElementById('ddi-' + key);
+        const isLastOne = drVisible[key] && visibleCount === 1;
+        cb.classList.toggle('disabled', isLastOne);
+        item.classList.toggle('disabled', isLastOne);
+      });
+    }
+
+    // ===== Revenue / Raised data sets =====
+    const raisedData = {
+      yoy: { fy24: [18000,38000,72000,115000,148000,170000,185000,198000,222000,258000,300000,330000], fy25: [28000,58000,105000,150000,182000,205000,218000,235000,265000,310000,345000,348000], fy26: [48000,68000,285000,320000,345000] },
+      mom: { fy24: [18000,20000,34000,43000,33000,22000,15000,13000,24000,36000,42000,30000], fy25: [28000,30000,47000,45000,32000,23000,13000,17000,30000,45000,35000,38000], fy26: [48000,20000,217000,35000,25000] },
+      gbl: { amounts: [82000,165000,310000], rows: ['$2','$3','$310,000'], transactions: ['1 transaction','1 transaction','108 transactions'], avgs: ['$2.00 avg','$3.00 avg','$2,870.37 avg'] },
+      dbl: { major:{amount:'$78,200',active:'7 of 12',havent:'5'}, mid:{amount:'$540,000',active:'105 of 127',havent:'22'}, general:{amount:'$78,200',active:'82 of 210',havent:'128'} }
+    };
+    const revenueData = {
+      yoy: { fy24: fy24.slice(), fy25: fy25.slice(), fy26: fy26.slice() },
+      mom: { fy24: momFy24.slice(), fy25: momFy25.slice(), fy26: momFy26Monthly.slice() },
+      gbl: { amounts: [95000,180000,331571], rows: ['$1','$1','$331,571'], transactions: ['1 transaction','1 transaction','115 transactions'], avgs: ['$1.00 avg','$1.00 avg','$2,883.23 avg'] },
+      dbl: { major:{amount:'$85,400',active:'8 of 12',havent:'4'}, mid:{amount:'$580,000',active:'112 of 127',havent:'15'}, general:{amount:'$85,400',active:'89 of 210',havent:'121'} }
+    };
+
+    function handleRevenueRaisedToggle(tileId, mode) {
+      const d = mode === 'raised' ? raisedData : revenueData;
+      if (tileId === 'tile-a') {
+        chartA.data.datasets[0].data = [...d.yoy.fy26, ...Array(12 - d.yoy.fy26.length).fill(null)];
+        chartA.data.datasets[1].data = d.yoy.fy25;
+        chartA.data.datasets[2].data = d.yoy.fy24;
+        chartA.update();
+      }
+      if (tileId === 'tile-mom') {
+        chartMom.data.datasets[0].data = d.mom.fy24;
+        chartMom.data.datasets[1].data = d.mom.fy25;
+        chartMom.data.datasets[2].data = [...d.mom.fy26, ...Array(12 - d.mom.fy26.length).fill(null)];
+        chartMom.update();
+      }
+      if (tileId === 'tile-gbl') {
+        chartGbl.data.datasets[0].data = d.gbl.amounts;
+        chartGbl.update();
+        const rows = document.querySelectorAll('#tile-gbl .tile-state-data .gbl-row');
+        rows.forEach((row, i) => {
+          row.querySelector('.gbl-amount').textContent = d.gbl.rows[i];
+          const rights = row.querySelectorAll('.gbl-row-right span');
+          rights[0].textContent = d.gbl.transactions[i];
+          rights[1].textContent = d.gbl.avgs[i];
+        });
+      }
+    }
+
+    // ===== Donors by Level toggle =====
+    function setDblToggle(btn) {
+      btn.parentElement.querySelectorAll('.dbl-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.textContent.trim().toLowerCase();
+      const d = mode === 'raised' ? raisedData.dbl : revenueData.dbl;
+      const cards = document.querySelectorAll('#tile-dbl .tile-state-data .dbl-card');
+      const levels = ['major', 'mid', 'general'];
+      cards.forEach((card, i) => {
+        const lv = d[levels[i]];
+        card.querySelector('.dbl-amount-value').textContent = lv.amount;
+        const cols = card.querySelectorAll('.dbl-col-text');
+        cols[0].innerHTML = '<strong>' + lv.active.split(' ')[0] + '</strong> of ' + lv.active.split(' ')[2] + ' active';
+        cols[1].innerHTML = '<span class="dbl-link">' + lv.havent + '</span> haven\'t given';
+      });
+    }
+
+    // ===== Giving by Level bar chart =====
+    let chartGbl;
+    const gblCtx = document.getElementById('gbl-chart');
+    if (gblCtx) {
+      const gblColors = ['#7D8183', '#5599E9', '#65A739'];
+      chartGbl = new Chart(gblCtx.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['General', 'Mid', 'Major'],
+          datasets: [{
+            data: [95000, 180000, 331571],
+            backgroundColor: gblColors,
+            hoverBackgroundColor: gblColors,
+            borderRadius: { topLeft: 4, topRight: 4 },
+            borderSkipped: 'bottom',
+            barPercentage: 0.6,
+            categoryPercentage: 0.7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: false,
+              external: function(context) {
+                let el = document.getElementById('gbl-tooltip');
+                if (!el) {
+                  el = document.createElement('div');
+                  el.id = 'gbl-tooltip';
+                  el.style.cssText = 'position:absolute;background:white;border:0.5px solid #A9ABAC;padding:6px;pointer-events:none;z-index:10;font-family:Proxima Nova,sans-serif;min-width:120px;';
+                  document.body.appendChild(el);
+                }
+                const tooltip = context.tooltip;
+                if (tooltip.opacity === 0) { el.style.opacity = 0; return; }
+                const label = tooltip.title[0];
+                const raw = tooltip.dataPoints[0].raw;
+                const idx = tooltip.dataPoints[0].dataIndex;
+                const color = gblColors[idx];
+                el.innerHTML =
+                  '<div style="font-size:12px;font-weight:700;color:#525759;text-align:center;margin-bottom:6px;">' + label + '</div>' +
+                  '<div style="display:flex;align-items:center;gap:8px;">' +
+                    '<div style="width:17px;height:3px;background:' + color + ';border-radius:2px;"></div>' +
+                    '<span style="font-size:14px;font-weight:700;color:#525759;">$' + Number(raw).toLocaleString() + '</span>' +
+                  '</div>';
+                el.style.opacity = 1;
+                const pos = gblCtx.getBoundingClientRect();
+                const tooltipWidth = el.offsetWidth || 120;
+                el.style.left = (pos.left + window.scrollX + tooltip.caretX - tooltipWidth / 2) + 'px';
+                el.style.top = (pos.top + window.scrollY + tooltip.caretY - 60) + 'px';
+              }
+            }
+          },
+          onHover: function(evt, elements) {
+            evt.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 350000,
+              ticks: {
+                callback: v => '$' + (v/1000) + 'k',
+                font: { family: "'Proxima Nova', sans-serif", size: 14 },
+                color: '#525759'
+              },
+              grid: { color: '#E9EAEA', drawBorder: false },
+              border: { display: false }
+            },
+            x: {
+              ticks: {
+                font: { family: "'Proxima Nova', sans-serif", size: 14, weight: '600' },
+                color: '#272D30'
+              },
+              grid: { display: false },
+              border: { display: false }
+            }
+          }
+        },
+        plugins: [{
+          id: 'gblColumnHighlight',
+          beforeDraw(chart) {
+            const active = chart.tooltip?.getActiveElements();
+            if (active?.length) {
+              const bar = active[0].element;
+              const ctx = chart.ctx;
+              const halfW = bar.width * 0.8;
+              ctx.save();
+              ctx.fillStyle = 'rgba(39,45,48,0.06)';
+              ctx.fillRect(bar.x - halfW, chart.chartArea.top, halfW * 2, chart.chartArea.bottom - chart.chartArea.top);
+              ctx.restore();
+            }
+          }
+        }]
+      });
+      gblCtx.addEventListener('mouseleave', () => {
+        const el = document.getElementById('gbl-tooltip');
+        if (el) el.style.opacity = 0;
+      });
+    }
+  </script>
+</body>
+</html>
