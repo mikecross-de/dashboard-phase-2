@@ -1417,26 +1417,26 @@
   <div class="modal-overlay" id="goal-history-modal" onclick="if(event.target===this)closeModal(this.id)">
     <div class="modal" style="max-width:600px;">
       <div class="modal-header">
-        <h2>Revenue Goal History</h2>
+        <h2 id="goal-history-title">Revenue Goal History</h2>
         <div style="flex:1;display:flex;justify-content:flex-end;">
-          <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
+          <div class="toggle-group" id="goal-history-toggle"><button class="toggle-btn active" onclick="setGoalHistoryMode('revenue')">Revenue</button><button class="toggle-btn" onclick="setGoalHistoryMode('raised')">Raised</button></div>
         </div>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="goal-history-body">
         <div class="goal-row">
           <div class="goal-row-header"><span class="goal-row-fy">FY 2026</span><span class="goal-row-pct">43%</span></div>
           <div class="goal-progress-bg"><div class="goal-progress-fill current" style="width:43%;"></div></div>
-          <div class="goal-row-meta"><span>$1,305,780 raised</span><span>$3M goal</span></div>
+          <div class="goal-row-meta"><span class="gh-amount">$1,305,780 revenue</span><span class="gh-goal">$3M goal</span></div>
         </div>
         <div class="goal-row">
           <div class="goal-row-header"><span class="goal-row-fy">FY 2025</span><span class="goal-row-pct"><i class="fa-solid fa-circle-check"></i> 105%</span></div>
           <div class="goal-progress-bg"><div class="goal-progress-fill past" style="width:100%;"></div></div>
-          <div class="goal-row-meta"><span>$1,092,000 raised</span><span>$1M goal</span></div>
+          <div class="goal-row-meta"><span class="gh-amount">$1,092,000 revenue</span><span class="gh-goal">$1M goal</span></div>
         </div>
         <div class="goal-row">
           <div class="goal-row-header"><span class="goal-row-fy">FY 2024</span><span class="goal-row-pct">82%</span></div>
           <div class="goal-progress-bg"><div class="goal-progress-fill past" style="width:82%;"></div></div>
-          <div class="goal-row-meta"><span>$980,000 raised</span><span>$1.2M goal</span></div>
+          <div class="goal-row-meta"><span class="gh-amount">$980,000 revenue</span><span class="gh-goal">$1.2M goal</span></div>
         </div>
       </div>
       <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('goal-history-modal')">Close</button></div>
@@ -1519,6 +1519,52 @@
       }
     }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Goal History modal toggle
+    const goalHistoryData = {
+      revenue: {
+        title: 'Revenue Goal History',
+        rows: [
+          { pct: '43%', pctIcon: '', width: '43%', amount: '$1,305,780 revenue', goal: '$3M goal', current: true },
+          { pct: '105%', pctIcon: '<i class="fa-solid fa-circle-check"></i> ', width: '100%', amount: '$1,092,000 revenue', goal: '$1M goal', current: false },
+          { pct: '82%', pctIcon: '', width: '82%', amount: '$980,000 revenue', goal: '$1.2M goal', current: false }
+        ]
+      },
+      raised: {
+        title: 'Raised Goal History',
+        rows: [
+          { pct: '38%', pctIcon: '', width: '38%', amount: '$1,140,000 raised', goal: '$3M goal', current: true },
+          { pct: '98%', pctIcon: '', width: '98%', amount: '$978,000 raised', goal: '$1M goal', current: false },
+          { pct: '75%', pctIcon: '', width: '75%', amount: '$900,000 raised', goal: '$1.2M goal', current: false }
+        ]
+      }
+    };
+
+    function setGoalHistoryMode(mode) {
+      const toggle = document.getElementById('goal-history-toggle');
+      toggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      toggle.querySelectorAll('.toggle-btn').forEach(b => { if (b.textContent.trim().toLowerCase() === mode) b.classList.add('active'); });
+      const d = goalHistoryData[mode];
+      document.getElementById('goal-history-title').textContent = d.title;
+      const rows = document.querySelectorAll('#goal-history-body .goal-row');
+      d.rows.forEach((r, i) => {
+        rows[i].querySelector('.goal-row-pct').innerHTML = r.pctIcon + r.pct;
+        rows[i].querySelector('.goal-progress-fill').style.width = r.width;
+        rows[i].querySelector('.goal-progress-fill').className = 'goal-progress-fill ' + (r.current ? 'current' : 'past');
+        rows[i].querySelector('.gh-amount').textContent = r.amount;
+        rows[i].querySelector('.gh-goal').textContent = r.goal;
+      });
+    }
+
+    // Sync Goal History toggle with main tile toggle on open
+    const origOpenModal = openModal;
+    openModal = function(id) {
+      origOpenModal(id);
+      if (id === 'goal-history-modal') {
+        const mainToggle = document.querySelector('#tile-a .toggle-btn.active');
+        if (mainToggle) setGoalHistoryMode(mainToggle.textContent.trim().toLowerCase());
+      }
+    };
 
     // Calculator-style input formatting
     (function() {
