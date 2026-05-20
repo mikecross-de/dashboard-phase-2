@@ -265,7 +265,7 @@
     /* ===== Recurring Giving Health tile ===== */
     .rgh-snapshot { display: flex; gap: 16px; }
     .rgh-snap-card {
-      flex: 1; background: var(--white); border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 40px 16px;
+      flex: 1; background: var(--white); border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 20px 16px;
       display: flex; flex-direction: column; gap: 4px;
     }
     .rgh-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
@@ -274,25 +274,45 @@
     .rgh-snap-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
     .rgh-divider { display: flex; align-items: center; gap: 12px; padding: 24px 0 16px; }
     .rgh-divider-line { flex: 1; height: 1px; background: var(--neutral-20); }
-    .rgh-movement { display: flex; flex-direction: column; gap: 16px; flex: 1; }
-    .rgh-movement-header { display: flex; align-items: center; justify-content: space-between; }
-    .rgh-month { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
-    .rgh-net { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; line-height: 18px; color: var(--green-old); }    .rgh-net .net-icon { width: 10px; height: 10px; border: 2px solid var(--green-old); border-radius: 2px; }
-    .rgh-metrics { display: flex; gap: 16px; }
-    .rgh-metric {
-      flex: 1; display: flex; gap: 9px; padding: 6px 10px; border-radius: var(--radius);
-      align-items: center;
+    .rgh-sched-card {
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px;
+      display: flex; flex-direction: column; gap: 16px; flex: 1; margin-top: 16px;
     }
-    .rgh-accent { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+    .rgh-sched-hdr { display: flex; align-items: center; justify-content: space-between; }
+    .rgh-sched-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
+    .rgh-sched-rows { display: flex; flex-direction: column; gap: 16px; }
+    .rgh-sched-row { display: flex; align-items: center; gap: 8px; }
+    .rgh-accent { width: 3px; border-radius: 2px; align-self: stretch; min-height: 20px; flex-shrink: 0; }
     .rgh-accent.green { background: var(--green-old); }
     .rgh-accent.orange { background: #D96B0C; }
-    .rgh-metric-content { display: flex; flex-direction: column; }
-    .rgh-metric-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
-    .rgh-metric-value.clickable { cursor: pointer; }
-    .rgh-metric-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .rgh-accent.blue { background: #5599E9; }
+    .rgh-metric-inline { display: flex; align-items: baseline; gap: 4px; cursor: pointer; }
+    .rgh-metric-inline:hover .rgh-metric-value,
+    .rgh-metric-inline:hover .rgh-metric-label { color: var(--green-old); text-decoration: underline; }
+    .rgh-metric-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .rgh-metric-label { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
-    .rgh-last-month { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--green-old); cursor: pointer; }
-    .rgh-last-month:hover { text-decoration: underline; }
+    .rgh-metric-trend { margin-left: auto; }
+
+    /* ===== Recurring Revenue tile ===== */
+    .rr-snapshot { display: flex; gap: 12px; }
+    .rr-snap-card {
+      flex: 1; background: var(--white); border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 20px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .rr-snap-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
+    .rr-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
+    .rr-snap-sub { font-size: 12px; font-weight: 400; line-height: 18px; color: #525759; margin-top: 4px; }
+    .rr-detail-card {
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px;
+      display: flex; flex-direction: column; gap: 16px; flex: 1; margin-top: 16px;
+    }
+    .rr-detail-hdr { display: flex; align-items: center; justify-content: space-between; }
+    .rr-detail-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
+    .rr-detail-rows { display: flex; flex-direction: column; gap: 16px; }
+    .rr-detail-row { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
+    .rr-detail-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
+    .rr-detail-label { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+    .rr-detail-trend { margin-left: auto; }
 
     /* ===== Donor Momentum tile ===== */
     .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
@@ -500,6 +520,7 @@
       <option value="donor-retention">Donor Retention</option>
       <option value="key-metrics">Key Metrics</option>
       <option value="recurring-health">Recurring Giving Health</option>
+      <option value="recurring-revenue">Recurring Revenue</option>
       <option value="donor-momentum">Donor Momentum</option>
       <option value="donors-by-level">Donors by Level</option>
       <option value="giving-by-level">Giving by Level</option>
@@ -912,35 +933,44 @@
         </div>
       </div>
 
-      <!-- Divider with month badge -->
-      <div class="rgh-divider">
-        <span class="km-badge">May 2026</span>
-        <div class="rgh-divider-line"></div>
-      </div>
-
-      <!-- Zone 2: Monthly Movement -->
-      <div class="rgh-movement">
-        <div class="rgh-metrics">
-          <div class="rgh-metric">
+      <!-- Schedules card -->
+      <div class="rgh-sched-card">
+        <div class="rgh-sched-hdr">
+          <span class="rgh-sched-title">Schedules</span>
+          <span class="km-badge small">May 2026</span>
+        </div>
+        <div class="rgh-sched-rows">
+          <div class="rgh-sched-row">
             <div class="rgh-accent green"></div>
-            <div class="rgh-metric-content">
-              <div class="rgh-metric-value clickable">10</div>
-              <div class="rgh-metric-label">New schedules</div>
-              <div class="km-trend">
-                <i class="fa-solid fa-caret-up trend-icon up"></i>
-                <span><span class="trend-change">2</span> from last month</span>
-              </div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value clickable">10</span>
+              <span class="rgh-metric-label">new</span>
+            </div>
+            <div class="rgh-metric-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">2</span> from last month</span>
             </div>
           </div>
-          <div class="rgh-metric">
+          <div class="rgh-sched-row">
             <div class="rgh-accent orange"></div>
-            <div class="rgh-metric-content">
-              <div class="rgh-metric-value clickable">5</div>
-              <div class="rgh-metric-label">Canceled schedules</div>
-              <div class="km-trend">
-                <i class="fa-solid fa-caret-up trend-icon down"></i>
-                <span><span class="trend-change">2</span> from last month</span>
-              </div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value clickable">5</span>
+              <span class="rgh-metric-label">canceled</span>
+            </div>
+            <div class="rgh-metric-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon down"></i>
+              <span><span class="trend-change">2</span> from last month</span>
+            </div>
+          </div>
+          <div class="rgh-sched-row">
+            <div class="rgh-accent blue"></div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value clickable">3</span>
+              <span class="rgh-metric-label">adjusted</span>
+            </div>
+            <div class="rgh-metric-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">1</span> from last month</span>
             </div>
           </div>
         </div>
@@ -961,25 +991,137 @@
           <div class="rgh-snap-label">Annualized revenue</div>
         </div>
       </div>
-      <div class="rgh-divider">
-        <span class="km-badge">May 2026</span>
-        <div class="rgh-divider-line"></div>
-      </div>
-      <div class="rgh-movement">
-        <div class="rgh-metrics">
-          <div class="rgh-metric">
+      <div class="rgh-sched-card">
+        <div class="rgh-sched-hdr">
+          <span class="rgh-sched-title">Schedules</span>
+          <span class="km-badge small">May 2026</span>
+        </div>
+        <div class="rgh-sched-rows">
+          <div class="rgh-sched-row">
             <div class="rgh-accent green"></div>
-            <div class="rgh-metric-content">
-              <div class="rgh-metric-value">0</div>
-              <div class="rgh-metric-label">New schedules</div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value">0</span>
+              <span class="rgh-metric-label">new</span>
             </div>
           </div>
-          <div class="rgh-metric">
+          <div class="rgh-sched-row">
             <div class="rgh-accent orange"></div>
-            <div class="rgh-metric-content">
-              <div class="rgh-metric-value">0</div>
-              <div class="rgh-metric-label">Canceled schedules</div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value">0</span>
+              <span class="rgh-metric-label">canceled</span>
             </div>
+          </div>
+          <div class="rgh-sched-row">
+            <div class="rgh-accent blue"></div>
+            <div class="rgh-metric-inline">
+              <span class="rgh-metric-value">0</span>
+              <span class="rgh-metric-label">adjusted</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-empty -->
+    </div>
+  </div>
+
+  <!-- ===== RECURRING REVENUE ===== -->
+  <div id="recurring-revenue" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Recurring Revenue</h2>
+      <a class="notion-link" href="#" target="_blank">
+        Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-rr')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-rr')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile half" id="tile-rr">
+      <div class="tile-header">
+        <div class="tile-title">Recurring Revenue</div>
+      </div>
+
+      <div class="tile-state-data">
+      <div class="rr-snapshot">
+        <div class="rr-snap-card">
+          <div class="rr-snap-value">$15,175</div>
+          <div class="rr-snap-label">Expected for June</div>
+          <div class="rr-snap-sub">233 of 234 scheduled</div>
+        </div>
+        <div class="rr-snap-card">
+          <div class="rr-snap-value">$14,200</div>
+          <div class="rr-snap-label">Collected this month</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">5%</span> vs. last month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rr-detail-card">
+        <div class="rr-detail-hdr">
+          <span class="rr-detail-title">Performance</span>
+          <span class="km-badge small">FY 2026</span>
+        </div>
+        <div class="rr-detail-rows">
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">$135,000</span>
+            <span class="rr-detail-label">FYTD total</span>
+            <div class="rr-detail-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">12%</span> vs. FY25</span>
+            </div>
+          </div>
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">72%</span>
+            <span class="rr-detail-label">of total revenue</span>
+            <div class="rr-detail-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">5%</span> vs. FY25</span>
+            </div>
+          </div>
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">$13,500</span>
+            <span class="rr-detail-label">avg monthly</span>
+            <div class="rr-detail-trend km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">8%</span> vs. FY25</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+      <div class="rr-snapshot">
+        <div class="rr-snap-card">
+          <div class="rr-snap-value">$0</div>
+          <div class="rr-snap-label">Expected for June</div>
+          <div class="rr-snap-sub">0 of 0 scheduled</div>
+        </div>
+        <div class="rr-snap-card">
+          <div class="rr-snap-value">$0</div>
+          <div class="rr-snap-label">Collected this month</div>
+        </div>
+      </div>
+
+      <div class="rr-detail-card">
+        <div class="rr-detail-hdr">
+          <span class="rr-detail-title">Performance</span>
+          <span class="km-badge small">FY 2026</span>
+        </div>
+        <div class="rr-detail-rows">
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">$0</span>
+            <span class="rr-detail-label">FYTD total</span>
+          </div>
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">0%</span>
+            <span class="rr-detail-label">of total revenue</span>
+          </div>
+          <div class="rr-detail-row">
+            <span class="rr-detail-value">$0</span>
+            <span class="rr-detail-label">avg monthly</span>
           </div>
         </div>
       </div>
