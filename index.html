@@ -276,17 +276,17 @@
     .rg-snap-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
     .rg-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
     .rg-sched-card {
-      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px;
-      display: flex; flex-direction: column; gap: 16px; flex: 1;
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px 16px 12px;
+      display: flex; flex-direction: column; gap: 10px; flex: 1;
     }
     .rg-sched-hdr { display: flex; align-items: center; justify-content: space-between; }
     .rg-sched-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
-    .rg-sched-rows { display: flex; flex-direction: column; gap: 12px; }
-    .rg-sched-row { display: flex; align-items: center; }
-    .rg-sched-left { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .rg-sched-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+    .rg-sched-row { display: flex; gap: 8px; padding: 8px 0; }
+    .rg-sched-left { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
     .rg-sched-left:hover .rg-sched-value,
     .rg-sched-left:hover .rg-sched-label { color: var(--green-old); text-decoration: underline; }
-    .rg-sched-trend { margin-left: auto; }
+    .rg-sched-inline { display: flex; align-items: baseline; gap: 4px; }
     .rg-accent { width: 3px; border-radius: 2px; align-self: stretch; min-height: 20px; flex-shrink: 0; }
     .rg-accent.green { background: var(--green-old); }
     .rg-accent.orange { background: #D96B0C; }
@@ -925,47 +925,31 @@
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
+                <div class="rg-accent green"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent green"></div>
-                  <span class="rg-sched-value">10</span>
-                  <span class="rg-sched-label">new</span>
-                </div>
-                <div class="rg-sched-trend km-trend">
-                  <i class="fa-solid fa-caret-up trend-icon up"></i>
-                  <span><span class="trend-change">2</span> from last month</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">10</span><span class="rg-sched-label">new</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">2</span> from last month</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent orange"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent orange"></div>
-                  <span class="rg-sched-value">5</span>
-                  <span class="rg-sched-label">canceled</span>
-                </div>
-                <div class="rg-sched-trend km-trend">
-                  <i class="fa-solid fa-caret-up trend-icon down"></i>
-                  <span><span class="trend-change">2</span> from last month</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">5</span><span class="rg-sched-label">canceled</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">2</span> from last month</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent blue"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent blue"></div>
-                  <span class="rg-sched-value">2</span>
-                  <span class="rg-sched-label">increased</span>
-                </div>
-                <div class="rg-sched-trend km-trend">
-                  <i class="fa-solid fa-caret-up trend-icon up"></i>
-                  <span><span class="trend-change">1</span> from last month</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">2</span><span class="rg-sched-label">increased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">1</span> from last month</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent" style="background:var(--red-100);"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent" style="background:var(--red-100);"></div>
-                  <span class="rg-sched-value">1</span>
-                  <span class="rg-sched-label">decreased</span>
-                </div>
-                <div class="rg-sched-trend km-trend">
-                  <i class="fa-solid fa-caret-up trend-icon down"></i>
-                  <span><span class="trend-change">1</span> from last month</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">1</span><span class="rg-sched-label">decreased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">1</span> from last month</span></div>
                 </div>
               </div>
             </div>
@@ -1013,31 +997,27 @@
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
+                <div class="rg-accent green"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent green"></div>
-                  <span class="rg-sched-value">0</span>
-                  <span class="rg-sched-label">new</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">0</span><span class="rg-sched-label">new</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent orange"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent orange"></div>
-                  <span class="rg-sched-value">0</span>
-                  <span class="rg-sched-label">canceled</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">0</span><span class="rg-sched-label">canceled</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent blue"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent blue"></div>
-                  <span class="rg-sched-value">0</span>
-                  <span class="rg-sched-label">increased</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">0</span><span class="rg-sched-label">increased</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
+                <div class="rg-accent" style="background:var(--red-100);"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-accent" style="background:var(--red-100);"></div>
-                  <span class="rg-sched-value">0</span>
-                  <span class="rg-sched-label">decreased</span>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">0</span><span class="rg-sched-label">decreased</span></div>
                 </div>
               </div>
             </div>
