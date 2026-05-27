@@ -271,7 +271,7 @@
       flex: 1; background: var(--white); border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px;
       display: flex; flex-direction: column; gap: 4px;
     }
-    .rg-snap-value { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
+    .rg-snap-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
     .rg-snap-value.clickable { cursor: pointer; }
     .rg-snap-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
     .rg-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
@@ -281,7 +281,7 @@
     }
     .rg-sched-hdr { display: flex; align-items: center; justify-content: space-between; }
     .rg-sched-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
-    .rg-sched-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+    .rg-sched-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
     .rg-sched-row { display: flex; gap: 8px; padding: 8px 0; }
     .rg-sched-left { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
     .rg-sched-left:hover .rg-sched-value,
@@ -407,6 +407,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       color: var(--neutral-40); font-size: 14px; cursor: pointer; margin-left: 0; vertical-align: middle;
     }
+    .info-icon-btn:hover { color: var(--black-100); }
 
     /* ===== Modals ===== */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
@@ -891,7 +892,6 @@
     <div class="tile" id="tile-rg">
       <div class="tile-header">
         <div class="tile-title">Recurring Giving</div>
-        <span class="km-badge">May 2026</span>
       </div>
 
       <div class="tile-state-data">
@@ -922,6 +922,7 @@
           <div class="rg-sched-card">
             <div class="rg-sched-hdr">
               <span class="rg-sched-title">Schedules</span>
+              <span class="km-badge small">May 2026</span>
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
@@ -994,6 +995,7 @@
           <div class="rg-sched-card">
             <div class="rg-sched-hdr">
               <span class="rg-sched-title">Schedules</span>
+              <span class="km-badge small">May 2026</span>
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
