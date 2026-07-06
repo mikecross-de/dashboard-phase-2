@@ -119,12 +119,19 @@
     .delta-chip.up { background: var(--green-10); color: var(--green-200); }
     .delta-chip.down { background: var(--red-10); color: var(--red-100); }
 
-    .past-goals-btn {
-      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
-      color: var(--green-old); background: none; border: none; cursor: pointer;
-      display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: var(--radius);
+    .prior-year-link {
+      font-size: 12px; line-height: 18px; color: var(--neutral-60);
+      text-decoration: none; cursor: pointer;
     }
-    .past-goals-btn:hover { background: var(--green-5); }
+    .prior-year-link:hover { color: var(--black-100); text-decoration: underline; }
+    .prior-year-link .tooltip-text { bottom: calc(100% + 8px); width: auto; white-space: nowrap; width: auto; }
+
+    .past-goals-btn {
+      font-family: var(--font-primary); font-size: 12px; font-weight: 700; line-height: 18px;
+      color: var(--green-old); background: none; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; padding: 0; border-radius: var(--radius);
+    }
+    .past-goals-btn:hover { text-decoration: underline; }
 
     .legend-box { display: flex; gap: 12px; align-items: flex-start; padding: 6px; border: 0.5px solid var(--neutral-40); font-size: 14px; line-height: 18px; color: var(--neutral-80); }
     .legend-item { display: flex; align-items: center; gap: 4px; }
@@ -294,16 +301,24 @@
     .rg-sched-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .rg-sched-label { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
     .rg-chart-wrap { flex: 1; min-height: 0; position: relative; }
+    .dm-period-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
+    .dm-group-box { border: 1px solid var(--neutral-20); border-radius: var(--radius); overflow: hidden; }
+    .dm-group-hdr { display: flex; justify-content: flex-end; padding: 8px 16px 4px; }
+    .dm-group-card { padding: 6px 16px 10px; }
+    .dm-group-divider { height: 1px; background: var(--neutral-20); margin: 0 16px; }
+    .rg-sched-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
+    .tt-missed { margin-top: 6px; padding-top: 6px; border-top: 0.5px solid var(--neutral-20); }
+    .tt-missed-link { font-size: 12px; font-weight: 700; color: var(--green-old); text-decoration: none; white-space: nowrap; }
+    .tt-missed-link:hover { text-decoration: underline; }
     .rg-chart-footer {
       display: flex; justify-content: flex-end; margin-top: 8px;
     }
 
     /* ===== Donor Momentum tile ===== */
-    .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
-    .dm-cards { display: flex; flex-direction: column; gap: 6px; }
+    .dm-cards { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
     .dm-card {
-      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 11px 16px;
-      display: flex; align-items: stretch; gap: 8px;
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 10px 16px;
+      display: flex; align-items: stretch; flex: 1;
     }
     .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .dm-card-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
@@ -315,18 +330,17 @@
     .dm-badge.blue { background: #D4E6FA; color: #10437F; }
     .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
     .dm-badge.red { background: #FCEBEB; color: #791F1F; }
-    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 4px; }
+    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; }
     .dm-big-num:hover { color: var(--green-old); text-decoration: underline; }
+    .dm-big-num[style*="cursor:default"]:hover { color: var(--black-100); text-decoration: none; }
+    .dm-row-main { display: flex; align-items: baseline; width: 100%; }
+    .dm-col-count { width: 200px; flex-shrink: 0; }
+    .dm-col-amount { flex: 1; }
     .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
     .dm-yoy .trend-change { font-weight: 600; }
     .dm-yoy .trend-icon.up { color: var(--green-old); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
-    .dm-sparkline-label { font-size: 12px; color: var(--neutral-60); text-align: center; }
-    .dm-divider { width: 100%; height: 1px; background: var(--neutral-20); margin: 12px 0; }
-    .dm-at-risk-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 2px; }
-    .dm-stake-row { display: flex; align-items: center; gap: 6px; }
     .dm-stake-icon { color: #FFC600; font-size: 20px; }
-    .dm-stake-value { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
     .dm-stake-label { font-size: 12px; color: var(--neutral-60); display: flex; align-items: center; gap: 4px; }
     .dm-subtitle { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
 
@@ -552,14 +566,14 @@
           <div class="todays-total">Today's Total: <strong>$250,000</strong></div>
           <div class="prior-totals">
             <span class="prior-total-item">
-              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">26%</span> vs. FY25</span></span>
+              <a href="#" class="prior-year-link has-tooltip">FY25: $198,000<span class="tooltip-text">↑ 26% vs. FY25</span></a>
             </span>
             <span class="prior-total-item">
-              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">43%</span> vs. FY24</span></span>
+              <a href="#" class="prior-year-link has-tooltip">FY24: $174,500<span class="tooltip-text">↑ 43% vs. FY24</span></a>
             </span>
+            <button class="past-goals-btn" onclick="openModal('goal-history-modal')">Past Goals</button>
           </div>
         </div>
-        <button class="past-goals-btn" onclick="openModal('goal-history-modal')">Past Goals <i class="fa-regular fa-arrow-up-right-from-square"></i></button>
         <div class="legend-box">
           <div class="legend-item"><span class="legend-line fy24"></span> FY24</div>
           <div class="legend-item"><span class="legend-line fy25"></span> FY25</div>
@@ -922,35 +936,38 @@
           <div class="rg-sched-card">
             <div class="rg-sched-hdr">
               <span class="rg-sched-title">Schedules</span>
-              <span class="km-badge small">May 2026</span>
+              <div class="toggle-group rg-sched-toggle">
+                <button class="toggle-btn active" onclick="setSchedPeriod('month', this)">Current Month</button>
+                <button class="toggle-btn" onclick="setSchedPeriod('fytd', this)">FYTD</button>
+              </div>
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
                 <div class="rg-accent green"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value">10</span><span class="rg-sched-label">new</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">2</span> from last month</span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-new">10</span><span class="rg-sched-label">new</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change" id="rg-trend-new">2</span> <span id="rg-suffix-new">from June last year</span></span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent orange"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value">5</span><span class="rg-sched-label">canceled</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">2</span> from last month</span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-canceled">5</span><span class="rg-sched-label">canceled</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change" id="rg-trend-canceled">2</span> <span id="rg-suffix-canceled">from June last year</span></span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent blue"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value">2</span><span class="rg-sched-label">increased</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">1</span> from last month</span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-increased">2</span><span class="rg-sched-label">increased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change" id="rg-trend-increased">1</span> <span id="rg-suffix-increased">from June last year</span></span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent" style="background:var(--red-100);"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value">1</span><span class="rg-sched-label">decreased</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">1</span> from last month</span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-decreased">1</span><span class="rg-sched-label">decreased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change" id="rg-trend-decreased">1</span> <span id="rg-suffix-decreased">from June last year</span></span></div>
                 </div>
               </div>
             </div>
@@ -1052,97 +1069,109 @@
 
       <div class="tile-state-data">
 
-      <!-- Zone 1: Monthly acquisition -->
-      <div class="dm-cards">
-        <!-- New -->
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <span class="dm-badge green">New</span>
-            <div class="dm-big-num">56</div>
-            <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">15</span> from last year</span>
+        <!-- New + Recaptured grouped box with toggle -->
+        <div class="dm-group-box">
+          <div class="dm-group-hdr">
+            <div class="toggle-group dm-period-toggle">
+              <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
+              <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
             </div>
           </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
+          <div class="dm-group-card">
+            <span class="dm-badge green">New</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" id="dm-val-new">56</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-new">$4,820</div>
+            </div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
+              <span>+<span class="trend-change" id="dm-trend-new">15</span> <span id="dm-suffix-new">from June last year</span></span>
+            </div>
+          </div>
+          <div class="dm-group-divider"></div>
+          <div class="dm-group-card">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" id="dm-val-recaptured">8</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-recaptured">$1,240</div>
+            </div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
+              <span>+<span class="trend-change" id="dm-trend-recaptured">3</span> <span id="dm-suffix-recaptured">from June last year</span></span>
+            </div>
           </div>
         </div>
 
-        <!-- Recaptured -->
-        <div class="dm-card">
+        <!-- At Risk separate card -->
+        <div class="dm-card" style="margin-top:8px;">
           <div class="dm-card-left">
-            <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-big-num">8,556</div>
-            <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">15</span> from last year</span>
+            <span class="dm-badge yellow">At Risk</span>
+            <div class="dm-row-main" style="align-items:center;">
+              <div class="dm-col-count" style="cursor:default;">
+                <div class="dm-big-num" style="cursor:default;">36</div>
+                <div class="dm-subtitle">No gift in 10–13 months</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
+                <div>
+                  <div class="dm-big-num" style="cursor:default;">$1,650</div>
+                  <div class="dm-stake-label">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Total value of each at-risk donor's most recent gift.</span></span></div>
+                </div>
+                <i class="fa-solid fa-exclamation-triangle dm-stake-icon"></i>
+              </div>
             </div>
           </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
+        </div>
+
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+
+        <!-- New + Recaptured grouped box -->
+        <div class="dm-group-box">
+          <div class="dm-group-hdr">
+            <div class="toggle-group dm-period-toggle">
+              <button class="toggle-btn active">Current Month</button>
+              <button class="toggle-btn">FYTD</button>
+            </div>
+          </div>
+          <div class="dm-group-card">
+            <span class="dm-badge green">New</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
+            </div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-group-divider"></div>
+          <div class="dm-group-card">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
+            </div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
           </div>
         </div>
 
         <!-- At Risk -->
-        <div class="dm-card">
+        <div class="dm-card" style="margin-top:8px;">
           <div class="dm-card-left">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="dm-badge yellow">At risk</span>
+            <span class="dm-badge yellow">At Risk</span>
+            <div class="dm-row-main" style="align-items:center;">
+              <div class="dm-col-count" style="cursor:default;">
+                <div class="dm-big-num" style="cursor:default;">—</div>
+                <div class="dm-subtitle">No gift in 10–13 months</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
+                <div>
+                  <div class="dm-big-num" style="cursor:default;">—</div>
+                  <div class="dm-stake-label">at stake</div>
+                </div>
+              </div>
             </div>
-            <div class="dm-big-num">36</div>
-            <div class="dm-subtitle">No gift in 10–13 months</div>
-          </div>
-          <div class="dm-at-risk-right">
-            <div class="dm-stake-row">
-              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
-              <span class="dm-stake-value">$1,650</span>
-            </div>
-            <div class="dm-stake-label" style="margin-left:32px;">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Lorem ipsum dolor sit amet. Total value of each at-risk donor's most recent gift.</span></span></div>
           </div>
         </div>
-      </div>
-      </div><!-- end tile-state-data -->
 
-      <div class="tile-state-empty">
-      <div class="dm-cards">
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <span class="dm-badge green">New</span>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
-          </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
-          </div>
-        </div>
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
-          </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
-          </div>
-        </div>
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="dm-badge yellow">At risk</span>
-            </div>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-subtitle">No gift in 10–13 months</div>
-          </div>
-          <div class="dm-at-risk-right">
-            <div class="dm-stake-row">
-              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
-              <span class="dm-stake-value">$0</span>
-            </div>
-            <div class="dm-stake-label" style="margin-left:32px;">at stake</div>
-          </div>
-        </div>
-      </div>
       </div><!-- end tile-state-empty -->
     </div>
   </div>
@@ -2063,6 +2092,18 @@
                 const rE = el.querySelector('.tt-expected');
                 if (collected != null) { rC.style.display = 'flex'; rC.querySelector('.tt-value').textContent = '$' + Number(collected).toLocaleString(); } else { rC.style.display = 'none'; }
                 if (expected != null) { rE.style.display = 'flex'; rE.querySelector('.tt-value').textContent = '$' + Number(expected).toLocaleString(); } else { rE.style.display = 'none'; }
+
+                // Show "View missed" link only when there's a gap
+                let missedRow = el.querySelector('.tt-missed');
+                if (!missedRow) {
+                  missedRow = document.createElement('div');
+                  missedRow.className = 'tt-missed';
+                  missedRow.innerHTML = '<a href="javascript:void(0)" class="tt-missed-link">View missed payments →</a>';
+                  el.appendChild(missedRow);
+                }
+                const hasMissed = collected != null && expected != null && collected < expected;
+                missedRow.style.display = hasMissed ? 'block' : 'none';
+
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
@@ -2233,6 +2274,50 @@
       gblCtx.addEventListener('mouseleave', () => {
         const el = document.getElementById('gbl-tooltip');
         if (el) el.style.opacity = 0;
+      });
+    }
+
+    // ===== Donor Momentum — period toggle =====
+    const dmData = {
+      month: { new: '56', recaptured: '8',   trendNew: '15', trendRecaptured: '3',  amtNew: '$4,820',  amtRecaptured: '$1,240', suffix: 'from June last year' },
+      fytd:  { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'from prior FYTD' }
+    };
+
+    function setDmPeriod(period, btn) {
+      btn.closest('.dm-period-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = dmData[period];
+      document.getElementById('dm-val-new').textContent          = d.new;
+      document.getElementById('dm-val-recaptured').textContent   = d.recaptured;
+      document.getElementById('dm-trend-new').textContent        = d.trendNew;
+      document.getElementById('dm-trend-recaptured').textContent = d.trendRecaptured;
+      document.getElementById('dm-amt-new').textContent          = d.amtNew;
+      document.getElementById('dm-amt-recaptured').textContent   = d.amtRecaptured;
+      document.getElementById('dm-suffix-new').textContent       = d.suffix;
+      document.getElementById('dm-suffix-recaptured').textContent = d.suffix;
+    }
+
+    // ===== Recurring Giving — Schedules period toggle =====
+    const schedData = {
+      month: { new: '10', canceled: '5', increased: '2', decreased: '1', trendNew: '2', trendCanceled: '2', trendIncreased: '1', trendDecreased: '1', suffix: 'from June last year' },
+      fytd:  { new: '47', canceled: '18', increased: '9', decreased: '5', trendNew: '12', trendCanceled: '6', trendIncreased: '3', trendDecreased: '2', suffix: 'from prior FYTD' }
+    };
+
+    function setSchedPeriod(period, btn) {
+      btn.closest('.rg-sched-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const d = schedData[period];
+      document.getElementById('rg-val-new').textContent       = d.new;
+      document.getElementById('rg-val-canceled').textContent  = d.canceled;
+      document.getElementById('rg-val-increased').textContent = d.increased;
+      document.getElementById('rg-val-decreased').textContent = d.decreased;
+      document.getElementById('rg-trend-new').textContent       = d.trendNew;
+      document.getElementById('rg-trend-canceled').textContent  = d.trendCanceled;
+      document.getElementById('rg-trend-increased').textContent = d.trendIncreased;
+      document.getElementById('rg-trend-decreased').textContent = d.trendDecreased;
+      ['new','canceled','increased','decreased'].forEach(k => {
+        document.getElementById('rg-suffix-' + k).textContent = d.suffix;
       });
     }
   </script>
