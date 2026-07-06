@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/ete4szq.css">
   <script src="https://kit.fontawesome.com/9b51659ddd.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <style>
     :root {
       --black-100: #272D30;
@@ -32,7 +33,7 @@
       --shadow: 0px 4px 4px rgba(0,0,0,0.25);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: var(--font-primary); background: var(--neutral-5); color: var(--black-100); padding: 32px; }
+    body { font-family: var(--font-primary); background: var(--neutral-5); color: var(--black-100); padding: 32px; overflow-x: hidden; }
 
     /* Page header / selector */
     .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
@@ -64,7 +65,7 @@
     /* Tile */
     .tile { background: var(--white); border-radius: var(--radius); padding: 24px; width: 812px; height: 424px; max-width: 100%; display: flex; flex-direction: column; }
     .tile.half { width: 394px; }
-    .tile.wide { width: 900px; height: auto; }
+    .tile.wide { width: 812px; height: auto; overflow: hidden; }
     .tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
     .tile-title { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; }
 
@@ -156,13 +157,13 @@
 
     /* ===== Donor Retention tile ===== */
     .dr-header-btn {
-      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
-      color: var(--black-100); background: var(--white); border: 1px solid var(--black-100);
-      border-radius: var(--radius); padding: 4px 8px; cursor: pointer; display: flex;
+      font-family: var(--font-primary); font-size: 14px; font-weight: 400; line-height: 18px;
+      color: var(--black-100); background: var(--white); border: 1px solid var(--neutral-60);
+      border-radius: var(--radius); padding: 0 12px; height: 40px; cursor: pointer; display: flex;
       align-items: center; gap: 8px; position: relative; white-space: nowrap;
     }
-    .dr-header-btn:hover { background: var(--neutral-5); }
-    .dr-header-btn i { font-size: 14px; }
+    .dr-header-btn:hover { background: var(--neutral-5); border-color: var(--black-100); }
+    .dr-header-btn i { font-size: 12px; color: var(--neutral-60); }
 
     .dr-charts { display: flex; gap: 16px; flex: 1; min-height: 0; align-items: center; justify-content: center; margin-bottom: 16px; }
     .dr-chart-card {
@@ -214,16 +215,17 @@
     .dr-dot.orange { background: #D96B0C; }
     .dr-dot.red { background: var(--red-100); }
 
-    /* Show/Hide dropdown */
+    /* Show/Hide dropdown — Grove Menu Full */
     .dr-dropdown {
       position: absolute; top: calc(100% + 4px); right: 0; background: var(--white);
-      border-radius: var(--radius); box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+      border: 1px solid var(--neutral-20); border-radius: var(--radius);
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.12);
       min-width: 260px; z-index: 20; display: none; padding: 8px 0;
     }
     .dr-dropdown.open { display: block; }
     .dr-dropdown-item {
-      display: flex; align-items: center; gap: 8px; padding: 8px 16px;
-      font-size: 16px; line-height: 21px; color: var(--black-100); cursor: pointer;
+      display: flex; align-items: center; gap: 12px; padding: 0 16px;
+      height: 45px; font-size: 16px; line-height: 21px; color: var(--black-100); cursor: pointer;
       background: none; border: none; width: 100%; text-align: left; font-family: var(--font-primary);
       position: relative;
     }
@@ -501,6 +503,78 @@
     }
     .btn-danger-text:hover .tooltip-text { opacity: 1; }
 
+    /* ===== Campaigns tile ===== */
+    .camp-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding-right: 12px; margin-right: -12px; }
+    .camp-row { padding: 14px 0; display: flex; flex-direction: column; gap: 10px; }
+    .camp-divider { height: 1px; background: var(--neutral-10); flex-shrink: 0; }
+    .camp-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; min-width: 0; }
+    .camp-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+    .camp-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+    .camp-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
+    .camp-name:hover { color: var(--green-old); text-decoration: underline; }
+    .camp-dates { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
+    .camp-no-goal-badge {
+      font-size: 11px; font-weight: 600; padding: 2px 8px;
+      border-radius: 100px; background: var(--neutral-10); color: var(--neutral-60); white-space: nowrap;
+    }
+    .camp-right { flex-shrink: 0; text-align: right; }
+    .camp-amount-wrap { display: flex; align-items: baseline; gap: 6px; position: relative; justify-content: flex-end; }
+    .camp-raised-val { font-size: 20px; font-weight: 700; color: var(--black-100); cursor: pointer; position: relative; }
+    .camp-raised-val:hover { color: var(--green-old); text-decoration: underline; }
+    .camp-raised-val .tooltip-text { right: 0; left: auto; white-space: nowrap; top: calc(100% + 8px); bottom: auto; }
+    .camp-of-goal { font-size: 12px; color: var(--neutral-60); white-space: nowrap; }
+
+    .camp-progress-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .camp-progress-track {
+      height: 8px; background: var(--neutral-10); border-radius: 4px; position: relative; overflow: hidden;
+    }
+    .camp-progress-fill { height: 100%; background: var(--green-old); border-radius: 4px; transition: width 0.3s ease; }
+    .camp-progress-meta {
+      display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--neutral-60);
+    }
+    .camp-pct { font-weight: 700; color: var(--black-100); font-size: 12px; }
+    .camp-yoy { font-size: 12px; }
+
+    .camp-no-goal-bar { display: flex; flex-direction: column; gap: 4px; }
+    .camp-no-goal-track { height: 8px; background: var(--neutral-10); border-radius: 4px; overflow: hidden; }
+    .camp-no-goal-fill {
+      height: 100%; width: 100%;
+      background: repeating-linear-gradient(90deg, var(--neutral-20) 0px, var(--neutral-20) 8px, transparent 8px, transparent 12px);
+    }
+
+    .camp-footer { display: flex; justify-content: flex-end; padding-top: 12px; border-top: 1px solid var(--neutral-10); margin-top: 4px; flex-shrink: 0; }
+    .camp-view-all { font-size: 14px; font-weight: 700; color: var(--green-old); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .camp-view-all:hover { text-decoration: underline; }
+
+    .camp-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+    .camp-empty-icon { font-size: 32px; color: var(--neutral-40); }
+    .camp-empty-title { font-size: 16px; font-weight: 700; color: var(--black-100); }
+    .camp-empty-body { font-size: 14px; color: var(--neutral-60); }
+    .camp-empty-link { color: var(--green-old); font-weight: 700; text-decoration: none; }
+    .camp-empty-link:hover { text-decoration: underline; }
+    .camp-config-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+    .camp-config-divider { height: 1px; background: var(--neutral-10); }
+    .camp-config-name { font-size: 14px; font-weight: 700; color: var(--black-100); }
+    .camp-config-meta { font-size: 12px; color: var(--neutral-60); margin-top: 1px; }
+    .camp-grip { color: var(--neutral-40); font-size: 14px; cursor: grab; flex-shrink: 0; }
+    .camp-config-remove {
+      font-family: var(--font-primary); font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      border: none; background: var(--neutral-10); color: var(--neutral-60);
+      flex-shrink: 0; transition: all 0.15s;
+    }
+    .camp-config-remove:hover { background: var(--red-10); color: var(--red-100); }
+    .camp-config-add {
+      font-family: var(--font-primary); font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+      padding: 4px 12px; border-radius: 100px; cursor: pointer;
+      border: 1px solid var(--neutral-20); background: var(--white);
+      color: var(--neutral-60); white-space: nowrap; transition: all 0.15s;
+    }
+    .camp-config-add:hover { border-color: var(--green-old); color: var(--green-old); }
+    .camp-drag-ghost { opacity: 0.4; background: var(--neutral-5); border-radius: var(--radius); }
+
     /* Modal animation */
     .modal-overlay { transition: opacity .2s; }
     .modal-overlay .modal { transform: translateY(10px); transition: transform .2s; }
@@ -522,6 +596,7 @@
       <option value="donor-momentum">Donor Momentum</option>
       <option value="donors-by-level">Donors by Level</option>
       <option value="giving-by-level">Giving by Level</option>
+      <option value="campaigns">Campaigns</option>
     </select>
   </div>
 
@@ -1433,6 +1508,269 @@
     </div>
   </div>
 
+  <!-- ===== CAMPAIGNS ===== -->
+  <div id="campaigns" class="tile-panel">
+    <div class="tile-section-header">
+      <h2>Campaigns</h2>
+      <a class="notion-link" href="https://www.notion.so/bloomerang/380f8da2e76f802ea355c43ab67905ee" target="_blank">
+        Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
+      </a>
+      <div class="state-toggle">
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-campaigns')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-campaigns')">Empty State</button>
+      </div>
+    </div>
+    <div class="tile wide" id="tile-campaigns" style="height:454px;">
+      <div class="tile-header">
+        <div class="tile-title">Campaigns</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="toggle-group">
+            <button class="toggle-btn active" onclick="setCampaignToggle('revenue', this)">Revenue</button>
+            <button class="toggle-btn" onclick="setCampaignToggle('raised', this)">Raised</button>
+          </div>
+          <div class="dr-chart-title-row" style="margin:0;">
+            <button class="dr-edit-btn" onclick="openModal('camp-config-modal')">
+              <i class="fa-regular fa-pen icon-outline" aria-hidden="true"></i>
+              <i class="fa-solid fa-pen icon-solid" aria-hidden="true"></i>
+              <span class="dr-edit-tooltip">Configure campaigns</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile-state-data">
+        <div class="camp-list" id="camp-list">
+
+          <!-- Campaign 1: FY goal, FY period → show YoY -->
+          <div class="camp-row" data-camp-id="1">
+            <div class="camp-row-top">
+              <div class="camp-left">
+                <div class="camp-name-row">
+                  <span class="camp-name clickable">Annual Fund 2026</span>
+                </div>
+                <div class="camp-dates">Jan 1 – Dec 31, 2026 · Fiscal year</div>
+              </div>
+              <div class="camp-right">
+                <div class="camp-amount-wrap">
+                  <span class="camp-raised-val">$78,068</span>
+                  <span class="camp-of-goal">of <span class="camp-goal">$150,000</span> goal</span>
+                </div>
+              </div>
+            </div>
+            <div class="camp-progress-wrap">
+              <div class="camp-progress-track">
+                <div class="camp-progress-fill" style="width: 52%;"></div>
+              </div>
+              <div class="camp-progress-meta">
+                <span class="camp-pct">52%</span>
+                <span class="camp-yoy"><i class="fa-solid fa-caret-up trend-icon up"></i> 8% vs. same period last year</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="camp-divider"></div>
+
+          <!-- Campaign 2: FY goal, FY period → show YoY -->
+          <div class="camp-row" data-camp-id="2">
+            <div class="camp-row-top">
+              <div class="camp-left">
+                <div class="camp-name-row">
+                  <span class="camp-name clickable">GivingTuesday 2026</span>
+                </div>
+                <div class="camp-dates">Nov 15 – Dec 3, 2026 · Calendar year</div>
+              </div>
+              <div class="camp-right">
+                <div class="camp-amount-wrap">
+                  <span class="camp-raised-val">$5,797</span>
+                  <span class="camp-of-goal">of <span class="camp-goal">$25,000</span> goal</span>
+                </div>
+              </div>
+            </div>
+            <div class="camp-progress-wrap">
+              <div class="camp-progress-track">
+                <div class="camp-progress-fill" style="width: 23%;"></div>
+              </div>
+              <div class="camp-progress-meta">
+                <span class="camp-pct">23%</span>
+                <span class="camp-yoy"><i class="fa-solid fa-caret-down trend-icon down"></i> 12% vs. same period last year</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="camp-divider"></div>
+
+          <!-- Campaign 3: No goal, custom date range → no YoY -->
+          <div class="camp-row" data-camp-id="3">
+            <div class="camp-row-top">
+              <div class="camp-left">
+                <div class="camp-name-row">
+                  <span class="camp-name clickable">Spring Stewardship 2026</span>
+                  <span class="camp-no-goal-badge">No goal</span>
+                </div>
+                <div class="camp-dates">Mar 1 – May 31, 2026 · Custom range</div>
+              </div>
+              <div class="camp-right">
+                <div class="camp-amount-wrap">
+                  <span class="camp-raised-val">$15,904</span>
+                  <span class="camp-of-goal">raised</span>
+                </div>
+              </div>
+            </div>
+            <div class="camp-no-goal-bar">
+              <div class="camp-no-goal-track">
+                <div class="camp-no-goal-fill"></div>
+              </div>
+              <div class="camp-progress-meta">
+                <span class="camp-pct" style="color:var(--neutral-60); font-weight:400;">No goal set</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="camp-divider"></div>
+
+          <!-- Campaign 4: Goal, FY period → show YoY -->
+          <div class="camp-row" data-camp-id="4">
+            <div class="camp-row-top">
+              <div class="camp-left">
+                <div class="camp-name-row">
+                  <span class="camp-name clickable">Capital Campaign Phase 2</span>
+                </div>
+                <div class="camp-dates">Jul 1, 2025 – Jun 30, 2027 · Fiscal year</div>
+              </div>
+              <div class="camp-right">
+                <div class="camp-amount-wrap">
+                  <span class="camp-raised-val">$1,234,592</span>
+                  <span class="camp-of-goal">of <span class="camp-goal">$2,500,000</span> goal</span>
+                </div>
+              </div>
+            </div>
+            <div class="camp-progress-wrap">
+              <div class="camp-progress-track">
+                <div class="camp-progress-fill" style="width: 49%;"></div>
+              </div>
+              <div class="camp-progress-meta">
+                <span class="camp-pct">49%</span>
+                <span class="camp-yoy"><i class="fa-solid fa-caret-up trend-icon up"></i> 3% vs. same period last year</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end camp-list -->
+
+        <div class="camp-footer">
+          <a href="#" class="camp-view-all">View all campaigns <i class="fa-regular fa-arrow-right"></i></a>
+        </div>
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+        <div class="camp-empty">
+          <i class="fa-regular fa-flag camp-empty-icon"></i>
+          <div class="camp-empty-title">No active campaigns</div>
+          <div class="camp-empty-body">Campaigns will appear here once they're active. <a href="#" class="camp-empty-link">Create a campaign</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CAMPAIGNS CONFIGURE MODAL ===== -->
+  <div class="modal-overlay" id="camp-config-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:520px;">
+      <div class="modal-header">
+        <h2>Configure Campaigns</h2>
+        <button class="modal-close" onclick="closeModal('camp-config-modal')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:16px 24px; display:flex; flex-direction:column; gap:0;">
+
+        <!-- Showing on dashboard -->
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:11px; font-weight:700; color:var(--neutral-60); text-transform:uppercase; letter-spacing:0.5px;">Showing on dashboard</span>
+            <span id="camp-count-label" style="font-size:12px; color:var(--neutral-60);">4 of 10</span>
+          </div>
+          <div id="camp-config-current" style="display:flex; flex-direction:column;">
+            <div class="camp-config-row" data-camp-id="1">
+              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
+              <div style="flex:1;">
+                <div class="camp-config-name">Annual Fund 2026</div>
+                <div class="camp-config-meta">Jan 1 – Dec 31, 2026</div>
+              </div>
+              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            </div>
+            <div class="camp-config-divider"></div>
+            <div class="camp-config-row" data-camp-id="2">
+              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
+              <div style="flex:1;">
+                <div class="camp-config-name">GivingTuesday 2026</div>
+                <div class="camp-config-meta">Nov 15 – Dec 3, 2026</div>
+              </div>
+              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            </div>
+            <div class="camp-config-divider"></div>
+            <div class="camp-config-row" data-camp-id="3">
+              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
+              <div style="flex:1;">
+                <div class="camp-config-name">Spring Stewardship 2026</div>
+                <div class="camp-config-meta">Mar 1 – May 31, 2026 · No goal</div>
+              </div>
+              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            </div>
+            <div class="camp-config-divider"></div>
+            <div class="camp-config-row" data-camp-id="4">
+              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
+              <div style="flex:1;">
+                <div class="camp-config-name">Capital Campaign Phase 2</div>
+                <div class="camp-config-meta">Jul 1, 2025 – Jun 30, 2027</div>
+              </div>
+              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height:1px; background:var(--neutral-10); margin:0 -24px 16px;"></div>
+
+        <!-- Search to add -->
+        <div>
+          <div style="font-size:11px; font-weight:700; color:var(--neutral-60); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Add a campaign</div>
+          <div style="position:relative; margin-bottom:12px;">
+            <i class="fa-regular fa-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--neutral-60); font-size:14px;"></i>
+            <input type="text" id="camp-search-input" placeholder="Search active campaigns…" oninput="filterCampSearch(this.value)"
+              style="width:100%; box-sizing:border-box; padding:8px 12px 8px 36px; border:1px solid var(--neutral-20); border-radius:var(--radius); font-family:var(--font-primary); font-size:14px; color:var(--black-100); outline:none;">
+          </div>
+
+          <!-- Search results -->
+          <div id="camp-search-results" style="display:none; flex-direction:column;">
+            <div class="camp-config-row camp-search-result" data-camp-id="5" data-name="Year-End Appeal 2026">
+              <div style="flex:1;">
+                <div class="camp-config-name">Year-End Appeal 2026</div>
+                <div class="camp-config-meta">Nov 1 – Dec 31, 2026</div>
+              </div>
+              <button class="camp-config-add" onclick="addCampConfig(this)"><i class="fa-regular fa-plus"></i> Add</button>
+            </div>
+            <div class="camp-config-divider camp-search-divider"></div>
+            <div class="camp-config-row camp-search-result" data-camp-id="6" data-name="Legacy Society Outreach">
+              <div style="flex:1;">
+                <div class="camp-config-name">Legacy Society Outreach</div>
+                <div class="camp-config-meta">Jan 1 – Dec 31, 2026 · No goal</div>
+              </div>
+              <button class="camp-config-add" onclick="addCampConfig(this)"><i class="fa-regular fa-plus"></i> Add</button>
+            </div>
+          </div>
+
+          <!-- Empty search state -->
+          <div id="camp-search-empty" style="display:none; font-size:13px; color:var(--neutral-60); padding:8px 0;">No matching active campaigns found.</div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="closeModal('camp-config-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('camp-config-modal')">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== EDIT CUSTOM RETENTION MODAL ===== -->
   <div class="modal-overlay" id="edit-custom-modal" onclick="if(event.target===this)closeModal(this.id)">
     <div class="modal" style="max-width:540px;">
@@ -1656,6 +1994,17 @@
       if (id === 'goal-history-modal') {
         const mainToggle = document.querySelector('#tile-a .toggle-btn.active');
         if (mainToggle) setGoalHistoryMode(mainToggle.textContent.trim().toLowerCase());
+      }
+      if (id === 'camp-config-modal') {
+        const list = document.getElementById('camp-config-current');
+        if (list && !campSortable) {
+          campSortable = Sortable.create(list, {
+            animation: 150,
+            handle: '.camp-grip',
+            ghostClass: 'camp-drag-ghost',
+            onEnd() { rebuildCampDividers(); }
+          });
+        }
       }
     };
 
@@ -2296,6 +2645,120 @@
       document.getElementById('dm-suffix-new').textContent       = d.suffix;
       document.getElementById('dm-suffix-recaptured').textContent = d.suffix;
     }
+
+    function rebuildCampDividers() {
+      const list = document.getElementById('camp-config-current');
+      // Remove all dividers
+      list.querySelectorAll('.camp-config-divider').forEach(d => d.remove());
+      // Re-add between rows
+      const rows = list.querySelectorAll('.camp-config-row');
+      rows.forEach((row, i) => {
+        if (i < rows.length - 1) {
+          const div = document.createElement('div');
+          div.className = 'camp-config-divider';
+          row.after(div);
+        }
+      });
+    }
+    function setCampaignToggle(mode, btn) {
+      btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.camp-raised-val').forEach(el => {
+        el.textContent = mode === 'revenue' ? el.dataset.revenue : el.dataset.raised;
+      });
+    }
+
+    // ===== Campaigns — Configure modal =====
+    function filterCampSearch(val) {
+      const results = document.getElementById('camp-search-results');
+      const empty = document.getElementById('camp-search-empty');
+      const query = val.trim().toLowerCase();
+
+      if (!query) {
+        results.style.display = 'none';
+        empty.style.display = 'none';
+        return;
+      }
+
+      // Filter search results by name
+      const rows = results.querySelectorAll('.camp-search-result');
+      const dividers = results.querySelectorAll('.camp-search-divider');
+      let anyVisible = false;
+
+      rows.forEach((row, i) => {
+        const name = row.dataset.name.toLowerCase();
+        const match = name.includes(query);
+        row.style.display = match ? 'flex' : 'none';
+        if (match) anyVisible = true;
+      });
+
+      // Show/hide dividers between visible results
+      dividers.forEach(d => d.style.display = 'none');
+      const visibleRows = [...rows].filter(r => r.style.display !== 'none');
+      visibleRows.forEach((r, i) => {
+        if (i < visibleRows.length - 1) {
+          const next = r.nextElementSibling;
+          if (next && next.classList.contains('camp-search-divider')) next.style.display = 'block';
+        }
+      });
+
+      results.style.display = anyVisible ? 'flex' : 'none';
+      empty.style.display = anyVisible ? 'none' : 'block';
+    }
+
+    function removeCampConfig(btn) {
+      const row = btn.closest('.camp-config-row');
+      row.remove();
+      rebuildCampDividers();
+      updateCampCountLabel();
+    }
+
+    function addCampConfig(btn) {
+      const current = document.getElementById('camp-config-current');
+      const count = current.querySelectorAll('.camp-config-row').length;
+      if (count >= 10) { btn.textContent = 'Max reached'; btn.disabled = true; return; }
+
+      const row = btn.closest('.camp-search-result');
+      const name = row.querySelector('.camp-config-name').textContent;
+      const meta = row.querySelector('.camp-config-meta').textContent;
+
+      // Add divider if list isn't empty
+      if (count > 0) {
+        const div = document.createElement('div');
+        div.className = 'camp-config-divider';
+        current.appendChild(div);
+      }
+
+      // Add new row
+      const newRow = document.createElement('div');
+      newRow.className = 'camp-config-row';
+      newRow.innerHTML = `
+        <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
+        <div style="flex:1;">
+          <div class="camp-config-name">${name}</div>
+          <div class="camp-config-meta">${meta}</div>
+        </div>
+        <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+      `;
+      current.appendChild(newRow);
+      rebuildCampDividers();
+
+      btn.innerHTML = '✓ Added';
+      btn.disabled = true;
+      btn.style.color = 'var(--green-old)';
+      btn.style.borderColor = 'var(--green-old)';
+
+      updateCampCountLabel();
+    }
+
+    function updateCampCountLabel() {
+      const count = document.querySelectorAll('#camp-config-current .camp-config-row').length;
+      const el = document.getElementById('camp-count-label');
+      if (el) el.textContent = `${count} of 10`;
+    }
+
+    // ===== Campaigns — Init drag-to-reorder on modal open =====
+    let campSortable = null;
 
     // ===== Recurring Giving — Schedules period toggle =====
     const schedData = {
