@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://use.typekit.net/ete4szq.css">
   <script src="https://kit.fontawesome.com/9b51659ddd.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <style>
     :root {
       --black-100: #272D30;
@@ -33,7 +32,7 @@
       --shadow: 0px 4px 4px rgba(0,0,0,0.25);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: var(--font-primary); background: var(--neutral-5); color: var(--black-100); padding: 32px; overflow-x: hidden; }
+    body { font-family: var(--font-primary); background: var(--neutral-5); color: var(--black-100); padding: 32px; }
 
     /* Page header / selector */
     .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
@@ -65,7 +64,7 @@
     /* Tile */
     .tile { background: var(--white); border-radius: var(--radius); padding: 24px; width: 812px; height: 424px; max-width: 100%; display: flex; flex-direction: column; }
     .tile.half { width: 394px; }
-    .tile.wide { width: 812px; height: auto; overflow: hidden; }
+    .tile.wide { width: 900px; height: auto; }
     .tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
     .tile-title { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; }
 
@@ -120,19 +119,12 @@
     .delta-chip.up { background: var(--green-10); color: var(--green-200); }
     .delta-chip.down { background: var(--red-10); color: var(--red-100); }
 
-    .prior-year-link {
-      font-size: 12px; line-height: 18px; color: var(--neutral-60);
-      text-decoration: none; cursor: pointer;
-    }
-    .prior-year-link:hover { color: var(--black-100); text-decoration: underline; }
-    .prior-year-link .tooltip-text { bottom: calc(100% + 8px); width: auto; white-space: nowrap; width: auto; }
-
     .past-goals-btn {
-      font-family: var(--font-primary); font-size: 12px; font-weight: 700; line-height: 18px;
+      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
       color: var(--green-old); background: none; border: none; cursor: pointer;
-      display: inline-flex; align-items: center; padding: 0; border-radius: var(--radius);
+      display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: var(--radius);
     }
-    .past-goals-btn:hover { text-decoration: underline; }
+    .past-goals-btn:hover { background: var(--green-5); }
 
     .legend-box { display: flex; gap: 12px; align-items: flex-start; padding: 6px; border: 0.5px solid var(--neutral-40); font-size: 14px; line-height: 18px; color: var(--neutral-80); }
     .legend-item { display: flex; align-items: center; gap: 4px; }
@@ -157,48 +149,46 @@
 
     /* ===== Donor Retention tile ===== */
     .dr-header-btn {
-      font-family: var(--font-primary); font-size: 14px; font-weight: 400; line-height: 18px;
-      color: var(--black-100); background: var(--white); border: 1px solid var(--neutral-60);
-      border-radius: var(--radius); padding: 0 12px; height: 40px; cursor: pointer; display: flex;
+      font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
+      color: var(--black-100); background: var(--white); border: 1px solid var(--black-100);
+      border-radius: var(--radius); padding: 4px 8px; cursor: pointer; display: flex;
       align-items: center; gap: 8px; position: relative; white-space: nowrap;
     }
-    .dr-header-btn:hover { background: var(--neutral-5); border-color: var(--black-100); }
-    .dr-header-btn i { font-size: 12px; color: var(--neutral-60); }
+    .dr-header-btn:hover { background: var(--neutral-5); }
+    .dr-header-btn i { font-size: 14px; }
 
     .dr-charts { display: flex; gap: 16px; flex: 1; min-height: 0; align-items: center; justify-content: center; margin-bottom: 16px; }
     .dr-chart-card {
       flex: 1; min-width: 0; height: 100%; background: var(--white); border: 1px solid var(--neutral-20);
       border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 16px;
+      align-items: center; justify-content: center; gap: 6px; position: relative;
     }
     .dr-chart-card.hidden { display: none; }
     .dr-chart-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); text-align: center; margin-bottom: 6px; }
     .dr-chart-subtitle { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); text-align: center; }
-    .dr-chart-title-row { display: flex; align-items: center; gap: 4px; justify-content: center; }
-    .dr-chart-title-row .dr-edit-btn {
-      position: relative; width: 24px; height: 24px; border-radius: 50%; border: none;
-      background: none; cursor: pointer; color: var(--neutral-60); font-size: 13px;
+    .dr-edit-btn {
+      position: absolute; right: 12px; top: 8px;
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      background: none; cursor: pointer; color: var(--neutral-60); font-size: 16px;
       display: inline-flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s; flex-shrink: 0; margin-top: -4px;
+      transition: background .15s, color .15s;
     }
-    .dr-chart-title-row .dr-edit-btn:hover { background: var(--neutral-20); color: var(--black-100); }
-    .dr-chart-title-row .dr-edit-btn .icon-outline { display: inline; }
-    .dr-chart-title-row .dr-edit-btn .icon-solid { display: none; }
-    .dr-chart-title-row .dr-edit-btn:hover .icon-outline { display: none; }
-    .dr-chart-title-row .dr-edit-btn:hover .icon-solid { display: inline; }
-    .dr-chart-title-row .dr-edit-btn .dr-edit-tooltip {
+    .dr-edit-btn:hover { background: var(--neutral-10); color: var(--black-100); }
+    .dr-edit-btn .dr-edit-tooltip {
       position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
       background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400;
       line-height: 18px; padding: 8px 16px; border-radius: 3px; white-space: nowrap;
       pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 10;
     }
-    .dr-chart-title-row .dr-edit-btn:hover .dr-edit-tooltip { opacity: 1; }
+    .dr-edit-btn:hover .dr-edit-tooltip { opacity: 1; }
 
-    .donut-wrap { position: relative; width: 136px; height: 136px; flex-shrink: 0; }
-    .donut-wrap svg { width: 100%; height: 100%; }
-    .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
-    .donut-pct { font-size: 29px; font-weight: 600; line-height: 35px; color: var(--black-100); }
+    .donut-wrap { position: relative; display: flex; flex-direction: column; align-items: center; height: 110px; margin-top: 12px; }
+    .donut-wrap svg { width: 160px; height: 120px; }
+    .donut-center { position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+    .donut-pct { font-size: 29px; font-weight: 500; line-height: 35px; color: var(--black-100); }
     .donut-label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--black-100); }
+    .dr-count { font-size: 16px; line-height: 21px; color: var(--black-100); text-align: center; }
+    .dr-count strong { font-weight: 700; }
 
     .dr-chart-legend { display: flex; gap: 16px; align-items: center; justify-content: center; }
     .dr-chart-legend .legend-item { gap: 4px; font-size: 12px; color: var(--neutral-80); }
@@ -215,17 +205,16 @@
     .dr-dot.orange { background: #D96B0C; }
     .dr-dot.red { background: var(--red-100); }
 
-    /* Show/Hide dropdown — Grove Menu Full */
+    /* Show/Hide dropdown */
     .dr-dropdown {
       position: absolute; top: calc(100% + 4px); right: 0; background: var(--white);
-      border: 1px solid var(--neutral-20); border-radius: var(--radius);
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.12);
+      border-radius: var(--radius); box-shadow: 0 4px 4px rgba(0,0,0,0.25);
       min-width: 260px; z-index: 20; display: none; padding: 8px 0;
     }
     .dr-dropdown.open { display: block; }
     .dr-dropdown-item {
-      display: flex; align-items: center; gap: 12px; padding: 0 16px;
-      height: 45px; font-size: 16px; line-height: 21px; color: var(--black-100); cursor: pointer;
+      display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+      font-size: 16px; line-height: 21px; color: var(--black-100); cursor: pointer;
       background: none; border: none; width: 100%; text-align: left; font-family: var(--font-primary);
       position: relative;
     }
@@ -264,7 +253,7 @@
     .km-value.clickable { cursor: pointer; }
     .km-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
     .km-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
-    .km-trend { display: flex; align-items: center; gap: 2px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 4px; }
+    .km-trend { display: flex; align-items: center; gap: 2px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 2px; }
     .km-trend .trend-icon { font-size: 16px; }
     .km-trend .trend-icon.up { color: var(--green-old); }
     .km-trend .trend-icon.down { color: var(--red-100); }
@@ -273,7 +262,7 @@
 
     /* ===== Recurring Giving (combined) tile ===== */
     .rg-body { display: flex; gap: 24px; flex: 1; min-height: 0; }
-    .rg-left { width: 340px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
+    .rg-left { width: 350px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
     .rg-right { flex: 1; min-width: 0; display: flex; flex-direction: column; }
     .rg-snapshot { display: flex; gap: 10px; }
     .rg-snap-card {
@@ -290,6 +279,15 @@
     }
     .rg-sched-hdr { display: flex; align-items: center; justify-content: space-between; }
     .rg-sched-title { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
+    .rg-sched-tabs { display: flex; }
+    .rg-sched-tab {
+      font-family: var(--font-primary); font-size: 12px; font-weight: 600; line-height: 18px;
+      padding: 3px 10px; border: 1px solid var(--neutral-20); background: var(--white);
+      color: var(--black-100); cursor: pointer;
+    }
+    .rg-sched-tab:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .rg-sched-tab:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: none; }
+    .rg-sched-tab.active { background: var(--neutral-10); }
     .rg-sched-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
     .rg-sched-row { display: flex; gap: 8px; padding: 8px 0; }
     .rg-sched-left { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
@@ -303,24 +301,77 @@
     .rg-sched-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .rg-sched-label { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
     .rg-chart-wrap { flex: 1; min-height: 0; position: relative; }
-    .dm-period-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
-    .dm-group-box { border: 1px solid var(--neutral-20); border-radius: var(--radius); overflow: hidden; }
-    .dm-group-hdr { display: flex; justify-content: flex-end; padding: 8px 16px 4px; }
-    .dm-group-card { padding: 6px 16px 10px; }
-    .dm-group-divider { height: 1px; background: var(--neutral-20); margin: 0 16px; }
-    .rg-sched-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
-    .tt-missed { margin-top: 6px; padding-top: 6px; border-top: 0.5px solid var(--neutral-20); }
-    .tt-missed-link { font-size: 12px; font-weight: 700; color: var(--green-old); text-decoration: none; white-space: nowrap; }
-    .tt-missed-link:hover { text-decoration: underline; }
     .rg-chart-footer {
       display: flex; justify-content: flex-end; margin-top: 8px;
     }
 
+    /* ===== Campaigns tile ===== */
+    .camp-header-right { display: flex; align-items: center; gap: 8px; }
+    .camp-configure-btn {
+      font-family: var(--font-primary); font-size: 16px; color: var(--neutral-60);
+      background: none; border: none; cursor: pointer; display: flex; align-items: center;
+    }
+    .camp-configure-btn:hover { color: var(--black-100); }
+    .camp-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; }
+    .camp-item { padding: 20px 0; border-bottom: 1px solid var(--neutral-10); }
+    .camp-item:first-child { padding-top: 8px; }
+    .camp-item:last-child { border-bottom: none; }
+    .camp-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .camp-item-left { display: flex; flex-direction: column; gap: 2px; }
+    .camp-card-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
+    .camp-card-name:hover { color: var(--green-old); text-decoration: underline; }
+    .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; }
+    .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-60); }
+    .camp-item-right { display: flex; align-items: baseline; gap: 4px; flex-shrink: 0; }
+    .camp-amount { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
+    .camp-amount-sub { font-size: 14px; font-weight: 400; color: var(--black-100); }
+    .camp-progress-bg { height: 8px; background: var(--neutral-10); border-radius: 999px; overflow: hidden; margin-top: 12px; }
+    .camp-progress-fill { height: 100%; border-radius: 999px; background: var(--green-old); }
+    .camp-progress-dashed {
+      height: 8px; margin-top: 12px; border-radius: 999px;
+      background: repeating-linear-gradient(90deg, var(--neutral-40) 0, var(--neutral-40) 6px, transparent 6px, transparent 12px);
+    }
+    .camp-row-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .camp-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
+    .camp-no-goal-text { font-size: 14px; color: var(--neutral-60); margin-top: 6px; }
+    .camp-view-all {
+      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-old);
+      background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px;
+      align-self: flex-end; padding: 8px 0;
+    }
+    .camp-view-all:hover { text-decoration: underline; }
+    /* Configure modal */
+    .config-list { display: flex; flex-direction: column; gap: 0; }
+    .config-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid var(--neutral-10);
+    }
+    .config-item:last-child { border-bottom: none; }
+    .config-item-info { flex: 1; }
+    .config-item-name { font-size: 14px; font-weight: 700; color: var(--black-100); }
+    .config-item-meta { font-size: 12px; color: var(--neutral-60); }
+    .config-section-title { font-size: 12px; font-weight: 700; color: var(--neutral-60); margin-top: 16px; margin-bottom: 4px; }
+    .config-add-btn {
+      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-old);
+      background: none; border: 1px solid var(--green-old); border-radius: var(--radius);
+      padding: 4px 12px; cursor: pointer;
+    }
+    .config-add-btn:hover { background: var(--green-5); }
+    .config-toggle {
+      width: 40px; height: 22px; border-radius: 11px; background: var(--green-old);
+      position: relative; cursor: pointer; border: none; flex-shrink: 0;
+    }
+    .config-toggle::after {
+      content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+      background: white; top: 2px; right: 2px; transition: 0.2s;
+    }
+
     /* ===== Donor Momentum tile ===== */
-    .dm-cards { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
+    .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
+    .dm-cards { display: flex; flex-direction: column; gap: 6px; }
     .dm-card {
-      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 10px 16px;
-      display: flex; align-items: stretch; flex: 1;
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 11px 16px;
+      display: flex; align-items: stretch; gap: 8px;
     }
     .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .dm-card-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
@@ -332,17 +383,18 @@
     .dm-badge.blue { background: #D4E6FA; color: #10437F; }
     .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
     .dm-badge.red { background: #FCEBEB; color: #791F1F; }
-    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; }
+    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 4px; }
     .dm-big-num:hover { color: var(--green-old); text-decoration: underline; }
-    .dm-big-num[style*="cursor:default"]:hover { color: var(--black-100); text-decoration: none; }
-    .dm-row-main { display: flex; align-items: baseline; width: 100%; }
-    .dm-col-count { width: 200px; flex-shrink: 0; }
-    .dm-col-amount { flex: 1; }
     .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
     .dm-yoy .trend-change { font-weight: 600; }
     .dm-yoy .trend-icon.up { color: var(--green-old); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
+    .dm-sparkline-label { font-size: 12px; color: var(--neutral-60); text-align: center; }
+    .dm-divider { width: 100%; height: 1px; background: var(--neutral-20); margin: 12px 0; }
+    .dm-at-risk-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 2px; }
+    .dm-stake-row { display: flex; align-items: center; gap: 6px; }
     .dm-stake-icon { color: #FFC600; font-size: 20px; }
+    .dm-stake-value { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
     .dm-stake-label { font-size: 12px; color: var(--neutral-60); display: flex; align-items: center; gap: 4px; }
     .dm-subtitle { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
 
@@ -362,6 +414,8 @@
       display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; justify-content: center;
     }
     .dbl-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .dbl-badge-row { display: flex; align-items: center; gap: 6px; }
+    .dbl-pct { font-size: 13px; font-weight: 600; color: var(--neutral-60); }
     .dbl-amount { display: flex; flex-direction: column; align-items: flex-end; }
     .dbl-amount-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); cursor: pointer; }
     .dbl-amount-value:hover { color: var(--green-old); text-decoration: underline; }
@@ -432,7 +486,7 @@
     .modal-header { display: flex; align-items: center; padding: 24px; gap: 4px; }
     .modal-header h2 { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .modal-close { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--neutral-60); background: none; border: none; font-size: 20px; transition: background .15s, color .15s; }
-    .modal-close:hover { color: var(--black-100); background: var(--neutral-20); }
+    .modal-close:hover { color: var(--black-100); background: var(--neutral-10); }
     .modal-body { padding: 0 24px; }
     .modal-footer { display: flex; align-items: center; justify-content: flex-end; padding: 24px; gap: 16px; }
     .btn { font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
@@ -487,93 +541,12 @@
     .field-error-msg { font-size: 14px; line-height: 18px; color: var(--red-100); display: none; padding: 4px 0 4px 16px; }
     .field-error-msg.visible { display: block; }
 
-    /* Delete button (circular icon) */
-    .btn-danger-text {
-      position: relative; width: 34px; height: 34px; border-radius: 50%; border: none;
-      background: none; cursor: pointer; color: var(--neutral-60);
-      display: inline-flex; align-items: center; justify-content: center; transition: background .15s, color .15s; flex-shrink: 0;
+    /* Reset defaults link */
+    .btn-reset {
+      font-family: var(--font-primary); font-size: 16px; font-weight: 600; color: var(--green-old);
+      background: none; border: none; cursor: pointer; padding: 0;
     }
-    .btn-danger-text:hover { background: var(--neutral-20); color: var(--black-100); }
-    .btn-danger-text i { font-size: 18px; }
-    .btn-danger-text .tooltip-text {
-      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400; line-height: 18px;
-      padding: 8px 12px; border-radius: var(--radius); white-space: nowrap; pointer-events: none;
-      opacity: 0; transition: opacity .15s; z-index: 10;
-    }
-    .btn-danger-text:hover .tooltip-text { opacity: 1; }
-
-    /* ===== Campaigns tile ===== */
-    .camp-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding-right: 12px; margin-right: -12px; }
-    .camp-row { padding: 14px 0; display: flex; flex-direction: column; gap: 10px; }
-    .camp-divider { height: 1px; background: var(--neutral-10); flex-shrink: 0; }
-    .camp-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; min-width: 0; }
-    .camp-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
-    .camp-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-    .camp-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
-    .camp-name:hover { color: var(--green-old); text-decoration: underline; }
-    .camp-dates { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
-    .camp-no-goal-badge {
-      font-size: 11px; font-weight: 600; padding: 2px 8px;
-      border-radius: 100px; background: var(--neutral-10); color: var(--neutral-60); white-space: nowrap;
-    }
-    .camp-right { flex-shrink: 0; text-align: right; }
-    .camp-amount-wrap { display: flex; align-items: baseline; gap: 6px; position: relative; justify-content: flex-end; }
-    .camp-raised-val { font-size: 20px; font-weight: 700; color: var(--black-100); cursor: pointer; position: relative; }
-    .camp-raised-val:hover { color: var(--green-old); text-decoration: underline; }
-    .camp-raised-val .tooltip-text { right: 0; left: auto; white-space: nowrap; top: calc(100% + 8px); bottom: auto; }
-    .camp-of-goal { font-size: 12px; color: var(--neutral-60); white-space: nowrap; }
-
-    .camp-progress-wrap { display: flex; flex-direction: column; gap: 4px; }
-    .camp-progress-track {
-      height: 8px; background: var(--neutral-10); border-radius: 4px; position: relative; overflow: hidden;
-    }
-    .camp-progress-fill { height: 100%; background: var(--green-old); border-radius: 4px; transition: width 0.3s ease; }
-    .camp-progress-meta {
-      display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--neutral-60);
-    }
-    .camp-pct { font-weight: 700; color: var(--black-100); font-size: 12px; }
-    .camp-yoy { font-size: 12px; }
-
-    .camp-no-goal-bar { display: flex; flex-direction: column; gap: 4px; }
-    .camp-no-goal-track { height: 8px; background: var(--neutral-10); border-radius: 4px; overflow: hidden; }
-    .camp-no-goal-fill {
-      height: 100%; width: 100%;
-      background: repeating-linear-gradient(90deg, var(--neutral-20) 0px, var(--neutral-20) 8px, transparent 8px, transparent 12px);
-    }
-
-    .camp-footer { display: flex; justify-content: flex-end; padding-top: 12px; border-top: 1px solid var(--neutral-10); margin-top: 4px; flex-shrink: 0; }
-    .camp-view-all { font-size: 14px; font-weight: 700; color: var(--green-old); text-decoration: none; display: flex; align-items: center; gap: 6px; }
-    .camp-view-all:hover { text-decoration: underline; }
-
-    .camp-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
-    .camp-empty-icon { font-size: 32px; color: var(--neutral-40); }
-    .camp-empty-title { font-size: 16px; font-weight: 700; color: var(--black-100); }
-    .camp-empty-body { font-size: 14px; color: var(--neutral-60); }
-    .camp-empty-link { color: var(--green-old); font-weight: 700; text-decoration: none; }
-    .camp-empty-link:hover { text-decoration: underline; }
-    .camp-config-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
-    .camp-config-divider { height: 1px; background: var(--neutral-10); }
-    .camp-config-name { font-size: 14px; font-weight: 700; color: var(--black-100); }
-    .camp-config-meta { font-size: 12px; color: var(--neutral-60); margin-top: 1px; }
-    .camp-grip { color: var(--neutral-40); font-size: 14px; cursor: grab; flex-shrink: 0; }
-    .camp-config-remove {
-      font-family: var(--font-primary); font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
-      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
-      border: none; background: var(--neutral-10); color: var(--neutral-60);
-      flex-shrink: 0; transition: all 0.15s;
-    }
-    .camp-config-remove:hover { background: var(--red-10); color: var(--red-100); }
-    .camp-config-add {
-      font-family: var(--font-primary); font-size: 12px; font-weight: 700;
-      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
-      padding: 4px 12px; border-radius: 100px; cursor: pointer;
-      border: 1px solid var(--neutral-20); background: var(--white);
-      color: var(--neutral-60); white-space: nowrap; transition: all 0.15s;
-    }
-    .camp-config-add:hover { border-color: var(--green-old); color: var(--green-old); }
-    .camp-drag-ghost { opacity: 0.4; background: var(--neutral-5); border-radius: var(--radius); }
+    .btn-reset:hover { text-decoration: underline; }
 
     /* Modal animation */
     .modal-overlay { transition: opacity .2s; }
@@ -625,9 +598,6 @@
       </div>
       <div class="tile-state-data">
       <div class="chart-area" id="chart-area-a">
-        <div class="goal-label" id="goal-label-a" style="top:20px;" onclick="openModal('edit-goal-modal')">
-          350K Goal (FY 26) <i class="fa-regular fa-pen-to-square"></i>
-        </div>
         <div class="custom-tooltip" id="tooltip-a">
           <div class="tt-month"></div>
           <div class="tt-row tt-fy26"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">FY26</span></div><span class="tt-value"></span></div>
@@ -641,12 +611,11 @@
           <div class="todays-total">Today's Total: <strong>$250,000</strong></div>
           <div class="prior-totals">
             <span class="prior-total-item">
-              <a href="#" class="prior-year-link has-tooltip">FY25: $198,000<span class="tooltip-text">↑ 26% vs. FY25</span></a>
+              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">26%</span> vs. FY25</span></span>
             </span>
             <span class="prior-total-item">
-              <a href="#" class="prior-year-link has-tooltip">FY24: $174,500<span class="tooltip-text">↑ 43% vs. FY24</span></a>
+              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">43%</span> vs. FY24</span></span>
             </span>
-            <button class="past-goals-btn" onclick="openModal('goal-history-modal')">Past Goals</button>
           </div>
         </div>
         <div class="legend-box">
@@ -729,100 +698,60 @@
     </div>
     <div class="tile" id="tile-dr">
       <div class="tile-header">
-        <div class="tile-title">Donor Retention</div>
-        <div style="position:relative;">
-          <button class="dr-header-btn" id="dr-toggle-btn" onclick="toggleDrDropdown()">
-            Show/Hide Graphs <i class="fa-solid fa-caret-down"></i>
-          </button>
-          <div class="dr-dropdown" id="dr-dropdown">
-            <button class="dr-dropdown-item" id="ddi-overall" onclick="toggleDrChart('overall')">
-              <span class="dr-checkbox checked" id="cb-overall"><i class="fa-solid fa-check"></i></span>
-              Overall Retention
-              <span class="dr-tooltip">Tile must have at least one chart</span>
-            </button>
-            <button class="dr-dropdown-item" id="ddi-firsttime" onclick="toggleDrChart('firsttime')">
-              <span class="dr-checkbox checked" id="cb-firsttime"><i class="fa-solid fa-check"></i></span>
-              First-time Donor Retention
-              <span class="dr-tooltip">Tile must have at least one chart</span>
-            </button>
-            <button class="dr-dropdown-item" id="ddi-custom" onclick="toggleDrChart('custom')">
-              <span class="dr-checkbox checked" id="cb-custom"><i class="fa-solid fa-check"></i></span>
-              Custom Retention
-              <span class="dr-tooltip">Tile must have at least one chart</span>
-            </button>
-          </div>
-        </div>
+        <div class="tile-title">Donor Retention <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Retention metrics help track how well your organization retains donors over time.</span></span></div>
       </div>
 
       <div class="tile-state-data">
       <div class="dr-charts" id="dr-charts">
         <!-- Overall Retention: 72% green -->
         <div class="dr-chart-card" id="card-overall">
+          <button class="dr-edit-btn" onclick="openModal('edit-overall-modal')">
+            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+            <span class="dr-edit-tooltip">Edit</span>
+          </button>
           <div>
             <div class="dr-chart-title">Overall Retention</div>
-            <div class="dr-chart-subtitle">(Rolling)</div>
+            <div class="dr-chart-subtitle">Rolling</div>
           </div>
           <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#3F9107" stroke-width="16"
-                stroke-dasharray="244.3" stroke-dashoffset="67.6"
-                transform="rotate(-90 68 68)" style="cursor:pointer;" />
+            <svg width="160" height="120">
+              <g transform="translate(80, 72)">
+                <path d="M-68.47606917325106,22.249223594996206A72,72,0,1,1,68.47606917325105,22.249223594996213L57.06339097770921,18.541019662496844A60,60,0,1,0,-57.06339097770922,18.541019662496836Z" fill="#E9EAEA"></path>
+              </g>
+              <path d="M 17.2 92.4 A 66 66 0 1 1 142.8 92.4" fill="none" stroke="#3F9107" stroke-width="12" stroke-dasharray="249" stroke-dashoffset="69.7"/>
             </svg>
-            <div class="donut-center"><span class="donut-pct">72%</span><span class="donut-label">Retained</span></div>
+            <div class="donut-center"><span class="donut-pct">72%</span></div>
           </div>
-          <div class="dr-chart-legend">
-            <div class="legend-item"><span class="legend-line" style="background:var(--green-old);"></span> Retained</div>
-            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
+          <div class="dr-count"><strong>2,140</strong> of <strong>2,970</strong> retained</div>
+          <div class="km-trend" style="justify-content:center;">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">2 pts</span> vs. last year</span>
           </div>
         </div>
 
-        <!-- First-Time Donor Retention: 72% green -->
+        <!-- First-Time Donor Retention: 24% red -->
         <div class="dr-chart-card" id="card-firsttime">
+          <button class="dr-edit-btn" onclick="openModal('edit-firsttime-modal')">
+            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+            <span class="dr-edit-tooltip">Edit</span>
+          </button>
           <div>
             <div class="dr-chart-title">First-Time Donor Retention</div>
-            <div class="dr-chart-subtitle">(Rolling)</div>
+            <div class="dr-chart-subtitle">Rolling</div>
           </div>
           <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#3F9107" stroke-width="16"
-                stroke-dasharray="244.3" stroke-dashoffset="67.6"
-                transform="rotate(-90 68 68)" style="cursor:pointer;" />
+            <svg width="160" height="120">
+              <g transform="translate(80, 72)">
+                <path d="M-68.47606917325106,22.249223594996206A72,72,0,1,1,68.47606917325105,22.249223594996213L57.06339097770921,18.541019662496844A60,60,0,1,0,-57.06339097770922,18.541019662496836Z" fill="#E9EAEA"></path>
+              </g>
+              <path d="M 17.2 92.4 A 66 66 0 1 1 142.8 92.4" fill="none" stroke="#E24B4A" stroke-width="12" stroke-dasharray="249" stroke-dashoffset="189.2"/>
             </svg>
-            <div class="donut-center"><span class="donut-pct">72%</span><span class="donut-label">Retained</span></div>
+            <div class="donut-center"><span class="donut-pct">24%</span></div>
           </div>
-          <div class="dr-chart-legend">
-            <div class="legend-item"><span class="legend-line" style="background:var(--green-old);"></span> Retained</div>
-            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
-          </div>
-        </div>
-
-        <!-- Custom Retention: 46% orange -->
-        <div class="dr-chart-card" id="card-custom">
-          <div>
-            <div class="dr-chart-title-row">
-              <span class="dr-chart-title">Custom Retention</span>
-              <button class="dr-edit-btn" onclick="openModal('edit-custom-modal')">
-                <i class="fa-regular fa-pen icon-outline" aria-hidden="true"></i>
-                <i class="fa-solid fa-pen icon-solid" aria-hidden="true"></i>
-                <span class="dr-edit-tooltip">Edit</span>
-              </button>
-            </div>
-            <div class="dr-chart-subtitle">(Calendar Year)</div>
-          </div>
-          <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D96B0C" stroke-width="16"
-                stroke-dasharray="156.1" stroke-dashoffset="0"
-                transform="rotate(-90 68 68)" style="cursor:pointer;" />
-            </svg>
-            <div class="donut-center"><span class="donut-pct">46%</span><span class="donut-label">Retained</span></div>
-          </div>
-          <div class="dr-chart-legend">
-            <div class="legend-item"><span class="legend-line" style="background:#D96B0C;"></span> Retained</div>
-            <div class="legend-item"><span class="legend-line" style="background:var(--neutral-20);"></span> Lapsed</div>
+          <div class="dr-count"><strong>31</strong> of <strong>129</strong> retained</div>
+          <div class="km-trend" style="justify-content:center;">
+            <i class="fa-solid fa-caret-down trend-icon down"></i>
+            <span><span class="trend-change">3 pts</span> vs. last year</span>
           </div>
         </div>
       </div>
@@ -834,38 +763,32 @@
         <div class="dr-chart-card">
           <div>
             <div class="dr-chart-title">Overall Retention</div>
-            <div class="dr-chart-subtitle">(Rolling)</div>
+            <div class="dr-chart-subtitle">Rolling</div>
           </div>
           <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+            <svg width="160" height="120">
+              <g transform="translate(80, 72)">
+                <path d="M-68.47606917325106,22.249223594996206A72,72,0,1,1,68.47606917325105,22.249223594996213L57.06339097770921,18.541019662496844A60,60,0,1,0,-57.06339097770922,18.541019662496836Z" fill="#E9EAEA"></path>
+              </g>
             </svg>
-            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
+            <div class="donut-center"><span class="donut-pct">0%</span></div>
           </div>
+          <div class="dr-count"><strong>0</strong> of <strong>0</strong> retained</div>
         </div>
         <div class="dr-chart-card">
           <div>
             <div class="dr-chart-title">First-Time Donor Retention</div>
-            <div class="dr-chart-subtitle">(Rolling)</div>
+            <div class="dr-chart-subtitle">Rolling</div>
           </div>
           <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
+            <svg width="160" height="120">
+              <g transform="translate(80, 72)">
+                <path d="M-68.47606917325106,22.249223594996206A72,72,0,1,1,68.47606917325105,22.249223594996213L57.06339097770921,18.541019662496844A60,60,0,1,0,-57.06339097770922,18.541019662496836Z" fill="#E9EAEA"></path>
+              </g>
             </svg>
-            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
+            <div class="donut-center"><span class="donut-pct">0%</span></div>
           </div>
-        </div>
-        <div class="dr-chart-card">
-          <div>
-            <div class="dr-chart-title">Custom Retention</div>
-            <div class="dr-chart-subtitle">(Rolling)</div>
-          </div>
-          <div class="donut-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle cx="68" cy="68" r="54" fill="none" stroke="#D4D5D6" stroke-width="16" />
-            </svg>
-            <div class="donut-center"><span class="donut-pct">0%</span><span class="donut-label">Retained</span></div>
-          </div>
+          <div class="dr-count"><strong>0</strong> of <strong>0</strong> retained</div>
         </div>
       </div>
       </div><!-- end tile-state-empty -->
@@ -912,18 +835,9 @@
             <span><span class="trend-change">6</span> from last month</span>
           </div>
         </div>
-        <!-- New Donor Count -->
-        <div class="km-card">
-          <div class="km-value clickable">4,280</div>
-          <div class="km-label">New Donor Count</div>
-          <div class="km-trend">
-            <i class="fa-solid fa-caret-up trend-icon up"></i>
-            <span><span class="trend-change">12</span> from last month</span>
-          </div>
-        </div>
         <!-- Total Transactions -->
         <div class="km-card">
-          <div class="km-value clickable">13,560</div>
+          <div class="km-value clickable">18,200</div>
           <div class="km-label">Total Transactions</div>
           <div class="km-trend">
             <i class="fa-solid fa-caret-up trend-icon up"></i>
@@ -939,6 +853,15 @@
             <span><span class="trend-change">15%</span> vs. last month</span>
           </div>
         </div>
+        <!-- Median Gift Size -->
+        <div class="km-card">
+          <div class="km-value">$125</div>
+          <div class="km-label">Median Gift Size</div>
+          <div class="km-trend">
+            <i class="fa-solid fa-caret-up trend-icon up"></i>
+            <span><span class="trend-change">3%</span> vs. last month</span>
+          </div>
+        </div>
       </div>
       </div><!-- end tile-state-data -->
 
@@ -950,15 +873,15 @@
         </div>
         <div class="km-card">
           <div class="km-value">0</div>
-          <div class="km-label">New Donor Count</div>
-        </div>
-        <div class="km-card">
-          <div class="km-value">0</div>
           <div class="km-label">Total Transactions</div>
         </div>
         <div class="km-card">
           <div class="km-value">$0</div>
           <div class="km-label">Avg Gift Size</div>
+        </div>
+        <div class="km-card">
+          <div class="km-value">$0</div>
+          <div class="km-label">Median Gift Size</div>
         </div>
       </div>
       </div><!-- end tile-state-empty -->
@@ -1011,38 +934,38 @@
           <div class="rg-sched-card">
             <div class="rg-sched-hdr">
               <span class="rg-sched-title">Schedules</span>
-              <div class="toggle-group rg-sched-toggle">
-                <button class="toggle-btn active" onclick="setSchedPeriod('month', this)">Current Month</button>
-                <button class="toggle-btn" onclick="setSchedPeriod('fytd', this)">FYTD</button>
+              <div class="rg-sched-tabs">
+                <button class="rg-sched-tab active" onclick="setSchedTab(this,'month')">Current Month</button>
+                <button class="rg-sched-tab" onclick="setSchedTab(this,'fytd')">FYTD</button>
               </div>
             </div>
-            <div class="rg-sched-rows">
+            <div class="rg-sched-rows" id="rg-sched-grid">
               <div class="rg-sched-row">
                 <div class="rg-accent green"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-new">10</span><span class="rg-sched-label">new</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change" id="rg-trend-new">2</span> <span id="rg-suffix-new">from June last year</span></span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">10</span><span class="rg-sched-label">new</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">2</span> from May last year</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent orange"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-canceled">5</span><span class="rg-sched-label">canceled</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change" id="rg-trend-canceled">2</span> <span id="rg-suffix-canceled">from June last year</span></span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">5</span><span class="rg-sched-label">canceled</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">2</span> from May last year</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent blue"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-increased">2</span><span class="rg-sched-label">increased</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change" id="rg-trend-increased">1</span> <span id="rg-suffix-increased">from June last year</span></span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">2</span><span class="rg-sched-label">increased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">1</span> from May last year</span></div>
                 </div>
               </div>
               <div class="rg-sched-row">
                 <div class="rg-accent" style="background:var(--red-100);"></div>
                 <div class="rg-sched-left">
-                  <div class="rg-sched-inline"><span class="rg-sched-value" id="rg-val-decreased">1</span><span class="rg-sched-label">decreased</span></div>
-                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change" id="rg-trend-decreased">1</span> <span id="rg-suffix-decreased">from June last year</span></span></div>
+                  <div class="rg-sched-inline"><span class="rg-sched-value">1</span><span class="rg-sched-label">decreased</span></div>
+                  <div class="km-trend"><i class="fa-solid fa-caret-up trend-icon down"></i><span><span class="trend-change">1</span> from May last year</span></div>
                 </div>
               </div>
             </div>
@@ -1087,7 +1010,10 @@
           <div class="rg-sched-card">
             <div class="rg-sched-hdr">
               <span class="rg-sched-title">Schedules</span>
-              <span class="km-badge small">May 2026</span>
+              <div class="rg-sched-tabs">
+                <button class="rg-sched-tab active" disabled>Current Month</button>
+                <button class="rg-sched-tab" disabled>FYTD</button>
+              </div>
             </div>
             <div class="rg-sched-rows">
               <div class="rg-sched-row">
@@ -1144,109 +1070,97 @@
 
       <div class="tile-state-data">
 
-        <!-- New + Recaptured grouped box with toggle -->
-        <div class="dm-group-box">
-          <div class="dm-group-hdr">
-            <div class="toggle-group dm-period-toggle">
-              <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
-              <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
-            </div>
-          </div>
-          <div class="dm-group-card">
-            <span class="dm-badge green">New</span>
-            <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" id="dm-val-new">56</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-new">$4,820</div>
-            </div>
-            <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
-              <span>+<span class="trend-change" id="dm-trend-new">15</span> <span id="dm-suffix-new">from June last year</span></span>
-            </div>
-          </div>
-          <div class="dm-group-divider"></div>
-          <div class="dm-group-card">
-            <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" id="dm-val-recaptured">8</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-recaptured">$1,240</div>
-            </div>
-            <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
-              <span>+<span class="trend-change" id="dm-trend-recaptured">3</span> <span id="dm-suffix-recaptured">from June last year</span></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- At Risk separate card -->
-        <div class="dm-card" style="margin-top:8px;">
+      <!-- Zone 1: Monthly acquisition -->
+      <div class="dm-cards">
+        <!-- New -->
+        <div class="dm-card">
           <div class="dm-card-left">
-            <span class="dm-badge yellow">At Risk</span>
-            <div class="dm-row-main" style="align-items:center;">
-              <div class="dm-col-count" style="cursor:default;">
-                <div class="dm-big-num" style="cursor:default;">36</div>
-                <div class="dm-subtitle">No gift in 10–13 months</div>
-              </div>
-              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
-                <div>
-                  <div class="dm-big-num" style="cursor:default;">$1,650</div>
-                  <div class="dm-stake-label">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Total value of each at-risk donor's most recent gift.</span></span></div>
-                </div>
-                <i class="fa-solid fa-exclamation-triangle dm-stake-icon"></i>
-              </div>
+            <span class="dm-badge green">New</span>
+            <div class="dm-big-num">56</div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">15</span> from last year</span>
             </div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
           </div>
         </div>
 
-      </div><!-- end tile-state-data -->
-
-      <div class="tile-state-empty">
-
-        <!-- New + Recaptured grouped box -->
-        <div class="dm-group-box">
-          <div class="dm-group-hdr">
-            <div class="toggle-group dm-period-toggle">
-              <button class="toggle-btn active">Current Month</button>
-              <button class="toggle-btn">FYTD</button>
-            </div>
-          </div>
-          <div class="dm-group-card">
-            <span class="dm-badge green">New</span>
-            <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
-            </div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
-          </div>
-          <div class="dm-group-divider"></div>
-          <div class="dm-group-card">
+        <!-- Recaptured -->
+        <div class="dm-card">
+          <div class="dm-card-left">
             <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
+            <div class="dm-big-num">8,556</div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">15</span> from last year</span>
             </div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
           </div>
         </div>
 
         <!-- At Risk -->
-        <div class="dm-card" style="margin-top:8px;">
+        <div class="dm-card">
           <div class="dm-card-left">
-            <span class="dm-badge yellow">At Risk</span>
-            <div class="dm-row-main" style="align-items:center;">
-              <div class="dm-col-count" style="cursor:default;">
-                <div class="dm-big-num" style="cursor:default;">—</div>
-                <div class="dm-subtitle">No gift in 10–13 months</div>
-              </div>
-              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
-                <div>
-                  <div class="dm-big-num" style="cursor:default;">—</div>
-                  <div class="dm-stake-label">at stake</div>
-                </div>
-              </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="dm-badge yellow">At risk</span>
             </div>
+            <div class="dm-big-num">36</div>
+            <div class="dm-subtitle">No gift in 10–13 months</div>
+          </div>
+          <div class="dm-at-risk-right">
+            <div class="dm-stake-row">
+              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
+              <span class="dm-stake-value">$1,650</span>
+            </div>
+            <div class="dm-stake-label" style="margin-left:32px;">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Lorem ipsum dolor sit amet. Total value of each at-risk donor's most recent gift.</span></span></div>
           </div>
         </div>
+      </div>
+      </div><!-- end tile-state-data -->
 
+      <div class="tile-state-empty">
+      <div class="dm-cards">
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge green">New</span>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
+          </div>
+          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
+            <span class="km-badge small">May 2026</span>
+          </div>
+        </div>
+        <div class="dm-card">
+          <div class="dm-card-left">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="dm-badge yellow">At risk</span>
+            </div>
+            <div class="dm-big-num" style="cursor:default;">0</div>
+            <div class="dm-subtitle">No gift in 10–13 months</div>
+          </div>
+          <div class="dm-at-risk-right">
+            <div class="dm-stake-row">
+              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
+              <span class="dm-stake-value">$0</span>
+            </div>
+            <div class="dm-stake-label" style="margin-left:32px;">at stake</div>
+          </div>
+        </div>
+      </div>
       </div><!-- end tile-state-empty -->
     </div>
   </div>
@@ -1278,7 +1192,7 @@
         <!-- Major -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge green">Major</span>
+            <span class="dm-badge green">Major<span style="margin:0 4px;">·</span>3%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$85,400</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1299,7 +1213,7 @@
         <!-- Mid -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge blue">Mid</span>
+            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>36%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$580,000</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1320,7 +1234,7 @@
         <!-- General -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General</span>
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>61%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$85,400</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1344,7 +1258,7 @@
       <div class="dbl-cards">
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge green">Major</span>
+            <span class="dm-badge green">Major<span style="margin:0 4px;">·</span>0%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1363,7 +1277,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge blue">Mid</span>
+            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>0%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1382,7 +1296,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General</span>
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>0%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1516,257 +1430,283 @@
         Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
       </a>
       <div class="state-toggle">
-        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-campaigns')">Has Data</button>
-        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-campaigns')">Empty State</button>
+        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-camp')">Has Data</button>
+        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-camp')">Empty State</button>
       </div>
     </div>
-    <div class="tile wide" id="tile-campaigns" style="height:454px;">
+    <div class="tile" id="tile-camp">
       <div class="tile-header">
         <div class="tile-title">Campaigns</div>
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="toggle-group">
-            <button class="toggle-btn active" onclick="setCampaignToggle('revenue', this)">Revenue</button>
-            <button class="toggle-btn" onclick="setCampaignToggle('raised', this)">Raised</button>
-          </div>
-          <div class="dr-chart-title-row" style="margin:0;">
-            <button class="dr-edit-btn" onclick="openModal('camp-config-modal')">
-              <i class="fa-regular fa-pen icon-outline" aria-hidden="true"></i>
-              <i class="fa-solid fa-pen icon-solid" aria-hidden="true"></i>
-              <span class="dr-edit-tooltip">Configure campaigns</span>
-            </button>
-          </div>
+        <div class="camp-header-right">
+          <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
+          <button class="camp-configure-btn" onclick="openModal('configure-campaigns-modal')"><i class="fa-regular fa-pen-to-square"></i></button>
         </div>
       </div>
 
       <div class="tile-state-data">
-        <div class="camp-list" id="camp-list">
-
-          <!-- Campaign 1: FY goal, FY period → show YoY -->
-          <div class="camp-row" data-camp-id="1">
-            <div class="camp-row-top">
-              <div class="camp-left">
-                <div class="camp-name-row">
-                  <span class="camp-name clickable">Annual Fund 2026</span>
-                </div>
-                <div class="camp-dates">Jan 1 – Dec 31, 2026 · Fiscal year</div>
-              </div>
-              <div class="camp-right">
-                <div class="camp-amount-wrap">
-                  <span class="camp-raised-val">$78,068</span>
-                  <span class="camp-of-goal">of <span class="camp-goal">$150,000</span> goal</span>
-                </div>
-              </div>
+      <div class="camp-list">
+        <!-- Annual Fund -->
+        <div class="camp-item">
+          <div class="camp-row-top">
+            <div class="camp-item-left">
+              <div class="camp-card-name">Annual Fund 2026</div>
+              <div class="camp-card-meta">Jan 1 – Dec 31, 2026<span style="margin:0 4px;">·</span>Fiscal year</div>
             </div>
-            <div class="camp-progress-wrap">
-              <div class="camp-progress-track">
-                <div class="camp-progress-fill" style="width: 52%;"></div>
-              </div>
-              <div class="camp-progress-meta">
-                <span class="camp-pct">52%</span>
-                <span class="camp-yoy"><i class="fa-solid fa-caret-up trend-icon up"></i> 8% vs. same period last year</span>
-              </div>
+            <div class="camp-item-right">
+              <span class="camp-amount">$78,068</span>
+              <span class="camp-amount-sub">of $150,000 goal</span>
             </div>
           </div>
-
-          <div class="camp-divider"></div>
-
-          <!-- Campaign 2: FY goal, FY period → show YoY -->
-          <div class="camp-row" data-camp-id="2">
-            <div class="camp-row-top">
-              <div class="camp-left">
-                <div class="camp-name-row">
-                  <span class="camp-name clickable">GivingTuesday 2026</span>
-                </div>
-                <div class="camp-dates">Nov 15 – Dec 3, 2026 · Calendar year</div>
-              </div>
-              <div class="camp-right">
-                <div class="camp-amount-wrap">
-                  <span class="camp-raised-val">$5,797</span>
-                  <span class="camp-of-goal">of <span class="camp-goal">$25,000</span> goal</span>
-                </div>
-              </div>
-            </div>
-            <div class="camp-progress-wrap">
-              <div class="camp-progress-track">
-                <div class="camp-progress-fill" style="width: 23%;"></div>
-              </div>
-              <div class="camp-progress-meta">
-                <span class="camp-pct">23%</span>
-                <span class="camp-yoy"><i class="fa-solid fa-caret-down trend-icon down"></i> 12% vs. same period last year</span>
-              </div>
+          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:52%;"></div></div>
+          <div class="camp-row-bottom">
+            <span class="camp-pct">52%</span>
+            <div class="km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">8%</span> vs. same period last year</span>
             </div>
           </div>
-
-          <div class="camp-divider"></div>
-
-          <!-- Campaign 3: No goal, custom date range → no YoY -->
-          <div class="camp-row" data-camp-id="3">
-            <div class="camp-row-top">
-              <div class="camp-left">
-                <div class="camp-name-row">
-                  <span class="camp-name clickable">Spring Stewardship 2026</span>
-                  <span class="camp-no-goal-badge">No goal</span>
-                </div>
-                <div class="camp-dates">Mar 1 – May 31, 2026 · Custom range</div>
-              </div>
-              <div class="camp-right">
-                <div class="camp-amount-wrap">
-                  <span class="camp-raised-val">$15,904</span>
-                  <span class="camp-of-goal">raised</span>
-                </div>
-              </div>
-            </div>
-            <div class="camp-no-goal-bar">
-              <div class="camp-no-goal-track">
-                <div class="camp-no-goal-fill"></div>
-              </div>
-              <div class="camp-progress-meta">
-                <span class="camp-pct" style="color:var(--neutral-60); font-weight:400;">No goal set</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="camp-divider"></div>
-
-          <!-- Campaign 4: Goal, FY period → show YoY -->
-          <div class="camp-row" data-camp-id="4">
-            <div class="camp-row-top">
-              <div class="camp-left">
-                <div class="camp-name-row">
-                  <span class="camp-name clickable">Capital Campaign Phase 2</span>
-                </div>
-                <div class="camp-dates">Jul 1, 2025 – Jun 30, 2027 · Fiscal year</div>
-              </div>
-              <div class="camp-right">
-                <div class="camp-amount-wrap">
-                  <span class="camp-raised-val">$1,234,592</span>
-                  <span class="camp-of-goal">of <span class="camp-goal">$2,500,000</span> goal</span>
-                </div>
-              </div>
-            </div>
-            <div class="camp-progress-wrap">
-              <div class="camp-progress-track">
-                <div class="camp-progress-fill" style="width: 49%;"></div>
-              </div>
-              <div class="camp-progress-meta">
-                <span class="camp-pct">49%</span>
-                <span class="camp-yoy"><i class="fa-solid fa-caret-up trend-icon up"></i> 3% vs. same period last year</span>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- end camp-list -->
-
-        <div class="camp-footer">
-          <a href="#" class="camp-view-all">View all campaigns <i class="fa-regular fa-arrow-right"></i></a>
         </div>
+
+        <!-- GivingTuesday -->
+        <div class="camp-item">
+          <div class="camp-row-top">
+            <div class="camp-item-left">
+              <div class="camp-card-name">GivingTuesday 2026</div>
+              <div class="camp-card-meta">Nov 15 – Dec 3, 2026<span style="margin:0 4px;">·</span>Calendar year</div>
+            </div>
+            <div class="camp-item-right">
+              <span class="camp-amount">$5,797</span>
+              <span class="camp-amount-sub">of $25,000 goal</span>
+            </div>
+          </div>
+          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:23%;"></div></div>
+          <div class="camp-row-bottom">
+            <span class="camp-pct">23%</span>
+            <div class="km-trend">
+              <i class="fa-solid fa-caret-down trend-icon down"></i>
+              <span><span class="trend-change">12%</span> vs. same period last year</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spring Stewardship (no goal) -->
+        <div class="camp-item">
+          <div class="camp-row-top">
+            <div class="camp-item-left">
+              <div class="camp-card-name">Spring Stewardship 2026 <span class="camp-no-goal">No goal</span></div>
+              <div class="camp-card-meta">Mar 1 – May 31, 2026<span style="margin:0 4px;">·</span>Custom range</div>
+            </div>
+            <div class="camp-item-right">
+              <span class="camp-amount">$15,904</span>
+              <span class="camp-amount-sub">raised</span>
+            </div>
+          </div>
+          <div class="camp-progress-dashed"></div>
+          <div class="camp-no-goal-text">No goal set</div>
+        </div>
+
+        <!-- Capital Campaign -->
+        <div class="camp-item">
+          <div class="camp-row-top">
+            <div class="camp-item-left">
+              <div class="camp-card-name">Capital Campaign Phase 2</div>
+              <div class="camp-card-meta">Jul 1, 2025 – Jun 30, 2027<span style="margin:0 4px;">·</span>Fiscal year</div>
+            </div>
+            <div class="camp-item-right">
+              <span class="camp-amount">$1,234,592</span>
+              <span class="camp-amount-sub">of $2,500,000 goal</span>
+            </div>
+          </div>
+          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:49%;"></div></div>
+          <div class="camp-row-bottom">
+            <span class="camp-pct">49%</span>
+            <div class="km-trend">
+              <i class="fa-solid fa-caret-up trend-icon up"></i>
+              <span><span class="trend-change">3%</span> vs. same period last year</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="camp-view-all">View all campaigns <i class="fa-regular fa-arrow-right"></i></button>
       </div><!-- end tile-state-data -->
 
       <div class="tile-state-empty">
-        <div class="camp-empty">
-          <i class="fa-regular fa-flag camp-empty-icon"></i>
-          <div class="camp-empty-title">No active campaigns</div>
-          <div class="camp-empty-body">Campaigns will appear here once they're active. <a href="#" class="camp-empty-link">Create a campaign</a></div>
-        </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
+        <div style="font-size:16px; font-weight:700; color:var(--black-100);">No active campaigns</div>
+        <div style="font-size:14px; color:var(--neutral-60);">Campaigns will appear here once they're active. <a href="#" style="color:var(--green-old); text-decoration:none; font-weight:600;">Create a campaign</a></div>
       </div>
-
+      </div><!-- end tile-state-empty -->
     </div>
   </div>
 
-  <!-- ===== CAMPAIGNS CONFIGURE MODAL ===== -->
-  <div class="modal-overlay" id="camp-config-modal" onclick="if(event.target===this)closeModal(this.id)">
-    <div class="modal" style="max-width:520px;">
+  <!-- ===== CONFIGURE CAMPAIGNS MODAL ===== -->
+  <div class="modal-overlay" id="configure-campaigns-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:540px;">
       <div class="modal-header">
         <h2>Configure Campaigns</h2>
-        <button class="modal-close" onclick="closeModal('camp-config-modal')"><i class="fa-regular fa-xmark"></i></button>
+        <button class="modal-close" onclick="closeModal('configure-campaigns-modal')"><i class="fa-regular fa-xmark"></i></button>
       </div>
-      <div class="modal-body" style="padding:16px 24px; display:flex; flex-direction:column; gap:0;">
-
-        <!-- Showing on dashboard -->
-        <div style="margin-bottom:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:11px; font-weight:700; color:var(--neutral-60); text-transform:uppercase; letter-spacing:0.5px;">Showing on dashboard</span>
-            <span id="camp-count-label" style="font-size:12px; color:var(--neutral-60);">4 of 10</span>
+      <div class="modal-body" style="padding:16px 24px 0;">
+        <p style="font-size:14px; color:var(--neutral-60); margin-bottom:4px;">Showing on dashboard <strong style="color:var(--black-100);">4</strong> of <strong style="color:var(--black-100);">10</strong></p>
+        <div class="config-list">
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">Annual Fund 2026</div>
+              <div class="config-item-meta">Jan 1 – Dec 31, 2026</div>
+            </div>
+            <button class="config-toggle"></button>
           </div>
-          <div id="camp-config-current" style="display:flex; flex-direction:column;">
-            <div class="camp-config-row" data-camp-id="1">
-              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
-              <div style="flex:1;">
-                <div class="camp-config-name">Annual Fund 2026</div>
-                <div class="camp-config-meta">Jan 1 – Dec 31, 2026</div>
-              </div>
-              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">GivingTuesday 2026</div>
+              <div class="config-item-meta">Nov 15 – Dec 3, 2026</div>
             </div>
-            <div class="camp-config-divider"></div>
-            <div class="camp-config-row" data-camp-id="2">
-              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
-              <div style="flex:1;">
-                <div class="camp-config-name">GivingTuesday 2026</div>
-                <div class="camp-config-meta">Nov 15 – Dec 3, 2026</div>
-              </div>
-              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            <button class="config-toggle"></button>
+          </div>
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">Spring Stewardship 2026</div>
+              <div class="config-item-meta">Mar 1 – May 31, 2026<span style="margin:0 4px;">·</span>No goal</div>
             </div>
-            <div class="camp-config-divider"></div>
-            <div class="camp-config-row" data-camp-id="3">
-              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
-              <div style="flex:1;">
-                <div class="camp-config-name">Spring Stewardship 2026</div>
-                <div class="camp-config-meta">Mar 1 – May 31, 2026 · No goal</div>
-              </div>
-              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
+            <button class="config-toggle"></button>
+          </div>
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">Capital Campaign Phase 2</div>
+              <div class="config-item-meta">Jul 1, 2025 – Jun 30, 2027</div>
             </div>
-            <div class="camp-config-divider"></div>
-            <div class="camp-config-row" data-camp-id="4">
-              <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
-              <div style="flex:1;">
-                <div class="camp-config-name">Capital Campaign Phase 2</div>
-                <div class="camp-config-meta">Jul 1, 2025 – Jun 30, 2027</div>
-              </div>
-              <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
-            </div>
+            <button class="config-toggle"></button>
           </div>
         </div>
 
-        <!-- Divider -->
-        <div style="height:1px; background:var(--neutral-10); margin:0 -24px 16px;"></div>
-
-        <!-- Search to add -->
-        <div>
-          <div style="font-size:11px; font-weight:700; color:var(--neutral-60); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Add a campaign</div>
-          <div style="position:relative; margin-bottom:12px;">
-            <i class="fa-regular fa-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--neutral-60); font-size:14px;"></i>
-            <input type="text" id="camp-search-input" placeholder="Search active campaigns…" oninput="filterCampSearch(this.value)"
-              style="width:100%; box-sizing:border-box; padding:8px 12px 8px 36px; border:1px solid var(--neutral-20); border-radius:var(--radius); font-family:var(--font-primary); font-size:14px; color:var(--black-100); outline:none;">
-          </div>
-
-          <!-- Search results -->
-          <div id="camp-search-results" style="display:none; flex-direction:column;">
-            <div class="camp-config-row camp-search-result" data-camp-id="5" data-name="Year-End Appeal 2026">
-              <div style="flex:1;">
-                <div class="camp-config-name">Year-End Appeal 2026</div>
-                <div class="camp-config-meta">Nov 1 – Dec 31, 2026</div>
-              </div>
-              <button class="camp-config-add" onclick="addCampConfig(this)"><i class="fa-regular fa-plus"></i> Add</button>
+        <div class="config-section-title">Add a campaign</div>
+        <div class="config-list">
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">Year-End Appeal 2026</div>
+              <div class="config-item-meta">Nov 1 – Dec 31, 2026</div>
             </div>
-            <div class="camp-config-divider camp-search-divider"></div>
-            <div class="camp-config-row camp-search-result" data-camp-id="6" data-name="Legacy Society Outreach">
-              <div style="flex:1;">
-                <div class="camp-config-name">Legacy Society Outreach</div>
-                <div class="camp-config-meta">Jan 1 – Dec 31, 2026 · No goal</div>
-              </div>
-              <button class="camp-config-add" onclick="addCampConfig(this)"><i class="fa-regular fa-plus"></i> Add</button>
-            </div>
+            <button class="config-add-btn">Add</button>
           </div>
-
-          <!-- Empty search state -->
-          <div id="camp-search-empty" style="display:none; font-size:13px; color:var(--neutral-60); padding:8px 0;">No matching active campaigns found.</div>
+          <div class="config-item">
+            <div class="config-item-info">
+              <div class="config-item-name">Legacy Society Outreach</div>
+              <div class="config-item-meta">Jan 1 – Dec 31, 2026<span style="margin:0 4px;">·</span>No goal</div>
+            </div>
+            <button class="config-add-btn">Add</button>
+          </div>
         </div>
-
       </div>
       <div class="modal-footer">
         <div class="spacer"></div>
-        <button class="btn btn-secondary" onclick="closeModal('camp-config-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="closeModal('camp-config-modal')">Save</button>
+        <button class="btn btn-secondary" onclick="closeModal('configure-campaigns-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('configure-campaigns-modal')">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EDIT OVERALL RETENTION MODAL ===== -->
+  <div class="modal-overlay" id="edit-overall-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:540px;">
+      <div class="modal-header">
+        <h2>Edit Overall Retention</h2>
+        <button class="modal-close" onclick="closeModal('edit-overall-modal')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:0 24px 0; display:flex; flex-direction:column; gap:24px;">
+        <p style="font-size:16px;line-height:21px;color:var(--black-100);">Custom settings can help your organization get a more accurate picture of success.</p>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select funds to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Funds</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select campaigns to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Campaigns</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select appeals to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Appeals</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:0 16px; height:56px; display:flex; align-items:center; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">All</span>
+            <i class="fa-solid fa-caret-down" style="font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Constituent Type</label>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
+          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
+          Include Soft Credits
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-reset">
+          Reset to defaults
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="closeModal('edit-overall-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('edit-overall-modal')">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EDIT FIRST-TIME DONOR RETENTION MODAL ===== -->
+  <div class="modal-overlay" id="edit-firsttime-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:540px;">
+      <div class="modal-header">
+        <h2>Edit First-Time Donor Retention</h2>
+        <button class="modal-close" onclick="closeModal('edit-firsttime-modal')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:0 24px 0; display:flex; flex-direction:column; gap:24px;">
+        <p style="font-size:16px;line-height:21px;color:var(--black-100);">Custom settings can help your organization get a more accurate picture of success.</p>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select funds to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Funds</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select campaigns to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Campaigns</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select appeals to exclude</span>
+            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Appeals</label>
+        </div>
+        <div class="mui-field" style="margin-top:4px;">
+          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:0 16px; height:56px; display:flex; align-items:center; cursor:pointer; position:relative;">
+            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">All</span>
+            <i class="fa-solid fa-caret-down" style="font-size:12px; color:var(--neutral-60);"></i>
+          </div>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Constituent Type</label>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
+          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
+          Include Soft Credits
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-reset">
+          Reset to defaults
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="closeModal('edit-firsttime-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('edit-firsttime-modal')">Save</button>
       </div>
     </div>
   </div>
@@ -1833,9 +1773,8 @@
         </label>
       </div>
       <div class="modal-footer">
-        <button class="btn-danger-text" aria-label="Reset to defaults">
-          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
-          <span class="tooltip-text" aria-hidden="true">Reset to defaults</span>
+        <button class="btn-reset">
+          Reset to defaults
         </button>
         <div class="spacer"></div>
         <button class="btn btn-secondary" onclick="closeModal('edit-custom-modal')">Cancel</button>
@@ -1894,7 +1833,6 @@
       </div>
       <div class="modal-footer">
         <button class="btn-danger-text" aria-label="Delete goal">
-          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
           <span class="tooltip-text" aria-hidden="true">Delete goal</span>
         </button>
         <div class="spacer"></div>
@@ -1994,17 +1932,6 @@
       if (id === 'goal-history-modal') {
         const mainToggle = document.querySelector('#tile-a .toggle-btn.active');
         if (mainToggle) setGoalHistoryMode(mainToggle.textContent.trim().toLowerCase());
-      }
-      if (id === 'camp-config-modal') {
-        const list = document.getElementById('camp-config-current');
-        if (list && !campSortable) {
-          campSortable = Sortable.create(list, {
-            animation: 150,
-            handle: '.camp-grip',
-            ghostClass: 'camp-drag-ghost',
-            onEnd() { rebuildCampDividers(); }
-          });
-        }
       }
     };
 
@@ -2111,16 +2038,6 @@
             // Right border
             ctx.beginPath(); ctx.moveTo(right, top); ctx.lineTo(right, bottom); ctx.stroke();
             ctx.restore();
-          }
-        }, {
-          id: 'goalLine',
-          afterDraw(chart) {
-            const goalY = chart.scales.y.getPixelForValue(goalAmount);
-            const ctx = chart.ctx;
-            ctx.save(); ctx.setLineDash([8, 6]); ctx.strokeStyle = '#272D30'; ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(chart.chartArea.left, goalY); ctx.lineTo(chart.chartArea.right, goalY); ctx.stroke(); ctx.restore();
-            const label = document.getElementById(goalLabelId);
-            if (label) label.style.top = (goalY - 14) + 'px';
           }
         }, {
           id: 'hoverLine',
@@ -2393,6 +2310,46 @@
       });
     }
 
+    // ===== Recurring Giving schedule tabs =====
+    const schedData = {
+      month: {
+        values: [10, 5, 2, 1],
+        trends: [
+          { dir: 'up', val: '2', text: 'from May last year' },
+          { dir: 'down', val: '2', text: 'from May last year' },
+          { dir: 'up', val: '1', text: 'from May last year' },
+          { dir: 'down', val: '1', text: 'from May last year' }
+        ]
+      },
+      fytd: {
+        values: [87, 34, 18, 9],
+        trends: [
+          { dir: 'up', val: '12', text: 'vs. FYTD last year' },
+          { dir: 'down', val: '8', text: 'vs. FYTD last year' },
+          { dir: 'up', val: '5', text: 'vs. FYTD last year' },
+          { dir: 'down', val: '3', text: 'vs. FYTD last year' }
+        ]
+      }
+    };
+    function setSchedTab(btn, mode) {
+      btn.parentElement.querySelectorAll('.rg-sched-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const grid = document.getElementById('rg-sched-grid');
+      if (!grid) return;
+      const d = schedData[mode];
+      const rows = grid.querySelectorAll('.rg-sched-row');
+      rows.forEach((row, i) => {
+        row.querySelector('.rg-sched-value').textContent = d.values[i];
+        const trend = row.querySelector('.km-trend');
+        if (trend) {
+          const icon = trend.querySelector('.trend-icon');
+          icon.className = 'fa-solid fa-caret-up trend-icon ' + d.trends[i].dir;
+          trend.querySelector('.trend-change').textContent = d.trends[i].val;
+          trend.querySelector('span > span').nextSibling.textContent = ' ' + d.trends[i].text;
+        }
+      });
+    }
+
     // ===== Recurring Giving forecast chart =====
     const rgCtx = document.getElementById('rg-chart');
     if (rgCtx) {
@@ -2441,18 +2398,6 @@
                 const rE = el.querySelector('.tt-expected');
                 if (collected != null) { rC.style.display = 'flex'; rC.querySelector('.tt-value').textContent = '$' + Number(collected).toLocaleString(); } else { rC.style.display = 'none'; }
                 if (expected != null) { rE.style.display = 'flex'; rE.querySelector('.tt-value').textContent = '$' + Number(expected).toLocaleString(); } else { rE.style.display = 'none'; }
-
-                // Show "View missed" link only when there's a gap
-                let missedRow = el.querySelector('.tt-missed');
-                if (!missedRow) {
-                  missedRow = document.createElement('div');
-                  missedRow.className = 'tt-missed';
-                  missedRow.innerHTML = '<a href="javascript:void(0)" class="tt-missed-link">View missed payments →</a>';
-                  el.appendChild(missedRow);
-                }
-                const hasMissed = collected != null && expected != null && collected < expected;
-                missedRow.style.display = hasMissed ? 'block' : 'none';
-
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
@@ -2623,164 +2568,6 @@
       gblCtx.addEventListener('mouseleave', () => {
         const el = document.getElementById('gbl-tooltip');
         if (el) el.style.opacity = 0;
-      });
-    }
-
-    // ===== Donor Momentum — period toggle =====
-    const dmData = {
-      month: { new: '56', recaptured: '8',   trendNew: '15', trendRecaptured: '3',  amtNew: '$4,820',  amtRecaptured: '$1,240', suffix: 'from June last year' },
-      fytd:  { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'from prior FYTD' }
-    };
-
-    function setDmPeriod(period, btn) {
-      btn.closest('.dm-period-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const d = dmData[period];
-      document.getElementById('dm-val-new').textContent          = d.new;
-      document.getElementById('dm-val-recaptured').textContent   = d.recaptured;
-      document.getElementById('dm-trend-new').textContent        = d.trendNew;
-      document.getElementById('dm-trend-recaptured').textContent = d.trendRecaptured;
-      document.getElementById('dm-amt-new').textContent          = d.amtNew;
-      document.getElementById('dm-amt-recaptured').textContent   = d.amtRecaptured;
-      document.getElementById('dm-suffix-new').textContent       = d.suffix;
-      document.getElementById('dm-suffix-recaptured').textContent = d.suffix;
-    }
-
-    function rebuildCampDividers() {
-      const list = document.getElementById('camp-config-current');
-      // Remove all dividers
-      list.querySelectorAll('.camp-config-divider').forEach(d => d.remove());
-      // Re-add between rows
-      const rows = list.querySelectorAll('.camp-config-row');
-      rows.forEach((row, i) => {
-        if (i < rows.length - 1) {
-          const div = document.createElement('div');
-          div.className = 'camp-config-divider';
-          row.after(div);
-        }
-      });
-    }
-    function setCampaignToggle(mode, btn) {
-      btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.camp-raised-val').forEach(el => {
-        el.textContent = mode === 'revenue' ? el.dataset.revenue : el.dataset.raised;
-      });
-    }
-
-    // ===== Campaigns — Configure modal =====
-    function filterCampSearch(val) {
-      const results = document.getElementById('camp-search-results');
-      const empty = document.getElementById('camp-search-empty');
-      const query = val.trim().toLowerCase();
-
-      if (!query) {
-        results.style.display = 'none';
-        empty.style.display = 'none';
-        return;
-      }
-
-      // Filter search results by name
-      const rows = results.querySelectorAll('.camp-search-result');
-      const dividers = results.querySelectorAll('.camp-search-divider');
-      let anyVisible = false;
-
-      rows.forEach((row, i) => {
-        const name = row.dataset.name.toLowerCase();
-        const match = name.includes(query);
-        row.style.display = match ? 'flex' : 'none';
-        if (match) anyVisible = true;
-      });
-
-      // Show/hide dividers between visible results
-      dividers.forEach(d => d.style.display = 'none');
-      const visibleRows = [...rows].filter(r => r.style.display !== 'none');
-      visibleRows.forEach((r, i) => {
-        if (i < visibleRows.length - 1) {
-          const next = r.nextElementSibling;
-          if (next && next.classList.contains('camp-search-divider')) next.style.display = 'block';
-        }
-      });
-
-      results.style.display = anyVisible ? 'flex' : 'none';
-      empty.style.display = anyVisible ? 'none' : 'block';
-    }
-
-    function removeCampConfig(btn) {
-      const row = btn.closest('.camp-config-row');
-      row.remove();
-      rebuildCampDividers();
-      updateCampCountLabel();
-    }
-
-    function addCampConfig(btn) {
-      const current = document.getElementById('camp-config-current');
-      const count = current.querySelectorAll('.camp-config-row').length;
-      if (count >= 10) { btn.textContent = 'Max reached'; btn.disabled = true; return; }
-
-      const row = btn.closest('.camp-search-result');
-      const name = row.querySelector('.camp-config-name').textContent;
-      const meta = row.querySelector('.camp-config-meta').textContent;
-
-      // Add divider if list isn't empty
-      if (count > 0) {
-        const div = document.createElement('div');
-        div.className = 'camp-config-divider';
-        current.appendChild(div);
-      }
-
-      // Add new row
-      const newRow = document.createElement('div');
-      newRow.className = 'camp-config-row';
-      newRow.innerHTML = `
-        <i class="fa-solid fa-grip-dots-vertical camp-grip"></i>
-        <div style="flex:1;">
-          <div class="camp-config-name">${name}</div>
-          <div class="camp-config-meta">${meta}</div>
-        </div>
-        <button class="camp-config-remove" onclick="removeCampConfig(this)"><i class="fa-regular fa-xmark"></i></button>
-      `;
-      current.appendChild(newRow);
-      rebuildCampDividers();
-
-      btn.innerHTML = '✓ Added';
-      btn.disabled = true;
-      btn.style.color = 'var(--green-old)';
-      btn.style.borderColor = 'var(--green-old)';
-
-      updateCampCountLabel();
-    }
-
-    function updateCampCountLabel() {
-      const count = document.querySelectorAll('#camp-config-current .camp-config-row').length;
-      const el = document.getElementById('camp-count-label');
-      if (el) el.textContent = `${count} of 10`;
-    }
-
-    // ===== Campaigns — Init drag-to-reorder on modal open =====
-    let campSortable = null;
-
-    // ===== Recurring Giving — Schedules period toggle =====
-    const schedData = {
-      month: { new: '10', canceled: '5', increased: '2', decreased: '1', trendNew: '2', trendCanceled: '2', trendIncreased: '1', trendDecreased: '1', suffix: 'from June last year' },
-      fytd:  { new: '47', canceled: '18', increased: '9', decreased: '5', trendNew: '12', trendCanceled: '6', trendIncreased: '3', trendDecreased: '2', suffix: 'from prior FYTD' }
-    };
-
-    function setSchedPeriod(period, btn) {
-      btn.closest('.rg-sched-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const d = schedData[period];
-      document.getElementById('rg-val-new').textContent       = d.new;
-      document.getElementById('rg-val-canceled').textContent  = d.canceled;
-      document.getElementById('rg-val-increased').textContent = d.increased;
-      document.getElementById('rg-val-decreased').textContent = d.decreased;
-      document.getElementById('rg-trend-new').textContent       = d.trendNew;
-      document.getElementById('rg-trend-canceled').textContent  = d.trendCanceled;
-      document.getElementById('rg-trend-increased').textContent = d.trendIncreased;
-      document.getElementById('rg-trend-decreased').textContent = d.trendDecreased;
-      ['new','canceled','increased','decreased'].forEach(k => {
-        document.getElementById('rg-suffix-' + k).textContent = d.suffix;
       });
     }
   </script>
