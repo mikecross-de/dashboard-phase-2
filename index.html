@@ -379,9 +379,9 @@
     .dm-period-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
     .dm-group-box { border: 1px solid var(--neutral-20); border-radius: var(--radius); overflow: hidden; }
     .dm-group-hdr { display: flex; justify-content: flex-end; padding: 8px 16px 4px; }
-    .dm-group-card { padding: 6px 16px 10px; }
+    .dm-group-card { padding: 12px 16px 12px; }
     .dm-group-divider { height: 1px; background: var(--neutral-20); margin: 0 16px; }
-    .dm-row-main { display: flex; align-items: baseline; width: 100%; }
+    .dm-row-main { display: flex; align-items: baseline; width: 100%; margin-top: 8px; }
     .dm-col-count { width: 200px; flex-shrink: 0; }
     .dm-col-amount { flex: 1; }
     /* ===== Donor Momentum tile ===== */
@@ -390,7 +390,7 @@
       border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 10px 16px;
       display: flex; align-items: stretch; flex: 1;
     }
-    .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; }
     .dm-card-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
     .dm-badge {
       display: inline-block; padding: 2px 6px; border-radius: var(--radius);
@@ -1084,14 +1084,14 @@
 
         <!-- New + Recaptured grouped box with toggle -->
         <div class="dm-group-box">
-          <div class="dm-group-hdr">
-            <div class="toggle-group dm-period-toggle">
-              <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
-              <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
-            </div>
-          </div>
           <div class="dm-group-card">
-            <span class="dm-badge green">New</span>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span class="dm-badge green">New</span>
+              <div class="toggle-group dm-period-toggle">
+                <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
+                <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
+              </div>
+            </div>
             <div class="dm-row-main">
               <div class="dm-big-num dm-col-count" id="dm-val-new">56</div>
               <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-new">$4,820</div>
@@ -1141,14 +1141,14 @@
 
         <!-- New + Recaptured grouped box -->
         <div class="dm-group-box">
-          <div class="dm-group-hdr">
-            <div class="toggle-group dm-period-toggle">
-              <button class="toggle-btn active">Current Month</button>
-              <button class="toggle-btn">FYTD</button>
-            </div>
-          </div>
           <div class="dm-group-card">
-            <span class="dm-badge green">New</span>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span class="dm-badge green">New</span>
+              <div class="toggle-group dm-period-toggle">
+                <button class="toggle-btn active">Current Month</button>
+                <button class="toggle-btn">FYTD</button>
+              </div>
+            </div>
             <div class="dm-row-main">
               <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
               <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
