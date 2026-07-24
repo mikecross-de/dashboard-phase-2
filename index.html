@@ -80,6 +80,7 @@
     .toggle-btn:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
     .toggle-btn.active { background: var(--neutral-20); }
     .toggle-btn:not(.active) { background: var(--white); }
+    .toggle-group.small .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
     .toggle-btn:hover:not(.active) { background: var(--neutral-10); }
 
     /* Chart */
@@ -248,8 +249,8 @@
 
     /* ===== Key Metrics tile ===== */
     .km-badge {
-      background: var(--neutral-10); padding: 3px 6px; border-radius: var(--radius);
-      font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
+      background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius);
+      font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
     }
     .km-badge.small { font-size: 12px; }
     .km-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-height: 0; }
@@ -374,6 +375,13 @@
       background: white; top: 2px; right: 2px; transition: 0.2s;
     }
 
+    .dm-group-box { border: 1px solid var(--neutral-20); border-radius: var(--radius); overflow: hidden; }
+    .dm-group-hdr { display: flex; justify-content: flex-end; padding: 8px 16px 4px; }
+    .dm-group-card { padding: 12px 16px 12px; }
+    .dm-group-divider { height: 1px; background: var(--neutral-20); margin: 0 16px; }
+    .dm-row-main { display: flex; align-items: baseline; width: 100%; }
+    .dm-col-count { width: 200px; flex-shrink: 0; }
+    .dm-col-amount { flex: 1; }
     /* ===== Donor Momentum tile ===== */
     .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
     .dm-cards { display: flex; flex-direction: column; gap: 6px; }
@@ -391,9 +399,9 @@
     .dm-badge.blue { background: #D4E6FA; color: #10437F; }
     .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
     .dm-badge.red { background: #FCEBEB; color: #791F1F; }
-    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 4px; }
+    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 6px; }
     .dm-big-num:hover { color: var(--green-100); text-decoration: underline; }
-    .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
+    .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 2px; }
     .dm-yoy .trend-change { font-weight: 600; }
     .dm-yoy .trend-icon.up { color: var(--green-100); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
@@ -1072,101 +1080,110 @@
     <div class="tile half" id="tile-dm">
       <div class="tile-header">
         <div class="tile-title">Donor Momentum</div>
+        <div class="toggle-group small dm-period-toggle">
+          <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
+          <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
+        </div>
       </div>
 
       <div class="tile-state-data">
 
-      <!-- Zone 1: Monthly acquisition -->
-      <div class="dm-cards">
-        <!-- New -->
-        <div class="dm-card">
-          <div class="dm-card-left">
+        <!-- New + Recaptured grouped box -->
+        <div class="dm-group-box">
+          <div class="dm-group-card">
             <span class="dm-badge green">New</span>
-            <div class="dm-big-num">56</div>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" id="dm-val-new">56</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-new">$4,820</div>
+            </div>
             <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">15</span> from last year</span>
+              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
+              <span><span class="trend-change" id="dm-trend-new">15</span> <span id="dm-suffix-new">from May last year</span></span>
             </div>
           </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
+          <div class="dm-group-divider"></div>
+          <div class="dm-group-card">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" id="dm-val-recaptured">8</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;" id="dm-amt-recaptured">$1,240</div>
+            </div>
+            <div class="dm-yoy">
+              <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
+              <span><span class="trend-change" id="dm-trend-recaptured">3</span> <span id="dm-suffix-recaptured">from May last year</span></span>
+            </div>
           </div>
         </div>
 
-        <!-- Recaptured -->
-        <div class="dm-card">
+        <!-- At Risk separate card -->
+        <div class="dm-card" style="margin-top:12px; padding:12px 16px;">
           <div class="dm-card-left">
-            <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-big-num">8,556</div>
-            <div class="dm-yoy">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">15</span> from last year</span>
+            <div style="display:flex; align-items:center;">
+              <span class="dm-badge yellow">At Risk</span>
+              <span class="km-badge" style="margin-left:auto;">Current</span>
+            </div>
+            <div class="dm-row-main" style="align-items:center;">
+              <div class="dm-col-count" style="cursor:default;">
+                <div class="dm-big-num" style="cursor:default;">36</div>
+                <div class="dm-subtitle">No gift in 10–13 months</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
+                <div>
+                  <div class="dm-big-num" style="cursor:default;">$1,650</div>
+                  <div class="dm-stake-label">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Total value of each at-risk donor's most recent gift.</span></span></div>
+                </div>
+                <i class="fa-solid fa-exclamation-triangle dm-stake-icon"></i>
+              </div>
             </div>
           </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
+        </div>
+
+      </div><!-- end tile-state-data -->
+
+      <div class="tile-state-empty">
+
+        <!-- New + Recaptured grouped box -->
+        <div class="dm-group-box">
+          <div class="dm-group-card">
+            <span class="dm-badge green">New</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" style="cursor:default;">0</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">$0</div>
+            </div>
+          </div>
+          <div class="dm-group-divider"></div>
+          <div class="dm-group-card">
+            <span class="dm-badge blue">Recaptured</span>
+            <div class="dm-row-main">
+              <div class="dm-big-num dm-col-count" style="cursor:default;">0</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">$0</div>
+            </div>
           </div>
         </div>
 
         <!-- At Risk -->
-        <div class="dm-card">
+        <div class="dm-card" style="margin-top:12px; padding:12px 16px;">
           <div class="dm-card-left">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="dm-badge yellow">At risk</span>
+            <div style="display:flex; align-items:center;">
+              <span class="dm-badge yellow">At Risk</span>
+              <span class="km-badge" style="margin-left:auto;">Current</span>
             </div>
-            <div class="dm-big-num">36</div>
-            <div class="dm-subtitle">No gift in 10–13 months</div>
-          </div>
-          <div class="dm-at-risk-right">
-            <div class="dm-stake-row">
-              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
-              <span class="dm-stake-value">$1,650</span>
+            <div class="dm-row-main" style="align-items:center;">
+              <div class="dm-col-count" style="cursor:default;">
+                <div class="dm-big-num" style="cursor:default;">0</div>
+                <div class="dm-subtitle">No gift in 10–13 months</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
+                <div>
+                  <div class="dm-big-num" style="cursor:default;">$0</div>
+                  <div class="dm-stake-label">at stake</div>
+                </div>
+                <i class="fa-solid fa-exclamation-triangle dm-stake-icon"></i>
+              </div>
             </div>
-            <div class="dm-stake-label" style="margin-left:32px;">at stake <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text" style="bottom:auto; top:calc(100% + 8px);">Lorem ipsum dolor sit amet. Total value of each at-risk donor's most recent gift.</span></span></div>
           </div>
         </div>
-      </div>
-      </div><!-- end tile-state-data -->
 
-      <div class="tile-state-empty">
-      <div class="dm-cards">
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <span class="dm-badge green">New</span>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
-          </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
-          </div>
-        </div>
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <span class="dm-badge blue">Recaptured</span>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
-          </div>
-          <div class="dm-card-right" style="justify-content:flex-start; align-items:flex-end; gap:8px;">
-            <span class="km-badge small">May 2026</span>
-          </div>
-        </div>
-        <div class="dm-card">
-          <div class="dm-card-left">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="dm-badge yellow">At risk</span>
-            </div>
-            <div class="dm-big-num" style="cursor:default;">0</div>
-            <div class="dm-subtitle">No gift in 10–13 months</div>
-          </div>
-          <div class="dm-at-risk-right">
-            <div class="dm-stake-row">
-              <i class="fa-solid fa-triangle-exclamation dm-stake-icon"></i>
-              <span class="dm-stake-value">$0</span>
-            </div>
-            <div class="dm-stake-label" style="margin-left:32px;">at stake</div>
-          </div>
-        </div>
-      </div>
       </div><!-- end tile-state-empty -->
     </div>
   </div>
@@ -2261,6 +2278,25 @@
         cols[0].innerHTML = '<strong>' + lv.active.split(' ')[0] + '</strong> of ' + lv.active.split(' ')[2] + ' active';
         cols[1].innerHTML = '<strong>' + lv.havent + '</strong> haven\'t given';
       });
+    }
+
+    // ===== Donor Momentum period toggle =====
+    const dmData = {
+      month: { new: '56', recaptured: '8', trendNew: '15', trendRecaptured: '3', amtNew: '$4,820', amtRecaptured: '$1,240', suffix: 'from May last year' },
+      fytd: { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'vs. FYTD last year' }
+    };
+    function setDmPeriod(period, btn) {
+      btn.closest('.dm-period-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const d = dmData[period];
+      document.getElementById('dm-val-new').textContent = d.new;
+      document.getElementById('dm-val-recaptured').textContent = d.recaptured;
+      document.getElementById('dm-trend-new').textContent = d.trendNew;
+      document.getElementById('dm-trend-recaptured').textContent = d.trendRecaptured;
+      document.getElementById('dm-amt-new').textContent = d.amtNew;
+      document.getElementById('dm-amt-recaptured').textContent = d.amtRecaptured;
+      document.getElementById('dm-suffix-new').textContent = d.suffix;
+      document.getElementById('dm-suffix-recaptured').textContent = d.suffix;
     }
 
     // ===== Recurring Giving schedule tabs =====
