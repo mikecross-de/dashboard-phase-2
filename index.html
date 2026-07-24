@@ -375,19 +375,20 @@
       background: white; top: 2px; right: 2px; transition: 0.2s;
     }
 
+
+    .dm-period-toggle .toggle-btn { font-size: 12px; font-weight: 600; height: 24px; padding: 0 10px; }
     .dm-group-box { border: 1px solid var(--neutral-20); border-radius: var(--radius); overflow: hidden; }
     .dm-group-hdr { display: flex; justify-content: flex-end; padding: 8px 16px 4px; }
-    .dm-group-card { padding: 12px 16px 12px; }
+    .dm-group-card { padding: 6px 16px 10px; }
     .dm-group-divider { height: 1px; background: var(--neutral-20); margin: 0 16px; }
     .dm-row-main { display: flex; align-items: baseline; width: 100%; }
     .dm-col-count { width: 200px; flex-shrink: 0; }
     .dm-col-amount { flex: 1; }
     /* ===== Donor Momentum tile ===== */
-    .dm-zone-label { font-size: 14px; font-weight: 700; line-height: 18px; color: var(--black-100); margin-bottom: 8px; }
-    .dm-cards { display: flex; flex-direction: column; gap: 6px; }
+    .dm-cards { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
     .dm-card {
-      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 11px 16px;
-      display: flex; align-items: stretch; gap: 8px;
+      border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 10px 16px;
+      display: flex; align-items: stretch; flex: 1;
     }
     .dm-card-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .dm-card-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
@@ -399,18 +400,14 @@
     .dm-badge.blue { background: #D4E6FA; color: #10437F; }
     .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
     .dm-badge.red { background: #FCEBEB; color: #791F1F; }
-    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 6px; }
+    .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; }
     .dm-big-num:hover { color: var(--green-100); text-decoration: underline; }
-    .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 2px; }
+    .dm-big-num[style*="cursor:default"]:hover { color: var(--black-100); text-decoration: none; }
+    .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
     .dm-yoy .trend-change { font-weight: 600; }
     .dm-yoy .trend-icon.up { color: var(--green-100); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
-    .dm-sparkline-label { font-size: 12px; color: var(--neutral-60); text-align: center; }
-    .dm-divider { width: 100%; height: 1px; background: var(--neutral-20); margin: 12px 0; }
-    .dm-at-risk-right { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 2px; }
-    .dm-stake-row { display: flex; align-items: center; gap: 6px; }
     .dm-stake-icon { color: #FFC600; font-size: 20px; }
-    .dm-stake-value { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
     .dm-stake-label { font-size: 12px; color: var(--neutral-60); display: flex; align-items: center; gap: 4px; }
     .dm-subtitle { font-size: 12px; color: var(--neutral-60); line-height: 18px; }
 
@@ -1065,6 +1062,7 @@
     </div>
   </div>
 
+
   <!-- ===== DONOR MOMENTUM ===== -->
   <div id="donor-momentum" class="tile-panel">
     <div class="tile-section-header">
@@ -1080,16 +1078,18 @@
     <div class="tile half" id="tile-dm">
       <div class="tile-header">
         <div class="tile-title">Donor Momentum</div>
-        <div class="toggle-group small dm-period-toggle">
-          <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
-          <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
-        </div>
       </div>
 
       <div class="tile-state-data">
 
-        <!-- New + Recaptured grouped box -->
+        <!-- New + Recaptured grouped box with toggle -->
         <div class="dm-group-box">
+          <div class="dm-group-hdr">
+            <div class="toggle-group dm-period-toggle">
+              <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
+              <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
+            </div>
+          </div>
           <div class="dm-group-card">
             <span class="dm-badge green">New</span>
             <div class="dm-row-main">
@@ -1098,7 +1098,7 @@
             </div>
             <div class="dm-yoy">
               <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
-              <span><span class="trend-change" id="dm-trend-new">15</span> <span id="dm-suffix-new">from May last year</span></span>
+              <span><span class="trend-change" id="dm-trend-new">15</span> <span id="dm-suffix-new">from June last year</span></span>
             </div>
           </div>
           <div class="dm-group-divider"></div>
@@ -1110,18 +1110,15 @@
             </div>
             <div class="dm-yoy">
               <i class="fa-solid fa-caret-up trend-icon up" style="font-size:14px;"></i>
-              <span><span class="trend-change" id="dm-trend-recaptured">3</span> <span id="dm-suffix-recaptured">from May last year</span></span>
+              <span><span class="trend-change" id="dm-trend-recaptured">3</span> <span id="dm-suffix-recaptured">from June last year</span></span>
             </div>
           </div>
         </div>
 
         <!-- At Risk separate card -->
-        <div class="dm-card" style="margin-top:12px; padding:12px 16px;">
+        <div class="dm-card" style="margin-top:8px;">
           <div class="dm-card-left">
-            <div style="display:flex; align-items:center;">
-              <span class="dm-badge yellow">At Risk</span>
-              <span class="km-badge" style="margin-left:auto;">Current</span>
-            </div>
+            <span class="dm-badge yellow">At Risk</span>
             <div class="dm-row-main" style="align-items:center;">
               <div class="dm-col-count" style="cursor:default;">
                 <div class="dm-big-num" style="cursor:default;">36</div>
@@ -1144,41 +1141,45 @@
 
         <!-- New + Recaptured grouped box -->
         <div class="dm-group-box">
+          <div class="dm-group-hdr">
+            <div class="toggle-group dm-period-toggle">
+              <button class="toggle-btn active">Current Month</button>
+              <button class="toggle-btn">FYTD</button>
+            </div>
+          </div>
           <div class="dm-group-card">
             <span class="dm-badge green">New</span>
             <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" style="cursor:default;">0</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;">$0</div>
+              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
             </div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
           </div>
           <div class="dm-group-divider"></div>
           <div class="dm-group-card">
             <span class="dm-badge blue">Recaptured</span>
             <div class="dm-row-main">
-              <div class="dm-big-num dm-col-count" style="cursor:default;">0</div>
-              <div class="dm-big-num dm-col-amount" style="cursor:default;">$0</div>
+              <div class="dm-big-num dm-col-count" style="cursor:default;">—</div>
+              <div class="dm-big-num dm-col-amount" style="cursor:default;">—</div>
             </div>
+            <div class="dm-yoy" style="color:var(--neutral-60);">No data yet</div>
           </div>
         </div>
 
         <!-- At Risk -->
-        <div class="dm-card" style="margin-top:12px; padding:12px 16px;">
+        <div class="dm-card" style="margin-top:8px;">
           <div class="dm-card-left">
-            <div style="display:flex; align-items:center;">
-              <span class="dm-badge yellow">At Risk</span>
-              <span class="km-badge" style="margin-left:auto;">Current</span>
-            </div>
+            <span class="dm-badge yellow">At Risk</span>
             <div class="dm-row-main" style="align-items:center;">
               <div class="dm-col-count" style="cursor:default;">
-                <div class="dm-big-num" style="cursor:default;">0</div>
+                <div class="dm-big-num" style="cursor:default;">—</div>
                 <div class="dm-subtitle">No gift in 10–13 months</div>
               </div>
               <div style="display:flex; align-items:center; gap:8px;" class="dm-col-amount">
                 <div>
-                  <div class="dm-big-num" style="cursor:default;">$0</div>
+                  <div class="dm-big-num" style="cursor:default;">—</div>
                   <div class="dm-stake-label">at stake</div>
                 </div>
-                <i class="fa-solid fa-exclamation-triangle dm-stake-icon"></i>
               </div>
             </div>
           </div>
@@ -2282,8 +2283,8 @@
 
     // ===== Donor Momentum period toggle =====
     const dmData = {
-      month: { new: '56', recaptured: '8', trendNew: '15', trendRecaptured: '3', amtNew: '$4,820', amtRecaptured: '$1,240', suffix: 'from May last year' },
-      fytd: { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'vs. FYTD last year' }
+      month: { new: '56', recaptured: '8', trendNew: '15', trendRecaptured: '3', amtNew: '$4,820', amtRecaptured: '$1,240', suffix: 'from June last year' },
+      fytd: { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'from prior FYTD' }
     };
     function setDmPeriod(period, btn) {
       btn.closest('.dm-period-toggle').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
