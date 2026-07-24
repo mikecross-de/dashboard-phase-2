@@ -21,6 +21,7 @@
       --green-200: #296401;
       --green-100: #357A06;
       --green-old: #3F9107;
+      --green-100: #357A06;
       --green-80: #6A994C;
       --green-20: #D9E9CD;
       --green-10: #ECF4E6;
@@ -46,7 +47,7 @@
       font-size: 14px; line-height: 18px; color: var(--neutral-60);
       text-decoration: none; transition: color 0.15s;
     }
-    .tile-section-header .notion-link:hover { color: var(--green-old); }
+    .tile-section-header .notion-link:hover { color: var(--green-100); }
     .tile-section-header .notion-link i { font-size: 12px; }
     .tile-selector {
       font-family: var(--font-primary); font-size: 14px; font-weight: 600; line-height: 18px;
@@ -57,7 +58,7 @@
       background-repeat: no-repeat; background-position: right 10px center;
     }
     .tile-selector:hover { border-color: var(--neutral-40); }
-    .tile-selector:focus { outline: none; border-color: var(--green-old); }
+    .tile-selector:focus { outline: none; border-color: var(--green-100); }
     .tile-panel { display: none; }
     .tile-panel.active { display: block; }
 
@@ -110,7 +111,14 @@
     .todays-total { font-size: 16px; line-height: 21px; }
     .todays-total strong { font-weight: 700; }
     .prior-totals { display: flex; gap: 12px; font-size: 12px; line-height: 18px; color: var(--neutral-60); align-items: center; }
-    .prior-total-item { display: inline-flex; align-items: center; gap: 4px; }
+    .prior-total-item { display: inline-flex; align-items: center; gap: 4px; position: relative; cursor: default; }
+    .prior-total-item .prior-tooltip {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400;
+      line-height: 18px; padding: 8px 16px; border-radius: 3px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 10;
+    }
+    .prior-total-item:hover .prior-tooltip { opacity: 1; }
     .delta-chip {
       display: inline-flex; align-items: center; gap: 2px;
       font-size: 11px; font-weight: 700; line-height: 14px;
@@ -121,7 +129,7 @@
 
     .past-goals-btn {
       font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px;
-      color: var(--green-old); background: none; border: none; cursor: pointer;
+      color: var(--green-100); background: none; border: none; cursor: pointer;
       display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: var(--radius);
     }
     .past-goals-btn:hover { background: var(--green-5); }
@@ -201,7 +209,7 @@
     .dr-threshold-legend { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
     .dr-threshold-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--black-100); }
     .dr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dr-dot.green { background: var(--green-old); }
+    .dr-dot.green { background: var(--green-100); }
     .dr-dot.orange { background: #D96B0C; }
     .dr-dot.red { background: var(--red-100); }
 
@@ -223,7 +231,7 @@
       width: 18px; height: 18px; border: 2px solid var(--neutral-60); border-radius: 2px;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s;
     }
-    .dr-checkbox.checked { background: var(--green-old); border-color: var(--green-old); }
+    .dr-checkbox.checked { background: var(--green-100); border-color: var(--green-100); }
     .dr-checkbox i { font-size: 10px; color: var(--white); display: none; }
     .dr-checkbox.checked i { display: block; }
     .dr-checkbox.disabled { background: var(--neutral-40); border-color: var(--neutral-40); cursor: not-allowed; }
@@ -251,11 +259,11 @@
     }
     .km-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
     .km-value.clickable { cursor: pointer; }
-    .km-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .km-value.clickable:hover { color: var(--green-100); text-decoration: underline; }
     .km-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
     .km-trend { display: flex; align-items: center; gap: 2px; font-size: 12px; line-height: 18px; color: var(--black-100); margin-top: 2px; }
     .km-trend .trend-icon { font-size: 16px; }
-    .km-trend .trend-icon.up { color: var(--green-old); }
+    .km-trend .trend-icon.up { color: var(--green-100); }
     .km-trend .trend-icon.down { color: var(--red-100); }
     .km-trend .trend-icon.neutral { color: var(--neutral-60); }
     .km-trend .trend-change { font-weight: 600; }
@@ -271,7 +279,7 @@
     }
     .rg-snap-value { font-size: 29px; font-weight: 700; line-height: 35px; color: var(--black-100); }
     .rg-snap-value.clickable { cursor: pointer; }
-    .rg-snap-value.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .rg-snap-value.clickable:hover { color: var(--green-100); text-decoration: underline; }
     .rg-snap-label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--black-100); }
     .rg-sched-card {
       border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 16px 16px 12px;
@@ -292,10 +300,10 @@
     .rg-sched-row { display: flex; gap: 8px; padding: 8px 0; }
     .rg-sched-left { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
     .rg-sched-left:hover .rg-sched-value,
-    .rg-sched-left:hover .rg-sched-label { color: var(--green-old); text-decoration: underline; }
+    .rg-sched-left:hover .rg-sched-label { color: var(--green-100); text-decoration: underline; }
     .rg-sched-inline { display: flex; align-items: baseline; gap: 4px; }
     .rg-accent { width: 3px; border-radius: 2px; align-self: stretch; min-height: 20px; flex-shrink: 0; }
-    .rg-accent.green { background: var(--green-old); }
+    .rg-accent.green { background: var(--green-100); }
     .rg-accent.orange { background: #D96B0C; }
     .rg-accent.blue { background: #5599E9; }
     .rg-sched-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
@@ -319,7 +327,7 @@
     .camp-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
     .camp-item-left { display: flex; flex-direction: column; gap: 2px; }
     .camp-card-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
-    .camp-card-name:hover { color: var(--green-old); text-decoration: underline; }
+    .camp-card-name:hover { color: var(--green-100); text-decoration: underline; }
     .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; }
     .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-60); }
     .camp-item-right { display: flex; align-items: baseline; gap: 4px; flex-shrink: 0; }
@@ -335,7 +343,7 @@
     .camp-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
     .camp-no-goal-text { font-size: 14px; color: var(--neutral-60); margin-top: 6px; }
     .camp-view-all {
-      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-old);
+      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
       background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px;
       align-self: flex-end; padding: 8px 0;
     }
@@ -352,13 +360,13 @@
     .config-item-meta { font-size: 12px; color: var(--neutral-60); }
     .config-section-title { font-size: 12px; font-weight: 700; color: var(--neutral-60); margin-top: 16px; margin-bottom: 4px; }
     .config-add-btn {
-      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-old);
-      background: none; border: 1px solid var(--green-old); border-radius: var(--radius);
+      font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
+      background: none; border: 1px solid var(--green-100); border-radius: var(--radius);
       padding: 4px 12px; cursor: pointer;
     }
     .config-add-btn:hover { background: var(--green-5); }
     .config-toggle {
-      width: 40px; height: 22px; border-radius: 11px; background: var(--green-old);
+      width: 40px; height: 22px; border-radius: 11px; background: var(--green-100);
       position: relative; cursor: pointer; border: none; flex-shrink: 0;
     }
     .config-toggle::after {
@@ -384,10 +392,10 @@
     .dm-badge.yellow { background: #FFF4CC; color: #664F00; }
     .dm-badge.red { background: #FCEBEB; color: #791F1F; }
     .dm-big-num { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); cursor: pointer; margin-top: 4px; }
-    .dm-big-num:hover { color: var(--green-old); text-decoration: underline; }
+    .dm-big-num:hover { color: var(--green-100); text-decoration: underline; }
     .dm-yoy { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 18px; color: var(--black-100); }
     .dm-yoy .trend-change { font-weight: 600; }
-    .dm-yoy .trend-icon.up { color: var(--green-old); }
+    .dm-yoy .trend-icon.up { color: var(--green-100); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
     .dm-sparkline-label { font-size: 12px; color: var(--neutral-60); text-align: center; }
     .dm-divider { width: 100%; height: 1px; background: var(--neutral-20); margin: 12px 0; }
@@ -418,18 +426,18 @@
     .dbl-pct { font-size: 13px; font-weight: 600; color: var(--neutral-60); }
     .dbl-amount { display: flex; flex-direction: column; align-items: flex-end; }
     .dbl-amount-value { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); cursor: pointer; }
-    .dbl-amount-value:hover { color: var(--green-old); text-decoration: underline; }
+    .dbl-amount-value:hover { color: var(--green-100); text-decoration: underline; }
     .dbl-amount-label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--black-100); }
     .dbl-bottom { display: flex; gap: 12px; }
     .dbl-col { flex: 1; display: flex; gap: 8px; align-items: center; }
     .dbl-col-accent { width: 3px; border-radius: 2px; align-self: stretch; min-height: 20px; }
-    .dbl-col-accent.green { background: var(--green-old); }
+    .dbl-col-accent.green { background: var(--green-100); }
     .dbl-col-accent.gray { background: var(--neutral-60); }
     .dbl-col-text { font-size: 14px; line-height: 18px; color: var(--black-100); }
     .dbl-col-text strong { font-weight: 700; font-size: 16px; }
     .dbl-col-text.clickable { cursor: pointer; }
     .dbl-col-text.clickable strong { font-size: 16px; }
-    .dbl-col-text.clickable:hover { color: var(--green-old); text-decoration: underline; }
+    .dbl-col-text.clickable:hover { color: var(--green-100); text-decoration: underline; }
 
     /* ===== Giving by Level tile ===== */
     .gbl-body { display: flex; gap: 0; flex: 1; min-height: 0; }
@@ -444,7 +452,7 @@
     .gbl-row-right { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 16px; color: var(--black-100); }
     .gbl-period { font-size: 16px; font-weight: 400; line-height: 21px; color: var(--black-100); }
     .gbl-amount { font-size: 36px; font-weight: 700; line-height: 42px; color: var(--black-100); cursor: pointer; }
-    .gbl-amount:hover { color: var(--green-old); text-decoration: underline; }
+    .gbl-amount:hover { color: var(--green-100); text-decoration: underline; }
     .gbl-info-icon { color: var(--neutral-40); font-size: 14px; cursor: help; margin-left: 4px; }
 
     /* ===== State Toggle (Has Data / Empty State) ===== */
@@ -490,17 +498,17 @@
     .modal-body { padding: 0 24px; }
     .modal-footer { display: flex; align-items: center; justify-content: flex-end; padding: 24px; gap: 16px; }
     .btn { font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-    .btn-secondary { background: var(--white); border: 1px solid var(--black-100); color: var(--black-100); }
-    .btn-secondary:hover { background: var(--neutral-5); }
-    .btn-primary { background: var(--green-old); color: var(--white); }
-    .btn-primary:hover { background: var(--green-200); }
+    .btn-secondary { background: var(--white); border: 1px solid var(--neutral-20); color: var(--black-100); }
+    .btn-secondary:hover { background: var(--neutral-20); }
+    .btn-primary { background: #357A06; color: var(--white); }
+    .btn-primary:hover { background: #2D6805; }
 
     .goal-row { display: flex; flex-direction: column; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--neutral-20); }
     .goal-row + .goal-row { margin-top: 24px; }
     .goal-row-header { display: flex; align-items: center; justify-content: space-between; }
     .goal-row-fy { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
     .goal-row-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); display: flex; align-items: center; gap: 8px; }
-    .goal-row-pct .fa-circle-check { color: var(--green-old); }
+    .goal-row-pct .fa-circle-check { color: var(--green-100); }
     .goal-progress-bg { width: 100%; height: 8px; background: var(--neutral-10); border-radius: 999px; }
     .goal-progress-fill { height: 8px; border-radius: 999px; }
     .goal-progress-fill.current { background: var(--green-old); }
@@ -514,7 +522,7 @@
       padding: 0 16px 0 44px; font-family: var(--font-primary); font-size: 16px; font-weight: 400;
       line-height: 21px; color: var(--black-100); background: var(--white); outline: none; transition: border-color .15s;
     }
-    .mui-field input:focus { border-color: var(--green-old); border-width: 2px; }
+    .mui-field input:focus { border-color: var(--green-100); border-width: 2px; }
     .mui-field .field-icon {
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
       color: #4E5555; font-size: 16px; pointer-events: none;
@@ -531,7 +539,7 @@
       top: 0; left: 16px; font-size: 12px; line-height: 18px;
       background: var(--white); padding: 0 4px; transform: translateY(-50%); color: var(--black-100);
     }
-    .mui-field input:focus + label { color: var(--green-old); }
+    .mui-field input:focus + label { color: var(--green-100); }
     .mui-field.has-error input, .mui-field.has-error input:focus { border-color: var(--red-100); }
     .mui-field.has-error input:focus + label,
     .mui-field.has-error input:not(:placeholder-shown) + label { color: var(--red-100); }
@@ -543,7 +551,7 @@
 
     /* Reset defaults link */
     .btn-reset {
-      font-family: var(--font-primary); font-size: 16px; font-weight: 600; color: var(--green-old);
+      font-family: var(--font-primary); font-size: 16px; font-weight: 600; color: var(--green-100);
       background: none; border: none; cursor: pointer; padding: 0;
     }
     .btn-reset:hover { text-decoration: underline; }
@@ -611,10 +619,12 @@
           <div class="todays-total">Today's Total: <strong>$250,000</strong></div>
           <div class="prior-totals">
             <span class="prior-total-item">
-              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">26%</span> vs. FY25</span></span>
+              <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>26%</strong> vs. FY25</span>
+              FY25: $198,000
             </span>
             <span class="prior-total-item">
-              <span class="km-trend"><i class="fa-solid fa-caret-up trend-icon up"></i><span><span class="trend-change">43%</span> vs. FY24</span></span>
+              <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>43%</strong> vs. FY24</span>
+              FY24: $174,500
             </span>
           </div>
         </div>
@@ -699,16 +709,16 @@
     <div class="tile" id="tile-dr">
       <div class="tile-header">
         <div class="tile-title">Donor Retention <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Retention metrics help track how well your organization retains donors over time.</span></span></div>
+        <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="openModal('edit-retention-modal')">
+          <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+          <span class="dr-edit-tooltip">Edit</span>
+        </button>
       </div>
 
       <div class="tile-state-data">
       <div class="dr-charts" id="dr-charts">
         <!-- Overall Retention: 72% green -->
         <div class="dr-chart-card" id="card-overall">
-          <button class="dr-edit-btn" onclick="openModal('edit-overall-modal')">
-            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-            <span class="dr-edit-tooltip">Edit</span>
-          </button>
           <div>
             <div class="dr-chart-title">Overall Retention</div>
             <div class="dr-chart-subtitle">Rolling</div>
@@ -731,10 +741,6 @@
 
         <!-- First-Time Donor Retention: 24% red -->
         <div class="dr-chart-card" id="card-firsttime">
-          <button class="dr-edit-btn" onclick="openModal('edit-firsttime-modal')">
-            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-            <span class="dr-edit-tooltip">Edit</span>
-          </button>
           <div>
             <div class="dr-chart-title">First-Time Donor Retention</div>
             <div class="dr-chart-subtitle">Rolling</div>
@@ -1236,7 +1242,7 @@
           <div class="dbl-top">
             <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>61%</span>
             <div class="dbl-amount">
-              <div class="dbl-amount-value">$85,400</div>
+              <div class="dbl-amount-value">$142,800</div>
               <div class="dbl-amount-label">FYTD</div>
             </div>
           </div>
@@ -1258,7 +1264,7 @@
       <div class="dbl-cards">
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge green">Major<span style="margin:0 4px;">·</span>0%</span>
+            <span class="dm-badge green">Major</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1277,7 +1283,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>0%</span>
+            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>36%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1296,7 +1302,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>0%</span>
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>61%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1533,7 +1539,7 @@
       <div class="tile-state-empty">
       <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
         <div style="font-size:16px; font-weight:700; color:var(--black-100);">No active campaigns</div>
-        <div style="font-size:14px; color:var(--neutral-60);">Campaigns will appear here once they're active. <a href="#" style="color:var(--green-old); text-decoration:none; font-weight:600;">Create a campaign</a></div>
+        <div style="font-size:14px; color:var(--neutral-60);">Campaigns will appear here once they're active. <a href="#" style="color:var(--green-100); text-decoration:none; font-weight:600;">Create a campaign</a></div>
       </div>
       </div><!-- end tile-state-empty -->
     </div>
@@ -1605,12 +1611,12 @@
     </div>
   </div>
 
-  <!-- ===== EDIT OVERALL RETENTION MODAL ===== -->
-  <div class="modal-overlay" id="edit-overall-modal" onclick="if(event.target===this)closeModal(this.id)">
+  <!-- ===== EDIT DONOR RETENTION MODAL ===== -->
+  <div class="modal-overlay" id="edit-retention-modal" onclick="if(event.target===this)closeModal(this.id)">
     <div class="modal" style="max-width:540px;">
       <div class="modal-header">
-        <h2>Edit Overall Retention</h2>
-        <button class="modal-close" onclick="closeModal('edit-overall-modal')"><i class="fa-regular fa-xmark"></i></button>
+        <h2>Edit Donor Retention</h2>
+        <button class="modal-close" onclick="closeModal('edit-retention-modal')"><i class="fa-regular fa-xmark"></i></button>
       </div>
       <div class="modal-body" style="padding:0 24px 0; display:flex; flex-direction:column; gap:24px;">
         <p style="font-size:16px;line-height:21px;color:var(--black-100);">Custom settings can help your organization get a more accurate picture of success.</p>
@@ -1637,13 +1643,13 @@
         </div>
         <div class="mui-field" style="margin-top:4px;">
           <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:0 16px; height:56px; display:flex; align-items:center; cursor:pointer; position:relative;">
-            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">All</span>
+            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">Rolling</span>
             <i class="fa-solid fa-caret-down" style="font-size:12px; color:var(--neutral-60);"></i>
           </div>
-          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Constituent Type</label>
+          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Date Range</label>
         </div>
         <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
-          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
+          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-100); cursor:pointer;">
           Include Soft Credits
         </label>
       </div>
@@ -1652,61 +1658,8 @@
           Reset to defaults
         </button>
         <div class="spacer"></div>
-        <button class="btn btn-secondary" onclick="closeModal('edit-overall-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="closeModal('edit-overall-modal')">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== EDIT FIRST-TIME DONOR RETENTION MODAL ===== -->
-  <div class="modal-overlay" id="edit-firsttime-modal" onclick="if(event.target===this)closeModal(this.id)">
-    <div class="modal" style="max-width:540px;">
-      <div class="modal-header">
-        <h2>Edit First-Time Donor Retention</h2>
-        <button class="modal-close" onclick="closeModal('edit-firsttime-modal')"><i class="fa-regular fa-xmark"></i></button>
-      </div>
-      <div class="modal-body" style="padding:0 24px 0; display:flex; flex-direction:column; gap:24px;">
-        <p style="font-size:16px;line-height:21px;color:var(--black-100);">Custom settings can help your organization get a more accurate picture of success.</p>
-        <div class="mui-field" style="margin-top:4px;">
-          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
-            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select funds to exclude</span>
-            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
-          </div>
-          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Funds</label>
-        </div>
-        <div class="mui-field" style="margin-top:4px;">
-          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
-            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select campaigns to exclude</span>
-            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
-          </div>
-          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Campaigns</label>
-        </div>
-        <div class="mui-field" style="margin-top:4px;">
-          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:14px 16px 10px 16px; min-height:56px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; cursor:pointer; position:relative;">
-            <span style="font-size:16px; line-height:21px; color:var(--neutral-60);">Select appeals to exclude</span>
-            <i class="fa-solid fa-caret-down" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--neutral-60);"></i>
-          </div>
-          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Excluded Appeals</label>
-        </div>
-        <div class="mui-field" style="margin-top:4px;">
-          <div style="border:1px solid var(--neutral-40); border-radius:var(--radius); padding:0 16px; height:56px; display:flex; align-items:center; cursor:pointer; position:relative;">
-            <span style="font-size:16px; line-height:21px; color:var(--black-100); flex:1;">All</span>
-            <i class="fa-solid fa-caret-down" style="font-size:12px; color:var(--neutral-60);"></i>
-          </div>
-          <label style="position:absolute; top:0; left:16px; font-size:12px; line-height:18px; background:var(--white); padding:0 4px; transform:translateY(-50%); color:var(--black-100);">Constituent Type</label>
-        </div>
-        <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
-          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
-          Include Soft Credits
-        </label>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-reset">
-          Reset to defaults
-        </button>
-        <div class="spacer"></div>
-        <button class="btn btn-secondary" onclick="closeModal('edit-firsttime-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="closeModal('edit-firsttime-modal')">Save</button>
+        <button class="btn btn-secondary" onclick="closeModal('edit-retention-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="closeModal('edit-retention-modal')">Save</button>
       </div>
     </div>
   </div>
@@ -1768,7 +1721,7 @@
 
         <!-- Include Soft Credits -->
         <label style="display:flex; align-items:center; gap:8px; font-size:16px; line-height:21px; color:var(--black-100); cursor:pointer;">
-          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-old); cursor:pointer;">
+          <input type="checkbox" checked style="width:18px; height:18px; accent-color:var(--green-100); cursor:pointer;">
           Include Soft Credits
         </label>
       </div>
