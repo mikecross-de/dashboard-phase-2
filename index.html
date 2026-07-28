@@ -334,28 +334,30 @@
       background: none; border: none; cursor: pointer; display: flex; align-items: center;
     }
     .camp-configure-btn:hover { color: var(--black-100); }
+    .camp-dd-limit { padding: 8px 16px; font-size: 12px; color: var(--neutral-60); border-top: 1px solid var(--neutral-20); margin-top: 4px; }
     .camp-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; }
-    .camp-item { padding: 20px 0; border-bottom: 1px solid var(--neutral-10); }
-    .camp-item:first-child { padding-top: 8px; }
-    .camp-item:last-child { border-bottom: none; }
+    .camp-item { padding: 24px 0; border-bottom: 1px solid var(--neutral-20); }
+    .camp-item:first-child { padding-top: 0; }
+    .camp-item:last-child { border-bottom: none; padding-bottom: 0; }
     .camp-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
     .camp-item-left { display: flex; flex-direction: column; gap: 2px; }
     .camp-card-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
     .camp-card-name:hover { color: var(--green-100); text-decoration: underline; }
     .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; }
-    .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-60); }
-    .camp-item-right { display: flex; align-items: baseline; gap: 4px; flex-shrink: 0; }
-    .camp-amount { font-size: 24px; font-weight: 700; line-height: 29px; color: var(--black-100); }
+    .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-80); }
+    .camp-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+    .camp-amount-row { display: flex; align-items: baseline; gap: 4px; }
+    .camp-amount { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .camp-amount-sub { font-size: 14px; font-weight: 400; color: var(--black-100); }
-    .camp-progress-bg { height: 8px; background: var(--neutral-10); border-radius: 999px; overflow: hidden; margin-top: 12px; }
-    .camp-progress-fill { height: 100%; border-radius: 999px; background: var(--green-old); }
+    .camp-progress-bg { height: 12px; background: var(--neutral-10); border-radius: 4px; overflow: hidden; margin-top: 12px; }
+    .camp-progress-fill { height: 100%; border-radius: 4px 0px 0px 4px; background: var(--green-old); }
     .camp-progress-dashed {
       height: 8px; margin-top: 12px; border-radius: 999px;
       background: repeating-linear-gradient(90deg, var(--neutral-40) 0, var(--neutral-40) 6px, transparent 6px, transparent 12px);
     }
     .camp-row-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
     .camp-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
-    .camp-no-goal-text { font-size: 14px; color: var(--neutral-60); margin-top: 6px; }
+    .camp-no-goal-text { font-size: 12px; color: var(--neutral-60); }
     .camp-view-all {
       font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
       background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px;
@@ -365,14 +367,15 @@
     /* Configure modal */
     .config-list { display: flex; flex-direction: column; gap: 0; }
     .config-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 0;
-      border-bottom: 1px solid var(--neutral-10);
+      display: flex; align-items: center; gap: 12px; padding: 16px 0;
+      border-bottom: 1px solid var(--neutral-20);
     }
+    .config-item:first-child { padding-top: 0; }
     .config-item:last-child { border-bottom: none; }
     .config-item-info { flex: 1; }
     .config-item-name { font-size: 14px; font-weight: 700; color: var(--black-100); }
     .config-item-meta { font-size: 12px; color: var(--neutral-60); }
-    .config-section-title { font-size: 12px; font-weight: 700; color: var(--neutral-60); margin-top: 16px; margin-bottom: 4px; }
+    .config-section-title { font-size: 16px; font-weight: 700; color: var(--black-100); margin-bottom: 12px; }
     .config-add-btn {
       font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
       background: none; border: 1px solid var(--green-100); border-radius: var(--radius);
@@ -521,11 +524,29 @@
     .state-toggle-btn:first-child { border-radius: var(--radius) 0 0 var(--radius); }
     .state-toggle-btn:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: none; }
     .state-toggle-btn.active { background: var(--neutral-20); color: var(--black-100); }
-    .tile-state-data, .tile-state-empty { display: contents; }
-    .tile-state-empty { display: none; }
+    .tile-state-data, .tile-state-empty, .tile-state-error { display: contents; }
+    .tile-state-empty, .tile-state-error { display: none; }
     .tile.show-empty .tile-state-data { display: none; }
     .tile.show-empty .tile-state-empty { display: contents; }
     .tile.show-empty .dr-header-btn { visibility: hidden; }
+    .tile.show-empty .camp-filter-wrap { visibility: hidden; }
+    #tile-camp.show-empty .toggle-group { visibility: hidden; }
+    .tile.show-error .tile-state-data { display: none; }
+    .tile.show-error .tile-state-empty { display: none; }
+    .tile.show-error .tile-state-error { display: contents; }
+    .tile.show-error .toggle-group,
+    .tile.show-error .dr-edit-btn,
+    .tile.show-error .gbl-filter-wrap,
+    .tile.show-error .camp-filter-wrap,
+    .tile.show-error .dr-footer,
+    .tile.show-error .info-icon-btn,
+    .tile.show-error .km-badge,
+    .tile.show-error .dbl-toggle { visibility: hidden; }
+    .tile-error-content {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;
+    }
+    .tile-error-title { font-size: 16px; font-weight: 400; color: var(--black-100); }
+    .tile-error-body { font-size: 16px; color: var(--black-100); }
 
     /* ===== Tooltips ===== */
     .has-tooltip { position: relative; }
@@ -551,11 +572,12 @@
     .modal-header h2 { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
     .modal-close { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--neutral-60); background: none; border: none; font-size: 20px; transition: background .15s, color .15s; }
     .modal-close:hover { color: var(--black-100); background: var(--neutral-10); }
-    .modal-body { padding: 0 24px; }
+    .modal-body { padding: 0 24px; padding-top: 0; }
     .modal-footer { display: flex; align-items: center; justify-content: flex-end; padding: 24px; gap: 16px; }
     .btn { font-family: var(--font-primary); font-size: 16px; font-weight: 700; line-height: 21px; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-    .btn-secondary { background: var(--white); border: 1px solid var(--neutral-20); color: var(--black-100); }
-    .btn-secondary:hover { background: var(--neutral-20); }
+    .btn-secondary { background: var(--white); border: 1px solid var(--black-100); color: var(--black-100); }
+    .btn-secondary:hover { background: var(--neutral-20); border-color: var(--neutral-20); }
+    .btn-sm { font-size: 14px; font-weight: 600; padding: 4px 12px; }
     .btn-primary { background: #357A06; color: var(--white); }
     .btn-primary:hover { background: #2D6805; }
 
@@ -648,6 +670,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-a')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-a')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-a')">Error State</button>
       </div>
     </div>
 
@@ -656,8 +679,8 @@
       <div class="tile-header">
         <div class="tile-title">Cumulative Year-Over-Year Pacing</div>
         <div class="toggle-group">
-          <button class="toggle-btn active">Revenue</button>
-          <button class="toggle-btn">Raised</button>
+          <button class="toggle-btn active" onclick="setYoyToggle('revenue', this)">Revenue</button>
+          <button class="toggle-btn" onclick="setYoyToggle('raised', this)">Raised</button>
         </div>
       </div>
       <div class="tile-state-data">
@@ -693,10 +716,16 @@
       </div><!-- end tile-state-data -->
 
       <div class="tile-state-empty">
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;" id="yoy-empty-msg">
         No revenue data to display yet
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
 
   </div>
@@ -712,6 +741,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-mom')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-mom')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-mom')">Error State</button>
       </div>
     </div>
 
@@ -719,8 +749,8 @@
       <div class="tile-header">
         <div class="tile-title">Month-Over-Month Comparison</div>
         <div class="toggle-group">
-          <button class="toggle-btn active">Revenue</button>
-          <button class="toggle-btn">Raised</button>
+          <button class="toggle-btn active" onclick="setMomToggle('revenue', this)">Revenue</button>
+          <button class="toggle-btn" onclick="setMomToggle('raised', this)">Raised</button>
         </div>
       </div>
       <div class="tile-state-data">
@@ -743,10 +773,16 @@
       </div><!-- end tile-state-data -->
 
       <div class="tile-state-empty">
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;" id="mom-empty-msg">
         No monthly revenue data to display yet
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -760,6 +796,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dr')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dr')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dr')">Error State</button>
       </div>
     </div>
     <div class="tile" id="tile-dr">
@@ -856,6 +893,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
 
       <div class="dr-footer">
         <div class="dr-footer-info">
@@ -881,6 +924,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-km')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-km')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-km')">Error State</button>
       </div>
     </div>
     <div class="tile half" id="tile-km">
@@ -949,6 +993,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -963,6 +1013,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-rg')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-rg')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-rg')">Error State</button>
       </div>
     </div>
     <div class="tile" id="tile-rg">
@@ -1115,6 +1166,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -1131,6 +1188,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dm')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dm')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dm')">Error State</button>
       </div>
     </div>
     <div class="tile half" id="tile-dm">
@@ -1206,6 +1264,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -1219,6 +1283,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dbl')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dbl')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dbl')">Error State</button>
       </div>
     </div>
     <div class="tile half" id="tile-dbl">
@@ -1236,7 +1301,7 @@
         <!-- Major -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge green">Major<span style="margin:0 4px;">·</span>3%</span>
+            <span class="dm-badge green">Major<span style="margin:0 6px;">·</span>3%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$85,400</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1257,7 +1322,7 @@
         <!-- Mid -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>36%</span>
+            <span class="dm-badge blue">Mid<span style="margin:0 6px;">·</span>36%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$580,000</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1278,7 +1343,7 @@
         <!-- General -->
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>61%</span>
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 6px;">·</span>61%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value">$142,800</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1321,7 +1386,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge blue">Mid<span style="margin:0 4px;">·</span>36%</span>
+            <span class="dm-badge blue">Mid<span style="margin:0 6px;">·</span>36%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1340,7 +1405,7 @@
         </div>
         <div class="dbl-card">
           <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 4px;">·</span>61%</span>
+            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 6px;">·</span>61%</span>
             <div class="dbl-amount">
               <div class="dbl-amount-value" style="cursor:default;">$0</div>
               <div class="dbl-amount-label">FYTD</div>
@@ -1359,6 +1424,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -1372,6 +1443,7 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-gbl')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-gbl')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-gbl')">Error State</button>
       </div>
     </div>
     <div class="tile" id="tile-gbl">
@@ -1491,6 +1563,12 @@
         </div>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
   <div id="campaigns" class="tile-panel">
@@ -1502,110 +1580,58 @@
       <div class="state-toggle">
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-camp')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-camp')">Empty State</button>
+        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-camp')">Error State</button>
       </div>
     </div>
-    <div class="tile" id="tile-camp">
+    <div class="tile" id="tile-camp" style="overflow:visible;">
       <div class="tile-header">
         <div class="tile-title">Campaigns</div>
-        <div class="camp-header-right">
-          <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
-          <button class="camp-configure-btn" onclick="openModal('configure-campaigns-modal')"><i class="fa-regular fa-pen-to-square"></i></button>
+        <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
+        <div class="camp-filter-wrap" style="position:relative;">
+          <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="event.stopPropagation(); toggleCampDropdown()">
+            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+            <span class="dr-edit-tooltip">Configure campaigns</span>
+          </button>
+          <div class="gbl-dropdown" id="camp-dropdown" style="min-width:280px; max-height:350px; overflow-y:auto; white-space:nowrap;">
+            <div class="gbl-dd-item checked-item" onclick="toggleCampLevel('annual-fund')">
+              <span class="gbl-cb checked" id="camp-cb-annual-fund"><i class="fa-solid fa-check"></i></span>
+              Annual Fund 2026
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleCampLevel('giving-tuesday')">
+              <span class="gbl-cb checked" id="camp-cb-giving-tuesday"><i class="fa-solid fa-check"></i></span>
+              GivingTuesday 2026
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleCampLevel('spring-stewardship')">
+              <span class="gbl-cb checked" id="camp-cb-spring-stewardship"><i class="fa-solid fa-check"></i></span>
+              Spring Stewardship 2026
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleCampLevel('capital-campaign')">
+              <span class="gbl-cb checked" id="camp-cb-capital-campaign"><i class="fa-solid fa-check"></i></span>
+              Capital Campaign Phase 2
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleCampLevel('year-end')">
+              <span class="gbl-cb checked" id="camp-cb-year-end"><i class="fa-solid fa-check"></i></span>
+              Year-End Appeal 2026
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="tile-state-data">
-      <div class="camp-list">
-        <!-- Annual Fund -->
-        <div class="camp-item">
-          <div class="camp-row-top">
-            <div class="camp-item-left">
-              <div class="camp-card-name">Annual Fund 2026</div>
-              <div class="camp-card-meta">Jan 1 – Dec 31, 2026<span style="margin:0 4px;">·</span>Fiscal year</div>
-            </div>
-            <div class="camp-item-right">
-              <span class="camp-amount">$78,068</span>
-              <span class="camp-amount-sub">of $150,000 goal</span>
-            </div>
-          </div>
-          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:52%;"></div></div>
-          <div class="camp-row-bottom">
-            <span class="camp-pct">52%</span>
-            <div class="km-trend">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">8%</span> vs. same period last year</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- GivingTuesday -->
-        <div class="camp-item">
-          <div class="camp-row-top">
-            <div class="camp-item-left">
-              <div class="camp-card-name">GivingTuesday 2026</div>
-              <div class="camp-card-meta">Nov 15 – Dec 3, 2026<span style="margin:0 4px;">·</span>Calendar year</div>
-            </div>
-            <div class="camp-item-right">
-              <span class="camp-amount">$5,797</span>
-              <span class="camp-amount-sub">of $25,000 goal</span>
-            </div>
-          </div>
-          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:23%;"></div></div>
-          <div class="camp-row-bottom">
-            <span class="camp-pct">23%</span>
-            <div class="km-trend">
-              <i class="fa-solid fa-caret-down trend-icon down"></i>
-              <span><span class="trend-change">12%</span> vs. same period last year</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Spring Stewardship (no goal) -->
-        <div class="camp-item">
-          <div class="camp-row-top">
-            <div class="camp-item-left">
-              <div class="camp-card-name">Spring Stewardship 2026 <span class="camp-no-goal">No goal</span></div>
-              <div class="camp-card-meta">Mar 1 – May 31, 2026<span style="margin:0 4px;">·</span>Custom range</div>
-            </div>
-            <div class="camp-item-right">
-              <span class="camp-amount">$15,904</span>
-              <span class="camp-amount-sub">raised</span>
-            </div>
-          </div>
-          <div class="camp-progress-dashed"></div>
-          <div class="camp-no-goal-text">No goal set</div>
-        </div>
-
-        <!-- Capital Campaign -->
-        <div class="camp-item">
-          <div class="camp-row-top">
-            <div class="camp-item-left">
-              <div class="camp-card-name">Capital Campaign Phase 2</div>
-              <div class="camp-card-meta">Jul 1, 2025 – Jun 30, 2027<span style="margin:0 4px;">·</span>Fiscal year</div>
-            </div>
-            <div class="camp-item-right">
-              <span class="camp-amount">$1,234,592</span>
-              <span class="camp-amount-sub">of $2,500,000 goal</span>
-            </div>
-          </div>
-          <div class="camp-progress-bg"><div class="camp-progress-fill" style="width:49%;"></div></div>
-          <div class="camp-row-bottom">
-            <span class="camp-pct">49%</span>
-            <div class="km-trend">
-              <i class="fa-solid fa-caret-up trend-icon up"></i>
-              <span><span class="trend-change">3%</span> vs. same period last year</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="camp-view-all">View all campaigns <i class="fa-regular fa-arrow-right"></i></button>
+      <div class="camp-list" id="camp-list-dynamic"></div>
       </div><!-- end tile-state-data -->
 
       <div class="tile-state-empty">
-      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
-        <div style="font-size:16px; font-weight:700; color:var(--black-100);">No active campaigns</div>
-        <div style="font-size:14px; color:var(--neutral-60);">Campaigns will appear here once they're active. <a href="#" style="color:var(--green-100); text-decoration:none; font-weight:600;">Create a campaign</a></div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
+        No active campaigns. <a href="#" style="color:var(--green-100); text-decoration:none; margin-left:4px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Create a campaign</a>
       </div>
       </div><!-- end tile-state-empty -->
+      <div class="tile-state-error">
+      <div class="tile-error-content">
+        <div class="tile-error-title">Unable to load data</div>
+        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
+      </div>
+      </div><!-- end tile-state-error -->
     </div>
   </div>
 
@@ -1616,54 +1642,55 @@
         <h2>Configure Campaigns</h2>
         <button class="modal-close" onclick="closeModal('configure-campaigns-modal')"><i class="fa-regular fa-xmark"></i></button>
       </div>
-      <div class="modal-body" style="padding:16px 24px 0;">
-        <p style="font-size:14px; color:var(--neutral-60); margin-bottom:4px;">Showing on dashboard <strong style="color:var(--black-100);">4</strong> of <strong style="color:var(--black-100);">10</strong></p>
+      <div class="modal-body">
+        <div class="config-section-title" style="margin-top:0;">Current campaigns</div>
         <div class="config-list">
-          <div class="config-item">
+          <div class="config-item" style="padding:0 0 16px 0; border-bottom:1px solid #D4D5D6;">
             <div class="config-item-info">
               <div class="config-item-name">Annual Fund 2026</div>
               <div class="config-item-meta">Jan 1 – Dec 31, 2026</div>
             </div>
-            <button class="config-toggle"></button>
+            <button class="btn btn-secondary btn-sm">Remove</button>
           </div>
-          <div class="config-item">
+          <div class="config-item" style="padding:16px 0; border-bottom:1px solid #D4D5D6;">
             <div class="config-item-info">
               <div class="config-item-name">GivingTuesday 2026</div>
               <div class="config-item-meta">Nov 15 – Dec 3, 2026</div>
             </div>
-            <button class="config-toggle"></button>
+            <button class="btn btn-secondary btn-sm">Remove</button>
           </div>
-          <div class="config-item">
+          <div class="config-item" style="padding:16px 0; border-bottom:none;">
             <div class="config-item-info">
               <div class="config-item-name">Spring Stewardship 2026</div>
-              <div class="config-item-meta">Mar 1 – May 31, 2026<span style="margin:0 4px;">·</span>No goal</div>
+              <div class="config-item-meta">Mar 1 – May 31, 2026<span style="margin:0 6px;">·</span>No goal</div>
             </div>
-            <button class="config-toggle"></button>
-          </div>
-          <div class="config-item">
-            <div class="config-item-info">
-              <div class="config-item-name">Capital Campaign Phase 2</div>
-              <div class="config-item-meta">Jul 1, 2025 – Jun 30, 2027</div>
-            </div>
-            <button class="config-toggle"></button>
+            <button class="btn btn-secondary btn-sm">Remove</button>
           </div>
         </div>
 
         <div class="config-section-title">Add a campaign</div>
+        <p style="font-size:12px; color:var(--neutral-60); margin-bottom:8px;">Maximum of 3 campaigns on the dashboard. Remove one to add another.</p>
         <div class="config-list">
-          <div class="config-item">
+          <div class="config-item" style="padding:0 0 16px 0; border-bottom:1px solid #D4D5D6;">
+            <div class="config-item-info">
+              <div class="config-item-name">Capital Campaign Phase 2</div>
+              <div class="config-item-meta">Jul 1, 2025 – Jun 30, 2027</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" disabled style="opacity:0.4; cursor:default;">Add</button>
+          </div>
+          <div class="config-item" style="padding:16px 0; border-bottom:1px solid #D4D5D6;">
             <div class="config-item-info">
               <div class="config-item-name">Year-End Appeal 2026</div>
               <div class="config-item-meta">Nov 1 – Dec 31, 2026</div>
             </div>
-            <button class="config-add-btn">Add</button>
+            <button class="btn btn-secondary btn-sm" disabled style="opacity:0.4; cursor:default;">Add</button>
           </div>
-          <div class="config-item">
+          <div class="config-item" style="padding:16px 0; border-bottom:none;">
             <div class="config-item-info">
               <div class="config-item-name">Legacy Society Outreach</div>
-              <div class="config-item-meta">Jan 1 – Dec 31, 2026<span style="margin:0 4px;">·</span>No goal</div>
+              <div class="config-item-meta">Jan 1 – Dec 31, 2026<span style="margin:0 6px;">·</span>No goal</div>
             </div>
-            <button class="config-add-btn">Add</button>
+            <button class="btn btn-secondary btn-sm" disabled style="opacity:0.4; cursor:default;">Add</button>
           </div>
         </div>
       </div>
@@ -1865,10 +1892,11 @@
       btn.parentElement.querySelectorAll('.state-toggle-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const tile = document.getElementById(tileId);
+      tile.classList.remove('show-empty', 'show-error');
       if (btn.dataset.state === 'empty') {
         tile.classList.add('show-empty');
-      } else {
-        tile.classList.remove('show-empty');
+      } else if (btn.dataset.state === 'error') {
+        tile.classList.add('show-error');
       }
     }
 
@@ -2098,6 +2126,22 @@
     const cfgA = makeChartConfig('goal-label-a');
     cfgA.options.plugins.tooltip.external = makeTooltipHandler('tooltip-a', 'chart-area-a');
     const chartA = new Chart(document.getElementById('chart-a').getContext('2d'), cfgA);
+
+    // ===== YoY toggle =====
+    function setYoyToggle(mode, btn) {
+      btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const msg = document.getElementById('yoy-empty-msg');
+      if (msg) msg.textContent = mode === 'revenue' ? 'No revenue data to display yet' : 'No raised data to display yet';
+    }
+
+    // ===== MoM toggle =====
+    function setMomToggle(mode, btn) {
+      btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const msg = document.getElementById('mom-empty-msg');
+      if (msg) msg.textContent = mode === 'revenue' ? 'No monthly revenue data to display yet' : 'No monthly raised data to display yet';
+    }
 
     // ===== MoM: Month-Over-Month Comparison =====
     // Monthly (non-cumulative) revenue data
@@ -2551,6 +2595,68 @@
           }
         }]
       });
+    }
+
+    // ===== Campaigns dropdown =====
+    const campChecked = { 'annual-fund': true, 'giving-tuesday': true, 'spring-stewardship': true, 'capital-campaign': true, 'year-end': true };
+    const campData = {
+      'annual-fund': { name: 'Annual Fund 2026', meta: 'Jan 1 – Dec 31, 2026 · Fiscal year', amount: '$78,068', goalText: 'of $150,000 goal', pct: 52, trendDir: 'up', trendVal: '8%', hasGoal: true },
+      'giving-tuesday': { name: 'GivingTuesday 2026', meta: 'Nov 15 – Dec 3, 2026 · Calendar year', amount: '$5,797', goalText: 'of $25,000 goal', pct: 23, trendDir: 'down', trendVal: '12%', hasGoal: true },
+      'spring-stewardship': { name: 'Spring Stewardship 2026', meta: 'Mar 1 – May 31, 2026 · Custom range', amount: '$15,904', goalText: 'raised', pct: 0, trendDir: null, trendVal: null, hasGoal: false, noGoal: true },
+      'capital-campaign': { name: 'Capital Campaign Phase 2', meta: 'Jul 1, 2025 – Jun 30, 2027 · Fiscal year', amount: '$1,234,592', goalText: 'of $2,500,000 goal', pct: 49, trendDir: 'up', trendVal: '3%', hasGoal: true },
+      'year-end': { name: 'Year-End Appeal 2026', meta: 'Nov 1 – Dec 31, 2026 · Calendar year', amount: '$2,340', goalText: 'of $20,000 goal', pct: 12, trendDir: 'up', trendVal: '5%', hasGoal: true },
+    };
+    function renderCampTile() {
+      const list = document.getElementById('camp-list-dynamic');
+      const active = Object.keys(campChecked).filter(k => campChecked[k]);
+      let html = '';
+      active.forEach(id => {
+        const c = campData[id];
+        html += '<div class="camp-item"><div class="camp-row-top"><div class="camp-item-left">';
+        html += '<div class="camp-card-name">' + c.name + (c.noGoal ? ' <span class="camp-no-goal">No goal</span>' : '') + '</div>';
+        html += '<div class="camp-card-meta">' + c.meta + '</div></div>';
+        html += '<div class="camp-item-right">';
+        html += '<div class="camp-amount-row"><span class="camp-amount">' + c.amount + '</span> <span class="camp-amount-sub">' + c.goalText + '</span></div>';
+        if (c.hasGoal && c.trendDir) {
+          html += '<div class="km-trend"><i class="fa-solid fa-caret-' + c.trendDir + ' trend-icon ' + c.trendDir + '"></i>';
+          html += '<span><span class="trend-change">' + c.trendVal + '</span> vs. same period last year</span></div>';
+        } else if (!c.hasGoal) {
+          html += '<div class="camp-no-goal-text">No goal set</div>';
+        }
+        html += '</div></div>';
+        if (c.hasGoal) {
+          html += '<div class="camp-progress-bg"><div class="camp-progress-fill" style="width:' + c.pct + '%;"></div></div>';
+        }
+        html += '</div>';
+      });
+      list.innerHTML = html;
+    }
+    renderCampTile();
+    function toggleCampDropdown() {
+      const dd = document.getElementById('camp-dropdown');
+      const btn = dd.closest('.camp-filter-wrap').querySelector('.dr-edit-btn');
+      dd.classList.toggle('open');
+      btn.classList.toggle('gbl-edit-active', dd.classList.contains('open'));
+    }
+    document.addEventListener('click', function(e) {
+      const wrap = document.querySelector('.camp-filter-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        const dd = document.getElementById('camp-dropdown');
+        if (dd) {
+          dd.classList.remove('open');
+          wrap.querySelector('.dr-edit-btn')?.classList.remove('gbl-edit-active');
+        }
+      }
+    });
+    function toggleCampLevel(id) {
+      const count = Object.values(campChecked).filter(v => v).length;
+      // Can't uncheck last one
+      if (campChecked[id] && count <= 1) return;
+      campChecked[id] = !campChecked[id];
+      const cb = document.getElementById('camp-cb-' + id);
+      cb.classList.toggle('checked', campChecked[id]);
+      cb.closest('.gbl-dd-item').classList.toggle('checked-item', campChecked[id]);
+      renderCampTile();
     }
 
     // ===== Totals by Level filter dropdown =====
