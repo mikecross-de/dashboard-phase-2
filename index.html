@@ -348,6 +348,8 @@
     .camp-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
     .camp-amount-row { display: flex; align-items: baseline; gap: 4px; }
     .camp-amount { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--black-100); }
+    .camp-amount-link { cursor: pointer; }
+    .camp-amount-link:hover { color: var(--green-100); text-decoration: underline; }
     .camp-amount-sub { font-size: 14px; font-weight: 400; color: var(--black-100); }
     .camp-progress-bg { height: 12px; background: var(--neutral-10); border-radius: 4px; overflow: hidden; margin-top: 12px; }
     .camp-progress-fill { height: 100%; border-radius: 4px 0px 0px 4px; background: var(--green-old); }
@@ -2604,7 +2606,7 @@
       'giving-tuesday': { name: 'GivingTuesday 2026', meta: 'Nov 15 – Dec 3, 2026 · Calendar year', amount: '$5,797', goalText: 'of $25,000 goal', pct: 23, trendDir: 'down', trendVal: '12%', hasGoal: true },
       'spring-stewardship': { name: 'Spring Stewardship 2026', meta: 'Mar 1 – May 31, 2026 · Custom range', amount: '$15,904', goalText: 'raised', pct: 0, trendDir: null, trendVal: null, hasGoal: false, noGoal: true },
       'capital-campaign': { name: 'Capital Campaign Phase 2', meta: 'Jul 1, 2025 – Jun 30, 2027 · Fiscal year', amount: '$1,234,592', goalText: 'of $2,500,000 goal', pct: 49, trendDir: 'up', trendVal: '3%', hasGoal: true },
-      'year-end': { name: 'Year-End Appeal 2026', meta: 'Nov 1 – Dec 31, 2026 · Calendar year', amount: '$2,340', goalText: 'of $20,000 goal', pct: 12, trendDir: 'up', trendVal: '5%', hasGoal: true },
+      'year-end': { name: 'Year-End Appeal 2026', meta: 'No date range', amount: '$2,340', goalText: 'of $20,000 goal', pct: 12, trendDir: 'up', trendVal: '5%', hasGoal: true },
     };
     function renderCampTile() {
       const list = document.getElementById('camp-list-dynamic');
@@ -2613,10 +2615,10 @@
       active.forEach(id => {
         const c = campData[id];
         html += '<div class="camp-item"><div class="camp-row-top"><div class="camp-item-left">';
-        html += '<div class="camp-card-name">' + c.name + (c.noGoal ? ' <span class="camp-no-goal">No goal</span>' : '') + '</div>';
+        html += '<div class="camp-card-name" onclick="alert(\'Navigate to ' + c.name + ' campaign record\')">' + c.name + (c.noGoal ? ' <span class="camp-no-goal">No goal</span>' : '') + '</div>';
         html += '<div class="camp-card-meta">' + c.meta + '</div></div>';
         html += '<div class="camp-item-right">';
-        html += '<div class="camp-amount-row"><span class="camp-amount">' + c.amount + '</span> <span class="camp-amount-sub">' + c.goalText + '</span></div>';
+        html += '<div class="camp-amount-row"><span class="camp-amount camp-amount-link" onclick="alert(\'Drill down → ' + c.name + ' transaction report\')">' + c.amount + '</span> <span class="camp-amount-sub">' + c.goalText + '</span></div>';
         if (c.hasGoal && c.trendDir) {
           html += '<div class="km-trend"><i class="fa-solid fa-caret-' + c.trendDir + ' trend-icon ' + c.trendDir + '"></i>';
           html += '<span><span class="trend-change">' + c.trendVal + '</span> vs. same period last year</span></div>';
