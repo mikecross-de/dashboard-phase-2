@@ -398,7 +398,7 @@
     .dm-stacked-amt { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
     .dm-stacked-nums { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; }
     .dm-paren-amt { font-size: 14px; font-weight: 400; line-height: 18px; color: var(--black-100); }
-    /* ===== Donor Momentum tile ===== */
+    /* ===== Donor Movement tile ===== */
     .dm-cards { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
     .dm-card {
       border: 1px solid var(--neutral-20); border-radius: var(--radius); padding: 10px 16px;
@@ -458,14 +458,51 @@
     .dbl-col-text.clickable strong { font-size: 16px; }
     .dbl-col-text.clickable:hover { color: var(--green-100); text-decoration: underline; }
 
+    /* ===== Totals by Level filter ===== */
+    .gbl-filter-wrap { position: relative; }
+    .gbl-edit-active { background: var(--neutral-10); color: var(--black-100); }
+    .gbl-edit-active .dr-edit-tooltip { display: none !important; opacity: 0 !important; }
+    .gbl-dropdown {
+      display: none; position: absolute; top: calc(100% + 4px); right: 0; background: var(--white);
+      border: none; border-radius: 0;
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); padding: 8px 0; min-width: 200px; z-index: 20;
+    }
+    .gbl-dropdown.open { display: block; }
+    .gbl-dd-item {
+      display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+      font-size: 16px; line-height: 21px;
+      font-weight: 400; color: var(--black-100); cursor: pointer; position: relative;
+      font-family: var(--font-primary);
+    }
+    .gbl-dd-item:hover { background: var(--neutral-5); }
+    .gbl-dd-item.checked-item { font-weight: 700; }
+    .gbl-dd-item.disabled .gbl-cb { opacity: 0.35; }
+    .gbl-dd-item.disabled { cursor: default; }
+    .gbl-dd-item.disabled:hover { background: var(--white); }
+    .gbl-dd-tooltip {
+      display: none; position: absolute; top: calc(100% + 2px); left: 16px;
+      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400;
+      line-height: 18px; padding: 8px 16px; border-radius: 3px; white-space: nowrap; pointer-events: none; z-index: 30;
+    }
+    .gbl-dd-item.disabled:hover .gbl-dd-tooltip { display: block; }
+    .gbl-cb {
+      width: 18px; height: 18px; border-radius: 2px; border: 2px solid rgb(125, 129, 131);
+      background-color: rgb(255, 255, 255);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .gbl-cb i { font-size: 11px; color: rgb(255, 255, 255); flex-shrink: 0; display: none; transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1); }
+    .gbl-cb.checked { border: 2px solid rgb(53, 122, 6); background-color: rgb(53, 122, 6); }
+    .gbl-cb.checked i { display: inline-block; }
+
     /* ===== Giving by Level tile ===== */
     .gbl-body { display: flex; gap: 0; flex: 1; min-height: 0; }
     .gbl-left { width: 50%; padding-right: 24px; display: flex; flex-direction: column; }
     .gbl-right { width: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
     .gbl-row {
-      display: flex; align-items: center; gap: 40px; padding: 8px;
+      display: flex; align-items: center; gap: 40px; padding: 16px 6px;
       border-bottom: 1px solid var(--neutral-20);
     }
+    .gbl-row:first-child { padding-top: 0; }
     .gbl-row:last-child { border-bottom: none; }
     .gbl-row-left { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .gbl-row-right { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 16px; color: var(--black-100); }
@@ -593,9 +630,9 @@
       <option value="donor-retention">Donor Retention</option>
       <option value="key-metrics">Key Metrics</option>
       <option value="recurring-giving">Recurring Giving</option>
-      <option value="donor-momentum">Donor Momentum</option>
+      <option value="donor-movement">Donor Movement</option>
       <option value="donors-by-level">Donors by Level</option>
-      <option value="giving-by-level">Giving by Level</option>
+      <option value="giving-by-level">Totals by Level</option>
       <option value="campaigns">Campaigns</option>
     </select>
   </div>
@@ -1085,9 +1122,9 @@
 
 
   <!-- ===== DONOR MOMENTUM ===== -->
-  <div id="donor-momentum" class="tile-panel">
+  <div id="donor-movement" class="tile-panel">
     <div class="tile-section-header">
-      <h2>Donor Momentum</h2>
+      <h2>Donor Movement</h2>
       <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Donor-Momentum-Tile-35ef8da2e76f80faae87c8b74fc4b845" target="_blank">
         Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
       </a>
@@ -1098,7 +1135,7 @@
     </div>
     <div class="tile half" id="tile-dm">
       <div class="tile-header">
-        <div class="tile-title">Donor Momentum</div>
+        <div class="tile-title">Donor Movement</div>
         <div class="toggle-group small dm-period-toggle">
           <button class="toggle-btn active" onclick="setDmPeriod('month', this)">Current Month</button>
           <button class="toggle-btn" onclick="setDmPeriod('fytd', this)">FYTD</button>
@@ -1328,7 +1365,7 @@
   <!-- ===== GIVING BY LEVEL ===== -->
   <div id="giving-by-level" class="tile-panel">
     <div class="tile-section-header">
-      <h2>Giving by Level</h2>
+      <h2>Totals by Level</h2>
       <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Totals-By-Level-Tile-Updates-35ff8da2e76f806eb430f8b195ed3737" target="_blank">
         Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
       </a>
@@ -1339,10 +1376,30 @@
     </div>
     <div class="tile" id="tile-gbl">
       <div class="tile-header">
-        <div class="tile-title">Giving by Level <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet. This tile groups individual transactions by giving level, unlike Donors by Level which counts unique constituents.</span></span></div>
+        <div class="tile-title">Totals by Level</div>
         <div class="toggle-group">
           <button class="toggle-btn active">Revenue</button>
           <button class="toggle-btn">Raised</button>
+        </div>
+        <div class="gbl-filter-wrap">
+          <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="toggleGblDropdown()">
+            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+            <span class="dr-edit-tooltip">Edit levels</span>
+          </button>
+          <div class="gbl-dropdown" id="gbl-dropdown">
+            <div class="gbl-dd-item checked-item" onclick="toggleGblLevel('major')">
+              <span class="gbl-cb checked" id="gbl-cb-major"><i class="fa-solid fa-check"></i></span>
+              Major
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleGblLevel('mid')">
+              <span class="gbl-cb checked" id="gbl-cb-mid"><i class="fa-solid fa-check"></i></span>
+              Mid
+            </div>
+            <div class="gbl-dd-item checked-item" onclick="toggleGblLevel('general')">
+              <span class="gbl-cb checked" id="gbl-cb-general"><i class="fa-solid fa-check"></i></span>
+              General
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1350,35 +1407,39 @@
 
       <div class="gbl-body">
         <div class="gbl-left">
-          <div class="gbl-row">
+          <div class="gbl-row" id="gbl-row-week">
             <div class="gbl-row-left">
               <div class="gbl-period">This week</div>
-              <div class="gbl-amount">$1</div>
+              <div class="gbl-amount" id="gbl-amt-week">$1</div>
             </div>
             <div class="gbl-row-right">
-              <span>1 transaction</span>
-              <span>$1.00 avg</span>
+              <span id="gbl-txn-week">1 transaction</span>
+              <span id="gbl-avg-week">$1.00 avg</span>
             </div>
           </div>
-          <div class="gbl-row">
+          <div class="gbl-row" id="gbl-row-month">
             <div class="gbl-row-left">
               <div class="gbl-period">This month</div>
-              <div class="gbl-amount">$1</div>
+              <div class="gbl-amount" id="gbl-amt-month">$1</div>
             </div>
             <div class="gbl-row-right">
-              <span>1 transaction</span>
-              <span>$1.00 avg</span>
+              <span id="gbl-txn-month">1 transaction</span>
+              <span id="gbl-avg-month">$1.00 avg</span>
             </div>
           </div>
-          <div class="gbl-row">
+          <div class="gbl-row" id="gbl-row-fy">
             <div class="gbl-row-left">
               <div class="gbl-period">This fiscal year</div>
-              <div class="gbl-amount">$331,571</div>
+              <div class="gbl-amount" id="gbl-amt-fy">$331,571</div>
             </div>
             <div class="gbl-row-right">
-              <span>115 transactions</span>
-              <span>$2,883.23 avg</span>
+              <span id="gbl-txn-fy">115 transactions</span>
+              <span id="gbl-avg-fy">$2,883.23 avg</span>
             </div>
+          </div>
+          <div class="dr-footer-info" style="margin-top:auto; padding-top:12px;">
+            <i class="fa-regular fa-circle-info"></i>
+            <span>Giving is grouped by each donor's assigned level.</span>
           </div>
         </div>
         <div class="gbl-right">
@@ -1420,6 +1481,10 @@
               <span>$0.00 avg</span>
             </div>
           </div>
+          <div class="dr-footer-info" style="margin-top:auto; padding-top:12px;">
+            <i class="fa-regular fa-circle-info"></i>
+            <span>Giving is grouped by each donor's assigned level.</span>
+          </div>
         </div>
         <div class="gbl-right" style="display:flex; align-items:center; justify-content:center; color:var(--black-100); font-size:16px;">
           No data to display
@@ -1428,8 +1493,6 @@
       </div><!-- end tile-state-empty -->
     </div>
   </div>
-
-  <!-- ===== CAMPAIGNS ===== -->
   <div id="campaigns" class="tile-panel">
     <div class="tile-section-header">
       <h2>Campaigns</h2>
@@ -2289,7 +2352,7 @@
       if (tip) tip.style.display = 'none';
     }
 
-    // ===== Donor Momentum period toggle =====
+    // ===== Donor Movement period toggle =====
     const dmData = {
       month: { new: '56', recaptured: '8', trendNew: '15', trendRecaptured: '3', amtNew: '$4,820', amtRecaptured: '$1,240', suffix: 'from June last year' },
       fytd: { new: '312', recaptured: '47', trendNew: '62', trendRecaptured: '11', amtNew: '$28,450', amtRecaptured: '$7,680', suffix: 'from prior FYTD' }
@@ -2490,6 +2553,81 @@
       });
     }
 
+    // ===== Totals by Level filter dropdown =====
+    const gblLevels = { major: true, mid: true, general: true };
+    const gblLevelData = {
+      major:   { week: { amt: 0, txn: 0 }, month: { amt: 0, txn: 0 }, fy: { amt: 185400, txn: 48 }, chart: 185400 },
+      mid:     { week: { amt: 1, txn: 1 }, month: { amt: 1, txn: 1 }, fy: { amt: 102371, txn: 42 }, chart: 102371 },
+      general: { week: { amt: 0, txn: 0 }, month: { amt: 0, txn: 0 }, fy: { amt: 43800, txn: 25 }, chart: 43800 }
+    };
+    function toggleGblDropdown() {
+      const dd = document.getElementById('gbl-dropdown');
+      const btn = dd.closest('.gbl-filter-wrap').querySelector('.dr-edit-btn');
+      dd.classList.toggle('open');
+      btn.classList.toggle('gbl-edit-active', dd.classList.contains('open'));
+    }
+    document.addEventListener('click', function(e) {
+      const wrap = document.querySelector('.gbl-filter-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        const dd = document.getElementById('gbl-dropdown');
+        if (dd) {
+          dd.classList.remove('open');
+          wrap.querySelector('.dr-edit-btn')?.classList.remove('gbl-edit-active');
+        }
+      }
+    });
+    function updateGblData() {
+      const active = Object.keys(gblLevels).filter(l => gblLevels[l]);
+      ['week','month','fy'].forEach(period => {
+        let totalAmt = 0, totalTxn = 0;
+        active.forEach(l => { totalAmt += gblLevelData[l][period].amt; totalTxn += gblLevelData[l][period].txn; });
+        const avg = totalTxn > 0 ? totalAmt / totalTxn : 0;
+        document.getElementById('gbl-amt-' + period).textContent = '$' + totalAmt.toLocaleString();
+        document.getElementById('gbl-txn-' + period).textContent = totalTxn + (totalTxn === 1 ? ' transaction' : ' transactions');
+        document.getElementById('gbl-avg-' + period).textContent = '$' + avg.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + ' avg';
+      });
+      // Update chart - order is General, Mid, Major
+      if (typeof chartGbl !== 'undefined' && chartGbl) {
+        chartGbl.data.datasets[0].data = [
+          gblLevelData.general.chart,
+          gblLevelData.mid.chart,
+          gblLevelData.major.chart
+        ];
+        chartGbl.data.datasets[0].backgroundColor = [
+          gblLevels.general ? '#7D8183' : '#E9EAEA',
+          gblLevels.mid ? '#5599E9' : '#E9EAEA',
+          gblLevels.major ? '#65A739' : '#E9EAEA'
+        ];
+        chartGbl.update();
+      }
+    }
+    function toggleGblLevel(level) {
+      const checkedCount = Object.values(gblLevels).filter(v => v).length;
+      if (gblLevels[level] && checkedCount <= 1) return;
+      gblLevels[level] = !gblLevels[level];
+      const cb = document.getElementById('gbl-cb-' + level);
+      cb.classList.toggle('checked', gblLevels[level]);
+      cb.closest('.gbl-dd-item').classList.toggle('checked-item', gblLevels[level]);
+      ['major','mid','general'].forEach(l => {
+        const item = document.getElementById('gbl-cb-' + l).closest('.gbl-dd-item');
+        const newCount = Object.values(gblLevels).filter(v => v).length;
+        if (gblLevels[l] && newCount <= 1) {
+          item.classList.add('disabled');
+          if (!item.querySelector('.gbl-dd-tooltip')) {
+            const tip = document.createElement('span');
+            tip.className = 'gbl-dd-tooltip';
+            tip.textContent = 'Tile must show at least one level';
+            item.appendChild(tip);
+          }
+        } else {
+          item.classList.remove('disabled');
+          const tip = item.querySelector('.gbl-dd-tooltip');
+          if (tip) tip.remove();
+        }
+      });
+      updateGblData();
+    }
+
     // ===== Giving by Level bar chart =====
     let chartGbl;
     const gblCtx = document.getElementById('gbl-chart');
@@ -2500,7 +2638,7 @@
         data: {
           labels: ['General', 'Mid', 'Major'],
           datasets: [{
-            data: [95000, 180000, 331571],
+            data: [43800, 102371, 185400],
             backgroundColor: gblColors,
             hoverBackgroundColor: gblColors,
             borderRadius: { topLeft: 4, topRight: 4 },
@@ -2550,7 +2688,7 @@
           scales: {
             y: {
               beginAtZero: true,
-              max: 350000,
+              max: 200000,
               ticks: {
                 callback: v => '$' + (v/1000) + 'k',
                 font: { family: "'Proxima Nova', sans-serif", size: 14 },
