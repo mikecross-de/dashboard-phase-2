@@ -148,9 +148,9 @@
     .mom-chart-area { position: relative; width: 100%; flex: 1; min-height: 0; margin-bottom: 16px; }
     .mom-custom-tooltip {
       position: absolute; background: var(--white); border: 0.5px solid var(--neutral-40);
-      padding: 2px 6px 6px; z-index: 10; pointer-events: none; display: none; min-width: 155px;
+      padding: 6px 10px 8px; z-index: 10; pointer-events: none; display: none; min-width: 155px;
     }
-    .mom-custom-tooltip .tt-month { font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); text-align: center; margin-bottom: 6px; }
+    .mom-custom-tooltip .tt-month { font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); text-align: left; margin-bottom: 6px; }
     .mom-custom-tooltip .tt-row { display: flex; align-items: center; gap: 12px; padding: 1px 0; }
     .mom-custom-tooltip .tt-series { display: flex; align-items: center; gap: 2px; }
     .mom-custom-tooltip .tt-line { width: 17px; height: 4px; border-radius: 2px; flex-shrink: 0; }
@@ -1096,8 +1096,8 @@
               <div class="tt-month"></div>
               <div class="tt-row tt-collected"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">Collected</span></div><span class="tt-value"></span></div>
               <div class="tt-row tt-expected"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-40);"></span><span class="tt-label">Expected</span></div><span class="tt-value"></span></div>
-              <div class="tt-missed" style="display:none; border-top:1px solid var(--neutral-20); margin-top:4px; padding-top:4px; text-align:center;">
-                <span style="font-size:12px; font-weight:600; color:var(--green-100);">Click bar to view missed</span>
+              <div class="tt-missed" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
+                <span style="font-size:12px; font-weight:600; color:var(--green-100);">View missed payments</span>
               </div>
             </div>
           </div>
@@ -1516,8 +1516,15 @@
             <span>Giving is grouped by each donor's assigned level.</span>
           </div>
         </div>
-        <div class="gbl-right">
+        <div class="gbl-right" style="position:relative;">
           <canvas id="gbl-chart"></canvas>
+          <div class="mom-custom-tooltip" id="gbl-tooltip-el">
+            <div class="tt-month gbl-tt-header"></div>
+            <div class="tt-row"><div class="tt-series"><span class="tt-line gbl-tt-swatch"></span><span class="tt-label gbl-tt-val"></span></div></div>
+            <div class="gbl-tt-link" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
+              <span class="gbl-tt-link-text" style="font-size:12px; font-weight:600; color:var(--green-100);"></span>
+            </div>
+          </div>
         </div>
       </div>
       </div><!-- end tile-state-data -->
@@ -2739,6 +2746,11 @@
     // ===== Giving by Level bar chart =====
     let chartGbl;
     const gblCtx = document.getElementById('gbl-chart');
+    const gblTooltipData = {
+      General: { pct: '13%', haventGiven: 121 },
+      Mid: { pct: '31%', haventGiven: 15 },
+      Major: { pct: '56%', haventGiven: 4 }
+    };
     if (gblCtx) {
       const gblColors = ['#7D8183', '#5599E9', '#65A739'];
       chartGbl = new Chart(gblCtx.getContext('2d'), {
@@ -2763,30 +2775,41 @@
             tooltip: {
               enabled: false,
               external: function(context) {
-                let el = document.getElementById('gbl-tooltip');
-                if (!el) {
-                  el = document.createElement('div');
-                  el.id = 'gbl-tooltip';
-                  el.style.cssText = 'position:absolute;background:white;border:0.5px solid #A9ABAC;padding:6px;pointer-events:none;z-index:10;font-family:Proxima Nova,sans-serif;min-width:120px;';
-                  document.body.appendChild(el);
-                }
-                const tooltip = context.tooltip;
-                if (tooltip.opacity === 0) { el.style.opacity = 0; return; }
+                const el = document.getElementById('gbl-tooltip-el');
+                const { chart, tooltip } = context;
+                if (tooltip.opacity === 0) { el.style.display = 'none'; return; }
                 const label = tooltip.title[0];
                 const raw = tooltip.dataPoints[0].raw;
                 const idx = tooltip.dataPoints[0].dataIndex;
+                const td = gblTooltipData[label] || {};
                 const color = gblColors[idx];
-                el.innerHTML =
-                  '<div style="font-size:12px;font-weight:700;color:#525759;text-align:center;margin-bottom:6px;">' + label + '</div>' +
-                  '<div style="display:flex;align-items:center;gap:8px;">' +
-                    '<div style="width:17px;height:3px;background:' + color + ';border-radius:2px;"></div>' +
-                    '<span style="font-size:14px;font-weight:700;color:#525759;">$' + Number(raw).toLocaleString() + '</span>' +
-                  '</div>';
-                el.style.opacity = 1;
-                const pos = gblCtx.getBoundingClientRect();
-                const tooltipWidth = el.offsetWidth || 120;
-                el.style.left = (pos.left + window.scrollX + tooltip.caretX - tooltipWidth / 2) + 'px';
-                el.style.top = (pos.top + window.scrollY + tooltip.caretY - 60) + 'px';
+                el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.pct || '');
+                el.querySelector('.gbl-tt-swatch').style.background = color;
+                el.querySelector('.gbl-tt-val').textContent = '$' + Number(raw).toLocaleString();
+                const linkWrap = el.querySelector('.gbl-tt-link');
+                const linkEl = el.querySelector('.gbl-tt-link-text');
+                if (td.haventGiven > 0) {
+                  linkWrap.style.display = 'block';
+                  linkEl.textContent = td.haventGiven + " haven't given yet";
+                } else {
+                  linkWrap.style.display = 'none';
+                }
+                el.style.display = 'block';
+                el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
+                el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
+              }
+            }
+          },
+          interaction: { mode: 'index', intersect: false },
+          onClick: function(evt, elements) {
+            if (elements.length > 0) {
+              const idx = elements[0].index;
+              const label = this.data.labels[idx];
+              const td = gblTooltipData[label] || {};
+              if (td.haventGiven > 0) {
+                alert('Drill down → ' + td.haventGiven + ' ' + label + ' donors who haven\'t given yet');
+              } else {
+                alert('Drill down → ' + label + ' giving report');
               }
             }
           },
