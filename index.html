@@ -1092,12 +1092,12 @@
         <div class="rg-right">
           <div class="rg-chart-wrap">
             <canvas id="rg-chart"></canvas>
-            <div class="mom-custom-tooltip" id="rg-tooltip-el">
+            <div class="mom-custom-tooltip" id="rg-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'">
               <div class="tt-month"></div>
               <div class="tt-row tt-collected"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">Collected</span></div><span class="tt-value"></span></div>
               <div class="tt-row tt-expected"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-40);"></span><span class="tt-label">Expected</span></div><span class="tt-value"></span></div>
               <div class="tt-missed" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
-                <span style="font-size:12px; font-weight:600; color:var(--green-100);">View missed payments</span>
+                <a href="#" style="font-size:12px; font-weight:600; color:var(--green-100); text-decoration:none; cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation(); alert('Drill down → Missed payments report')" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">View missed payments</a>
               </div>
             </div>
           </div>
@@ -1516,13 +1516,13 @@
             <span>Giving is grouped by each donor's assigned level.</span>
           </div>
         </div>
-        <div class="gbl-right" style="position:relative;">
+        <div class="gbl-right">
           <canvas id="gbl-chart"></canvas>
-          <div class="mom-custom-tooltip" id="gbl-tooltip-el">
+          <div class="mom-custom-tooltip" id="gbl-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'">
             <div class="tt-month gbl-tt-header"></div>
             <div class="tt-row"><div class="tt-series"><span class="tt-line gbl-tt-swatch"></span><span class="tt-label gbl-tt-val"></span></div></div>
             <div class="gbl-tt-link" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
-              <span class="gbl-tt-link-text" style="font-size:12px; font-weight:600; color:var(--green-100);"></span>
+              <a href="#" class="gbl-tt-link-text" style="font-size:12px; font-weight:600; color:var(--green-100); text-decoration:none; cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation();" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"></a>
             </div>
           </div>
         </div>
@@ -2502,7 +2502,10 @@
               external: function(context) {
                 const el = document.getElementById('rg-tooltip-el');
                 const { chart, tooltip } = context;
-                if (tooltip.opacity === 0) { el.style.display = 'none'; return; }
+                if (tooltip.opacity === 0) {
+                  if (el.dataset.linkHover === '1') return;
+                  el.style.display = 'none'; return;
+                }
                 const di = tooltip.dataPoints[0].dataIndex;
                 const month = chart.data.labels[di];
                 el.querySelector('.tt-month').textContent = month;
@@ -2777,7 +2780,10 @@
               external: function(context) {
                 const el = document.getElementById('gbl-tooltip-el');
                 const { chart, tooltip } = context;
-                if (tooltip.opacity === 0) { el.style.display = 'none'; return; }
+                if (tooltip.opacity === 0) {
+                  if (el.dataset.linkHover === '1') return;
+                  el.style.display = 'none'; var hl = document.getElementById('gbl-col-highlight'); if (hl) hl.style.display = 'none'; return;
+                }
                 const label = tooltip.title[0];
                 const raw = tooltip.dataPoints[0].raw;
                 const idx = tooltip.dataPoints[0].dataIndex;
@@ -2791,12 +2797,23 @@
                 if (td.haventGiven > 0) {
                   linkWrap.style.display = 'block';
                   linkEl.textContent = td.haventGiven + " haven't given yet";
+                  linkEl.onclick = function(e) { e.preventDefault(); e.stopPropagation(); alert('Drill down → ' + label + ': ' + td.haventGiven + ' donors who haven\'t given yet'); };
                 } else {
                   linkWrap.style.display = 'none';
                 }
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
+                var hl = document.getElementById('gbl-col-highlight');
+                var bar = chart.getDatasetMeta(0).data[idx];
+                if (bar && hl) {
+                  var halfW = bar.width * 0.8;
+                  hl.style.left = (bar.x - halfW) + 'px';
+                  hl.style.top = chart.chartArea.top + 'px';
+                  hl.style.width = (halfW * 2) + 'px';
+                  hl.style.height = (chart.chartArea.bottom - chart.chartArea.top) + 'px';
+                  hl.style.display = 'block';
+                }
               }
             }
           },
@@ -2805,12 +2822,8 @@
             if (elements.length > 0) {
               const idx = elements[0].index;
               const label = this.data.labels[idx];
-              const td = gblTooltipData[label] || {};
-              if (td.haventGiven > 0) {
-                alert('Drill down → ' + td.haventGiven + ' ' + label + ' donors who haven\'t given yet');
-              } else {
-                alert('Drill down → ' + label + ' giving report');
-              }
+              const raw = this.data.datasets[0].data[idx];
+              alert('Drill down → ' + label + ' level transaction report\n\n$' + Number(raw).toLocaleString() + ' total');
             }
           },
           onHover: function(evt, elements) {
@@ -2853,10 +2866,6 @@
             }
           }
         }]
-      });
-      gblCtx.addEventListener('mouseleave', () => {
-        const el = document.getElementById('gbl-tooltip');
-        if (el) el.style.opacity = 0;
       });
     }
   </script>
