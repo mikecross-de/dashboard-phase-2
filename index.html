@@ -2621,9 +2621,9 @@
                 const idx = tooltip.dataPoints[0].dataIndex;
                 const td = gblTooltipData[label] || {};
                 const color = gblColors[idx];
-                el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.donors || 0) + ' donors (' + (td.pct || '') + ')';
+                el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.donors || 0) + ' donors';
                 el.querySelector('.gbl-tt-swatch').style.background = color;
-                el.querySelector('.gbl-tt-val').textContent = '$' + Number(raw).toLocaleString();
+                el.querySelector('.gbl-tt-val').textContent = '$' + Number(raw).toLocaleString() + ' (' + (td.pct || '') + ')';
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
