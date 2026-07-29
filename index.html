@@ -1091,8 +1091,9 @@
 
         <div class="rg-right">
           <div class="rg-chart-wrap">
+            <div id="rg-col-highlight" style="display:none; position:absolute; background:rgba(39,45,48,0.06); pointer-events:none; z-index:0;"></div>
             <canvas id="rg-chart"></canvas>
-            <div class="mom-custom-tooltip" id="rg-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'">
+            <div class="mom-custom-tooltip" id="rg-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'; document.getElementById('rg-col-highlight').style.display='block'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'; document.getElementById('rg-col-highlight').style.display='none'">
               <div class="tt-month"></div>
               <div class="tt-row tt-collected"><div class="tt-series"><span class="tt-line" style="background:var(--green-old);"></span><span class="tt-label">Collected</span></div><span class="tt-value"></span></div>
               <div class="tt-row tt-expected"><div class="tt-series"><span class="tt-line" style="background:var(--neutral-40);"></span><span class="tt-label">Expected</span></div><span class="tt-value"></span></div>
@@ -1517,8 +1518,9 @@
           </div>
         </div>
         <div class="gbl-right">
+          <div id="gbl-col-highlight" style="display:none; position:absolute; background:rgba(39,45,48,0.06); pointer-events:none; z-index:0;"></div>
           <canvas id="gbl-chart"></canvas>
-          <div class="mom-custom-tooltip" id="gbl-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'">
+          <div class="mom-custom-tooltip" id="gbl-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'; document.getElementById('gbl-col-highlight').style.display='block'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'; document.getElementById('gbl-col-highlight').style.display='none'">
             <div class="tt-month gbl-tt-header"></div>
             <div class="tt-row"><div class="tt-series"><span class="tt-line gbl-tt-swatch"></span><span class="tt-label gbl-tt-val"></span></div></div>
             <div class="gbl-tt-link" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
@@ -2504,7 +2506,9 @@
                 const { chart, tooltip } = context;
                 if (tooltip.opacity === 0) {
                   if (el.dataset.linkHover === '1') return;
-                  el.style.display = 'none'; return;
+                  el.style.display = 'none';
+                  var hl = document.getElementById('rg-col-highlight'); if (hl) hl.style.display = 'none';
+                  return;
                 }
                 const di = tooltip.dataPoints[0].dataIndex;
                 const month = chart.data.labels[di];
@@ -2524,6 +2528,19 @@
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
+                var hl = document.getElementById('rg-col-highlight');
+                var meta0 = chart.getDatasetMeta(0).data[di];
+                var meta1 = chart.getDatasetMeta(1).data[di];
+                if (meta0 && meta1 && hl) {
+                  var halfW = meta0.width / 2;
+                  var left = Math.min(meta0.x, meta1.x) - halfW - 8;
+                  var right = Math.max(meta0.x, meta1.x) + halfW + 8;
+                  hl.style.left = left + 'px';
+                  hl.style.top = chart.chartArea.top + 'px';
+                  hl.style.width = (right - left) + 'px';
+                  hl.style.height = (chart.chartArea.bottom - chart.chartArea.top) + 'px';
+                  hl.style.display = 'block';
+                }
               }
             }
           },
@@ -2582,28 +2599,6 @@
             ctx.beginPath(); ctx.moveTo(left, top); ctx.lineTo(left, bottom); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(right, top); ctx.lineTo(right, bottom); ctx.stroke();
             ctx.restore();
-          }
-        }, {
-          id: 'rgColumnHighlight',
-          beforeDraw(chart) {
-            const active = chart.tooltip?.getActiveElements();
-            if (active?.length) {
-              const di = active[0].index;
-              const meta0 = chart.getDatasetMeta(0);
-              const meta1 = chart.getDatasetMeta(1);
-              const barLeft = meta0.data[di];
-              const barRight = meta1.data[di];
-              if (barLeft && barRight) {
-                const ctx = chart.ctx;
-                const halfW = barLeft.width / 2;
-                const left = barLeft.x - halfW - 8;
-                const right = barRight.x + halfW + 8;
-                ctx.save();
-                ctx.fillStyle = 'rgba(39,45,48,0.06)';
-                ctx.fillRect(left, chart.chartArea.top, right - left, chart.chartArea.bottom - chart.chartArea.top);
-                ctx.restore();
-              }
-            }
           }
         }]
       });
@@ -2851,21 +2846,7 @@
             }
           }
         },
-        plugins: [{
-          id: 'gblColumnHighlight',
-          beforeDraw(chart) {
-            const active = chart.tooltip?.getActiveElements();
-            if (active?.length) {
-              const bar = active[0].element;
-              const ctx = chart.ctx;
-              const halfW = bar.width * 0.8;
-              ctx.save();
-              ctx.fillStyle = 'rgba(39,45,48,0.06)';
-              ctx.fillRect(bar.x - halfW, chart.chartArea.top, halfW * 2, chart.chartArea.bottom - chart.chartArea.top);
-              ctx.restore();
-            }
-          }
-        }]
+        plugins: []
       });
     }
   </script>
