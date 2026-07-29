@@ -655,7 +655,6 @@
       <option value="key-metrics">Key Metrics</option>
       <option value="recurring-giving">Recurring Giving</option>
       <option value="donor-movement">Donor Movement</option>
-      <option value="donors-by-level">Donors by Level</option>
       <option value="giving-by-level">Totals by Level</option>
       <option value="campaigns">Campaigns</option>
     </select>
@@ -1277,166 +1276,6 @@
   </div>
 
   <!-- ===== DONORS BY LEVEL ===== -->
-  <div id="donors-by-level" class="tile-panel">
-    <div class="tile-section-header">
-      <h2>Donors by Level</h2>
-      <a class="notion-link" href="https://www.notion.so/bloomerang/Problem-Statement-Donors-By-Level-Tile-35ef8da2e76f805e8f53ef2a3c74edd8" target="_blank">
-        Problem Statement <i class="fa-regular fa-arrow-up-right-from-square"></i>
-      </a>
-      <div class="state-toggle">
-        <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dbl')">Has Data</button>
-        <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dbl')">Empty State</button>
-        <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dbl')">Error State</button>
-      </div>
-    </div>
-    <div class="tile half" id="tile-dbl">
-      <div class="tile-header">
-        <div class="tile-title">Donors by Level <span class="info-icon-btn has-tooltip"><i class="fa-regular fa-circle-info"></i><span class="tooltip-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explains giving levels and what the counts represent.</span></span></div>
-        <div class="dbl-toggle">
-          <button class="dbl-toggle-btn active" onclick="setDblToggle(this)">Revenue</button>
-          <button class="dbl-toggle-btn" onclick="setDblToggle(this)">Raised</button>
-        </div>
-      </div>
-
-      <div class="tile-state-data">
-
-      <div class="dbl-cards">
-        <!-- Major -->
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge green">Major<span style="margin:0 6px;">·</span>3%</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value">$85,400</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>8</strong> of 12 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text clickable"><strong>4</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mid -->
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge blue">Mid<span style="margin:0 6px;">·</span>36%</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value">$580,000</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>112</strong> of 127 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text clickable"><strong>15</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- General -->
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 6px;">·</span>61%</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value">$142,800</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>89</strong> of 210 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text clickable"><strong>121</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div><!-- end tile-state-data -->
-
-      <div class="tile-state-empty">
-      <div class="dbl-cards">
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge green">Major</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value" style="cursor:default;">$0</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge blue">Mid<span style="margin:0 6px;">·</span>36%</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value" style="cursor:default;">$0</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-        <div class="dbl-card">
-          <div class="dbl-top">
-            <span class="dm-badge" style="background:var(--neutral-10); color:var(--neutral-80);">General<span style="margin:0 6px;">·</span>61%</span>
-            <div class="dbl-amount">
-              <div class="dbl-amount-value" style="cursor:default;">$0</div>
-              <div class="dbl-amount-label">FYTD</div>
-            </div>
-          </div>
-          <div class="dbl-bottom">
-            <div class="dbl-col">
-              <div class="dbl-col-accent green"></div>
-              <div class="dbl-col-text"><strong>0</strong> of 0 active</div>
-            </div>
-            <div class="dbl-col">
-              <div class="dbl-col-accent gray"></div>
-              <div class="dbl-col-text"><strong>0</strong> haven't given</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div><!-- end tile-state-empty -->
-      <div class="tile-state-error">
-      <div class="tile-error-content">
-        <div class="tile-error-title">Unable to load data</div>
-        <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
-      </div>
-      </div><!-- end tile-state-error -->
-    </div>
-  </div>
-
-  <!-- ===== GIVING BY LEVEL ===== -->
   <div id="giving-by-level" class="tile-panel">
     <div class="tile-section-header">
       <h2>Totals by Level</h2>
@@ -1520,12 +1359,9 @@
         <div class="gbl-right">
           <div id="gbl-col-highlight" style="display:none; position:absolute; background:rgba(39,45,48,0.06); pointer-events:none; z-index:0;"></div>
           <canvas id="gbl-chart"></canvas>
-          <div class="mom-custom-tooltip" id="gbl-tooltip-el" style="pointer-events:auto;" onmouseenter="this.dataset.linkHover='1'; document.getElementById('gbl-col-highlight').style.display='block'" onmouseleave="this.dataset.linkHover='0'; this.style.display='none'; document.getElementById('gbl-col-highlight').style.display='none'">
+          <div class="mom-custom-tooltip" id="gbl-tooltip-el">
             <div class="tt-month gbl-tt-header"></div>
             <div class="tt-row"><div class="tt-series"><span class="tt-line gbl-tt-swatch"></span><span class="tt-label gbl-tt-val"></span></div></div>
-            <div class="gbl-tt-link" style="display:none; border-top:1px solid var(--neutral-20); margin-top:8px; padding-top:4px; text-align:center;">
-              <a href="#" class="gbl-tt-link-text" style="font-size:12px; font-weight:600; color:var(--green-100); text-decoration:none; cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation();" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"></a>
-            </div>
           </div>
         </div>
       </div>
@@ -2776,8 +2612,9 @@
                 const el = document.getElementById('gbl-tooltip-el');
                 const { chart, tooltip } = context;
                 if (tooltip.opacity === 0) {
-                  if (el.dataset.linkHover === '1') return;
-                  el.style.display = 'none'; var hl = document.getElementById('gbl-col-highlight'); if (hl) hl.style.display = 'none'; return;
+                  el.style.display = 'none';
+                  var hl = document.getElementById('gbl-col-highlight'); if (hl) hl.style.display = 'none';
+                  return;
                 }
                 const label = tooltip.title[0];
                 const raw = tooltip.dataPoints[0].raw;
@@ -2787,15 +2624,6 @@
                 el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.pct || '');
                 el.querySelector('.gbl-tt-swatch').style.background = color;
                 el.querySelector('.gbl-tt-val').textContent = '$' + Number(raw).toLocaleString();
-                const linkWrap = el.querySelector('.gbl-tt-link');
-                const linkEl = el.querySelector('.gbl-tt-link-text');
-                if (td.haventGiven > 0) {
-                  linkWrap.style.display = 'block';
-                  linkEl.textContent = td.haventGiven + " haven't given yet";
-                  linkEl.onclick = function(e) { e.preventDefault(); e.stopPropagation(); alert('Drill down → ' + label + ': ' + td.haventGiven + ' donors who haven\'t given yet'); };
-                } else {
-                  linkWrap.style.display = 'none';
-                }
                 el.style.display = 'block';
                 el.style.left = (tooltip.caretX - el.offsetWidth / 2) + 'px';
                 el.style.top = (tooltip.caretY - el.offsetHeight - 12) + 'px';
