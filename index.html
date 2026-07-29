@@ -2581,9 +2581,9 @@
     let chartGbl;
     const gblCtx = document.getElementById('gbl-chart');
     const gblTooltipData = {
-      General: { pct: '13%', haventGiven: 121 },
-      Mid: { pct: '31%', haventGiven: 15 },
-      Major: { pct: '56%', haventGiven: 4 }
+      General: { pct: '13%', haventGiven: 121, donors: 210 },
+      Mid: { pct: '31%', haventGiven: 15, donors: 127 },
+      Major: { pct: '56%', haventGiven: 4, donors: 12 }
     };
     if (gblCtx) {
       const gblColors = ['#7D8183', '#5599E9', '#65A739'];
@@ -2621,7 +2621,7 @@
                 const idx = tooltip.dataPoints[0].dataIndex;
                 const td = gblTooltipData[label] || {};
                 const color = gblColors[idx];
-                el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.pct || '');
+                el.querySelector('.gbl-tt-header').textContent = label + ' · ' + (td.donors || 0) + ' donors (' + (td.pct || '') + ')';
                 el.querySelector('.gbl-tt-swatch').style.background = color;
                 el.querySelector('.gbl-tt-val').textContent = '$' + Number(raw).toLocaleString();
                 el.style.display = 'block';
