@@ -343,7 +343,8 @@
     .camp-item-left { display: flex; flex-direction: column; gap: 2px; }
     .camp-card-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
     .camp-card-name:hover { color: var(--green-100); text-decoration: underline; }
-    .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; }
+    .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; text-decoration: none; display: inline-block; }
+    .camp-card-name:hover .camp-no-goal { color: var(--neutral-60); text-decoration: none; }
     .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-80); }
     .camp-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
     .camp-amount-row { display: flex; align-items: baseline; gap: 4px; }
@@ -1433,6 +1434,7 @@
     <div class="tile" id="tile-camp" style="overflow:visible;">
       <div class="tile-header">
         <div class="tile-title">Campaigns</div>
+        <a href="#" style="font-size:14px; font-weight:600; color:var(--green-100); text-decoration:none; margin-left:auto; margin-right:6px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.preventDefault(); alert('Navigate to Campaigns overview page')">View all</a>
         <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
         <div class="camp-filter-wrap" style="position:relative;">
           <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="event.stopPropagation(); toggleCampDropdown()">
