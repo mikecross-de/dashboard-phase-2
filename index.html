@@ -537,6 +537,31 @@
     .tile.show-error .tile-state-data { display: none; }
     .tile.show-error .tile-state-empty { display: none; }
     .tile.show-error .tile-state-error { display: contents; }
+    .tile-state-loading { display: none; }
+    .tile.show-loading .tile-state-data { display: none; }
+    .tile.show-loading .tile-state-empty { display: none; }
+    .tile.show-loading .tile-state-error { display: none; }
+    .tile.show-loading .tile-state-loading { display: contents; }
+    .tile.show-loading .toggle-group,
+    .tile.show-loading .dr-edit-btn,
+    .tile.show-loading .gbl-filter-wrap,
+    .tile.show-loading .camp-filter-wrap,
+    .tile.show-loading .dr-footer,
+    .tile.show-loading .info-icon-btn,
+    .tile.show-loading .km-badge,
+    .tile.show-loading .dbl-toggle,
+    .tile.show-loading .camp-view-all-link { visibility: hidden; }
+
+    @keyframes shimmer {
+      0% { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    .sk {
+      background: linear-gradient(90deg, #E3E4E5 25%, #F1F2F2 37%, #E3E4E5 63%);
+      background-size: 1200px 100%;
+      animation: shimmer 1.8s infinite ease-in-out;
+      border-radius: 4px;
+    }
     .tile.show-error .toggle-group,
     .tile.show-error .dr-edit-btn,
     .tile.show-error .gbl-filter-wrap,
@@ -673,6 +698,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-a')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-a')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-a')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-a')">Loading State</button>
       </div>
     </div>
 
@@ -728,6 +754,11 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; flex-direction:column;">
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
 
   </div>
@@ -744,6 +775,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-mom')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-mom')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-mom')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-mom')">Loading State</button>
       </div>
     </div>
 
@@ -785,6 +817,11 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; flex-direction:column;">
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
 
@@ -799,6 +836,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dr')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dr')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dr')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-dr')">Loading State</button>
       </div>
     </div>
     <div class="tile" id="tile-dr">
@@ -901,6 +939,12 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; gap:24px;">
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
 
       <div class="dr-footer">
         <div class="dr-footer-info">
@@ -927,6 +971,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-km')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-km')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-km')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-km')">Loading State</button>
       </div>
     </div>
     <div class="tile half" id="tile-km">
@@ -1001,6 +1046,14 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; min-height:0;">
+        <div class="sk" style="border-radius:8px;"></div>
+        <div class="sk" style="border-radius:8px;"></div>
+        <div class="sk" style="border-radius:8px;"></div>
+        <div class="sk" style="border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
 
@@ -1016,6 +1069,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-rg')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-rg')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-rg')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-rg')">Loading State</button>
       </div>
     </div>
     <div class="tile" id="tile-rg">
@@ -1175,6 +1229,18 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; gap:24px; min-height:0;">
+        <div style="width:350px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; gap:10px;">
+            <div class="sk" style="flex:1; height:90px; border-radius:8px;"></div>
+            <div class="sk" style="flex:1; height:90px; border-radius:8px;"></div>
+          </div>
+          <div class="sk" style="flex:1; border-radius:8px;"></div>
+        </div>
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
 
@@ -1192,6 +1258,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-dm')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-dm')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-dm')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-dm')">Loading State</button>
       </div>
     </div>
     <div class="tile half" id="tile-dm">
@@ -1273,6 +1340,13 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="display:flex; flex-direction:column; gap:8px; flex:1; min-height:0;">
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
 
@@ -1287,6 +1361,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-gbl')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-gbl')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-gbl')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-gbl')">Loading State</button>
       </div>
     </div>
     <div class="tile" id="tile-gbl">
@@ -1417,6 +1492,12 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; min-height:0;">
+        <div class="sk" style="width:50%; border-radius:8px; margin-right:24px;"></div>
+        <div class="sk" style="width:50%; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
   <div id="campaigns" class="tile-panel">
@@ -1429,6 +1510,7 @@
         <button class="state-toggle-btn active" data-state="data" onclick="toggleState(this,'tile-camp')">Has Data</button>
         <button class="state-toggle-btn" data-state="empty" onclick="toggleState(this,'tile-camp')">Empty State</button>
         <button class="state-toggle-btn" data-state="error" onclick="toggleState(this,'tile-camp')">Error State</button>
+        <button class="state-toggle-btn" data-state="loading" onclick="toggleState(this,'tile-camp')">Loading State</button>
       </div>
     </div>
     <div class="tile" id="tile-camp" style="overflow:visible;">
@@ -1481,6 +1563,13 @@
         <div class="tile-error-body">Try refreshing the page. If the issue persists, contact support.</div>
       </div>
       </div><!-- end tile-state-error -->
+      <div class="tile-state-loading">
+      <div style="flex:1; display:flex; flex-direction:column; gap:0;">
+        <div class="sk" style="flex:1; border-radius:8px; margin-bottom:24px;"></div>
+        <div class="sk" style="flex:1; border-radius:8px; margin-bottom:24px;"></div>
+        <div class="sk" style="flex:1; border-radius:8px;"></div>
+      </div>
+      </div><!-- end tile-state-loading -->
     </div>
   </div>
 
@@ -1741,11 +1830,13 @@
       btn.parentElement.querySelectorAll('.state-toggle-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const tile = document.getElementById(tileId);
-      tile.classList.remove('show-empty', 'show-error');
+      tile.classList.remove('show-empty', 'show-error', 'show-loading');
       if (btn.dataset.state === 'empty') {
         tile.classList.add('show-empty');
       } else if (btn.dataset.state === 'error') {
         tile.classList.add('show-error');
+      } else if (btn.dataset.state === 'loading') {
+        tile.classList.add('show-loading');
       }
     }
 
