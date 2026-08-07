@@ -1911,6 +1911,10 @@
           <tbody id="udf-tbody"></tbody>
         </table>
       </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('udf-modal')">Close</button>
+        <button class="btn btn-primary" onclick="exportUdfCsv(); closeModal('udf-modal')">Export</button>
+      </div>
     </div>
   </div>
 
@@ -2020,6 +2024,20 @@
       }
       const dataHtml = sorted.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('');
       tbody.innerHTML = totalHtml + dataHtml;
+    }
+
+    function exportUdfCsv() {
+      if (!udfCurrentCfg || !udfData.length) return;
+      const header = udfCurrentCfg.columns.join(',');
+      const rows = udfData.map(r => r.map(c => '"' + c.replace(/"/g, '""') + '"').join(','));
+      const csv = header + '\n' + rows.join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (udfCurrentCfg.title || 'export').replace(/\s+/g, '_') + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     // State toggle (Has Data / Empty State)
