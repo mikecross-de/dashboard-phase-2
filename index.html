@@ -66,8 +66,11 @@
     .tile { background: var(--white); border-radius: var(--radius); padding: 24px; width: 812px; height: 424px; max-width: 100%; display: flex; flex-direction: column; }
     .tile.half { width: 394px; }
     .tile.wide { width: 900px; height: auto; }
-    .tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
+    .tile-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 24px; min-height: 28px; }
     .tile-title { flex: 1; font-size: 20px; font-weight: 700; line-height: 24px; }
+    .tile-title-group { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+    .tile-title-group .tile-title { flex: none; }
+    .tile-subtitle { font-size: 14px; color: var(--neutral-80); }
 
     /* Toggle */
     .toggle-group { display: flex; }
@@ -261,8 +264,8 @@
 
     /* ===== Key Metrics tile ===== */
     .km-badge {
-      background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius);
-      font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
+      background: var(--neutral-10); padding: 3px 6px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
     }
     .km-badge.small { font-size: 12px; }
     .km-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-height: 0; }
@@ -551,6 +554,52 @@
     .tile.show-loading .km-badge,
     .tile.show-loading .dbl-toggle,
     .tile.show-loading .camp-view-all-link { visibility: hidden; }
+    .tile.show-loading .tile-subtitle { visibility: hidden; }
+
+    /* Data freshness tooltip */
+    .data-freshness-btn {
+      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+      border: none; background: none; color: var(--neutral-60); font-size: 14px; cursor: pointer;
+      border-radius: 50%; position: relative; flex-shrink: 0; overflow: visible;
+    }
+    .data-freshness-btn:hover { color: var(--black-100); background: var(--neutral-10); }
+    .data-freshness-tip {
+      display: none !important; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--black-100); color: var(--white); font-size: 14px; font-weight: 400;
+      line-height: 18px; padding: 8px 16px; border-radius: 3px; white-space: nowrap;
+      pointer-events: none; z-index: 30;
+    }
+    .data-freshness-btn:hover .data-freshness-tip { display: block !important; }
+
+    /* UDF Modal Table - matches reporting dg-table */
+    .udf-modal-subtitle { font-size: 14px; color: var(--neutral-80); }
+    .udf-table-wrap { flex: 1; overflow-y: auto; }
+    .udf-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+    .udf-table thead { position: sticky; top: 0; z-index: 1; }
+    .udf-table thead th {
+      text-align: left; padding: 14px 16px; font-size: 14px; font-weight: 600;
+      color: var(--neutral-80); background: var(--white); border-bottom: 1px solid var(--neutral-20);
+      white-space: nowrap; user-select: none; line-height: 18px; cursor: pointer; transition: color .1s;
+    }
+    .udf-table thead th .th-inner { display: inline-flex; align-items: center; gap: 6px; }
+    .udf-table thead th .th-sort-wrap {
+      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; opacity: 0; transition: opacity .1s, background .1s; flex-shrink: 0;
+    }
+    .udf-table thead th:hover .th-sort-wrap { opacity: 1; }
+    .udf-table thead th .th-sort-wrap:hover { background: var(--neutral-10); }
+    .udf-table thead th.sorted .th-sort-wrap { opacity: 1; }
+    .udf-table thead th .th-sort { font-size: 12px; color: var(--neutral-60); }
+    .udf-table thead th.sorted .th-sort { color: var(--neutral-80); }
+    .udf-table tbody tr { transition: background .08s; cursor: default; }
+    .udf-table tbody tr td {
+      border-bottom: 1px solid var(--neutral-20); padding: 16px; color: var(--black-100);
+      vertical-align: middle; font-size: 14px; line-height: 18px;
+    }
+    .udf-table tbody tr:hover td { background: var(--neutral-5); }
+    .udf-table tbody tr:last-child td { border-bottom: 1px solid var(--neutral-20); }
+    .udf-table .udf-total-row td { font-weight: 700; background: var(--neutral-5); }
+    .udf-table .udf-total-row:hover td { background: var(--neutral-5); }
 
     @keyframes shimmer {
       0% { background-position: -600px 0; }
@@ -570,6 +619,7 @@
     .tile.show-error .info-icon-btn,
     .tile.show-error .km-badge,
     .tile.show-error .dbl-toggle { visibility: hidden; }
+    .tile.show-error .tile-subtitle { visibility: hidden; }
     .tile-error-content {
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;
     }
@@ -705,7 +755,10 @@
     <!-- OPTION A: Chart-Forward -->
     <div class="tile" id="tile-a">
       <div class="tile-header">
-        <div class="tile-title">Cumulative Year-Over-Year Pacing</div>
+        <div class="tile-title-group">
+          <div class="tile-title">Cumulative Year-Over-Year Pacing</div>
+          <div class="tile-subtitle">Data updated through yesterday</div>
+        </div>
         <div class="toggle-group">
           <button class="toggle-btn active" onclick="setYoyToggle('revenue', this)">Revenue</button>
           <button class="toggle-btn" onclick="setYoyToggle('raised', this)">Raised</button>
@@ -723,15 +776,15 @@
       </div>
       <div class="tile-footer">
         <div class="footer-totals">
-          <div class="todays-total">Today's Total: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); alert('Drill down → FY26 transaction report')">$250,000</a></strong></div>
+          <div class="todays-total">FY26 Total: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy26')">$250,000</a></strong></div>
           <div class="prior-totals">
             <span class="prior-total-item">
               <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>26%</strong> vs. FY25</span>
-              FY25: <strong><span class="clickable-value">$198,000</span></strong>
+              FY25: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy25')">$198,000</a></strong>
             </span>
             <span class="prior-total-item">
               <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>43%</strong> vs. FY24</span>
-              FY24: <strong><span class="clickable-value">$174,500</span></strong>
+              FY24: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy24')">$174,500</a></strong>
             </span>
           </div>
         </div>
@@ -781,7 +834,10 @@
 
     <div class="tile" id="tile-mom">
       <div class="tile-header">
-        <div class="tile-title">Month-Over-Month Comparison</div>
+        <div class="tile-title-group">
+          <div class="tile-title">Month-Over-Month Comparison</div>
+          <div class="tile-subtitle">Data updated through yesterday</div>
+        </div>
         <div class="toggle-group">
           <button class="toggle-btn active" onclick="setMomToggle('revenue', this)">Revenue</button>
           <button class="toggle-btn" onclick="setMomToggle('raised', this)">Raised</button>
@@ -976,14 +1032,17 @@
     </div>
     <div class="tile half" id="tile-km">
       <div class="tile-header">
-        <div class="tile-title">Key Metrics</div>
+        <div class="tile-title-group">
+          <div class="tile-title">Key Metrics</div>
+          <div class="tile-subtitle">Data updated through yesterday</div>
+        </div>
         <span class="km-badge">Current FY</span>
       </div>
       <div class="tile-state-data">
       <div class="km-grid">
         <!-- Total Donor Count -->
         <div class="km-card">
-          <div class="km-value clickable">13,560</div>
+          <div class="km-value clickable" onclick="openUdfModal('km-donors')">13,560</div>
           <div class="km-label">Total Donor Count</div>
           <div class="km-trend">
             <i class="fa-solid fa-caret-down trend-icon down"></i>
@@ -992,7 +1051,7 @@
         </div>
         <!-- Total Transactions -->
         <div class="km-card">
-          <div class="km-value clickable">18,200</div>
+          <div class="km-value clickable" onclick="openUdfModal('km-transactions')">18,200</div>
           <div class="km-label">Total Transactions</div>
           <div class="km-trend">
             <i class="fa-solid fa-caret-up trend-icon up"></i>
@@ -1824,7 +1883,145 @@
     </div>
   </div>
 
+  <!-- ===== UDF VERIFICATION MODAL ===== -->
+  <div class="modal-overlay" id="udf-modal" onclick="if(event.target===this)closeModal(this.id)">
+    <div class="modal" style="max-width:760px; height:80vh; overflow:hidden;">
+      <div class="modal-header" style="flex-direction:column; align-items:flex-start; gap:2px;">
+        <div style="display:flex; align-items:center; width:100%;">
+          <h2 id="udf-modal-title">FY26 Total</h2>
+          <div style="flex:1;"></div>
+          <button class="modal-close" onclick="closeModal('udf-modal')"><i class="fa-regular fa-xmark"></i></button>
+        </div>
+        <div class="udf-modal-subtitle" id="udf-modal-subtitle"></div>
+      </div>
+      <!-- Loading state -->
+      <div id="udf-loading" style="display:none; flex:1; align-items:center; justify-content:center;">
+        <i class="fa-solid fa-spinner-third fa-spin" style="font-size:24px; color:var(--green-old);"></i>
+      </div>
+      <!-- Empty state -->
+      <div id="udf-empty" style="display:none; flex:1; align-items:center; justify-content:center; color:var(--neutral-60); font-size:16px;">
+        No transactions for this period.
+      </div>
+      <!-- Table -->
+      <div class="udf-table-wrap" style="flex:1; min-height:0; overflow-y:auto; padding:0 24px 24px;">
+        <table class="udf-table" id="udf-table">
+          <thead>
+            <tr id="udf-thead-row"></tr>
+          </thead>
+          <tbody id="udf-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ===== UDF Verification Modal =====
+    const udfConfigs = {
+      'yoy-fy26': { title: 'FY26 Total', total: '$250,000', columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'yoy-fy25': { title: 'FY25 Total', total: '$198,000', columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'yoy-fy24': { title: 'FY24 Total', total: '$174,500', columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-jan': { title: 'January Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-feb': { title: 'February Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-mar': { title: 'March Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-apr': { title: 'April Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-may': { title: 'May Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'mom-jun': { title: 'June Total', total: null, columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+      'km-donors': { title: 'Total Donor Count', total: '13,560', columns: ['Donor Name','FYTD Total'], amountCol: 1, isDonors: true },
+      'km-transactions': { title: 'Total Transactions', total: '18,200', columns: ['Date','Donor','Amount','Type'], amountCol: 2 },
+    };
+    const sampleNames = ['Eleanor Richardson','Marcus Thompson','Patricia Nguyen','Robert Chen','Sarah Mitchell','David Okafor','Jennifer Walsh','Thomas Rivera','Amanda Foster','Christopher Lee','Monica Patel','Brian Hoffman','Katherine Yu','Steven Morales','Rachel Kim','Daniel Jackson','Laura Fernandez','James Wright','Natalie Brooks','William Garcia'];
+    const sampleTypes = ['Donation','Pledge Payment','Recurring','Donation','Event Registration','Donation','Recurring','Donation','Pledge Payment','Donation'];
+    function generateUdfData(key) {
+      const cfg = udfConfigs[key];
+      if (!cfg) return [];
+      const rows = [];
+      const count = 15 + Math.floor(Math.random()*10);
+      if (key === 'km-donors') {
+        for (let i=0; i<count; i++) {
+          rows.push([sampleNames[i % sampleNames.length], '$' + (500 + Math.floor(Math.random()*9500)).toLocaleString()]);
+        }
+      } else {
+        const year = key.includes('fy24') ? 2024 : key.includes('fy25') ? 2025 : 2026;
+        for (let i=0; i<count; i++) {
+          const m = String(1+Math.floor(Math.random()*12)).padStart(2,'0');
+          const d = String(1+Math.floor(Math.random()*28)).padStart(2,'0');
+          rows.push([year+'-'+m+'-'+d, sampleNames[i % sampleNames.length], '$'+(25+Math.floor(Math.random()*4975)).toLocaleString(), sampleTypes[i % sampleTypes.length]]);
+        }
+      }
+      return rows;
+    }
+    let udfData = [], udfFiltered = [], udfSortCol = 0, udfSortAsc = false, udfColumns = [], udfCurrentCfg = null;
+    function openUdfModal(key) {
+      try {
+      const cfg = udfConfigs[key];
+      if (!cfg) { console.error('No config for key:', key); return; }
+      udfCurrentCfg = cfg;
+      document.getElementById('udf-modal-title').textContent = cfg.title;
+      const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      const asOf = yesterday.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      document.getElementById('udf-modal-subtitle').textContent = 'Data updated through yesterday (' + asOf + ')';
+      udfColumns = cfg.columns;
+      udfData = generateUdfData(key);
+      udfSortCol = 0; udfSortAsc = false;
+      document.getElementById('udf-loading').style.display = 'flex';
+      document.getElementById('udf-table').style.display = 'none';
+      document.getElementById('udf-empty').style.display = 'none';
+      openModal('udf-modal');
+      setTimeout(function() {
+        document.getElementById('udf-loading').style.display = 'none';
+        if (udfData.length === 0) {
+          document.getElementById('udf-empty').style.display = 'flex';
+        } else {
+          document.getElementById('udf-table').style.display = 'table';
+          renderUdfHead(cfg);
+          filterUdfTable();
+        }
+      }, 600);
+      } catch(e) { console.error('openUdfModal error:', e); alert('Error: ' + e.message); }
+    }
+    function renderUdfHead(cfg) {
+      const tr = document.getElementById('udf-thead-row');
+      tr.innerHTML = '';
+      cfg.columns.forEach((col, i) => {
+        const th = document.createElement('th');
+        if (i === udfSortCol) th.classList.add('sorted');
+        const sortIcon = (i === udfSortCol) ? (udfSortAsc ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-arrow-up';
+        th.innerHTML = '<span class="th-inner"><span class="th-text">' + col + '</span><span class="th-sort-wrap"><i class="fa-solid ' + sortIcon + ' th-sort"></i></span></span>';
+        th.onclick = () => { 
+          if (udfSortCol === i) udfSortAsc = !udfSortAsc; 
+          else { udfSortCol = i; udfSortAsc = true; }
+          renderUdfHead(cfg);
+          renderUdfBody(cfg);
+        };
+        tr.appendChild(th);
+      });
+    }
+    function filterUdfTable() {
+      udfFiltered = [...udfData];
+      if (udfCurrentCfg) renderUdfBody(udfCurrentCfg);
+    }
+    function renderUdfBody(cfg) {
+      const sorted = [...udfFiltered].sort((a,b) => {
+        let va = a[udfSortCol], vb = b[udfSortCol];
+        if (va.startsWith('$')) { va = parseFloat(va.replace(/[$,]/g,'')); vb = parseFloat(vb.replace(/[$,]/g,'')); return udfSortAsc ? va-vb : vb-va; }
+        return udfSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      });
+      const tbody = document.getElementById('udf-tbody');
+      // Total row first - use the matched total from config
+      let totalHtml = '';
+      if (udfData.length && cfg.total) {
+        totalHtml = '<tr class="udf-total-row">';
+        for (let i = 0; i < cfg.columns.length; i++) {
+          if (i === 0) totalHtml += '<td>Total</td>';
+          else if (i === cfg.amountCol) totalHtml += '<td>' + cfg.total + '</td>';
+          else totalHtml += '<td></td>';
+        }
+        totalHtml += '</tr>';
+      }
+      const dataHtml = sorted.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('');
+      tbody.innerHTML = totalHtml + dataHtml;
+    }
+
     // State toggle (Has Data / Empty State)
     function toggleState(btn, tileId) {
       btn.parentElement.querySelectorAll('.state-toggle-btn').forEach(b => b.classList.remove('active'));
@@ -2173,7 +2370,7 @@
             const el = elements[0];
             const ds = this.data.datasets[el.datasetIndex];
             const month = months[el.index];
-            alert('Drill down → ' + ds.label + ' ' + month + ': ' + formatDollar(ds.data[el.index]) + '\n\nWould open transaction report with filters pre-applied.');
+            openUdfModal('mom-' + month.toLowerCase());
           }
         },
         onHover: function(evt, elements) {
