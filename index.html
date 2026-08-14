@@ -113,7 +113,7 @@
     .footer-totals { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .todays-total { font-size: 16px; line-height: 21px; }
     .todays-total strong { font-weight: 700; }
-    .prior-totals { display: flex; gap: 12px; font-size: 12px; line-height: 18px; color: var(--neutral-60); align-items: center; }
+    .prior-totals { display: flex; gap: 12px; font-size: 12px; line-height: 18px; color: var(--neutral-80); align-items: center; }
     .prior-total-item { display: inline-flex; align-items: center; gap: 4px; position: relative; cursor: default; }
     .clickable-value { color: inherit; text-decoration: none; cursor: pointer; }
     .clickable-value:hover { color: var(--green-100); text-decoration: underline; }
@@ -264,7 +264,7 @@
     /* ===== Key Metrics tile ===== */
     .km-badge {
       background: var(--neutral-10); padding: 3px 6px; border-radius: var(--radius);
-      font-size: 14px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
+      font-size: 12px; font-weight: 700; line-height: 18px; color: var(--neutral-80); white-space: nowrap;
     }
     .km-badge.small { font-size: 12px; }
     .km-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-height: 0; }
@@ -281,7 +281,7 @@
     .km-trend .trend-icon.up { color: var(--green-100); }
     .km-trend .trend-icon.down { color: var(--red-100); }
     .km-trend .trend-icon.neutral { color: var(--neutral-60); }
-    .km-trend .trend-change { font-weight: 600; }
+    .km-trend .trend-change { font-weight: 500; }
 
     /* ===== Recurring Giving (combined) tile ===== */
     .rg-body { display: flex; gap: 24px; flex: 1; min-height: 0; }
@@ -336,7 +336,7 @@
       background: none; border: none; cursor: pointer; display: flex; align-items: center;
     }
     .camp-configure-btn:hover { color: var(--black-100); }
-    .camp-dd-limit { padding: 8px 16px; font-size: 12px; color: var(--neutral-60); border-top: 1px solid var(--neutral-20); margin-top: 4px; }
+    .camp-dd-limit { padding: 8px 16px; font-size: 12px; color: var(--neutral-80); border-top: 1px solid var(--neutral-20); margin-top: 4px; }
     .camp-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; }
     .camp-item { padding: 24px 0; border-bottom: 1px solid var(--neutral-20); }
     .camp-item:first-child { padding-top: 0; }
@@ -345,8 +345,8 @@
     .camp-item-left { display: flex; flex-direction: column; gap: 2px; }
     .camp-card-name { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); cursor: pointer; }
     .camp-card-name:hover { color: var(--green-100); text-decoration: underline; }
-    .camp-no-goal { font-size: 11px; font-weight: 600; color: var(--neutral-60); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; text-decoration: none; display: inline-block; }
-    .camp-card-name:hover .camp-no-goal { color: var(--neutral-60); text-decoration: none; }
+    .camp-no-goal { font-size: 12px; font-weight: 600; color: var(--neutral-80); background: var(--neutral-10); padding: 2px 6px; border-radius: var(--radius); vertical-align: middle; margin-left: 6px; text-decoration: none; display: inline-block; }
+    .camp-card-name:hover .camp-no-goal { color: var(--neutral-80); text-decoration: none; }
     .camp-card-meta { font-size: 14px; line-height: 18px; color: var(--neutral-80); }
     .camp-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
     .camp-amount-row { display: flex; align-items: baseline; gap: 4px; }
@@ -362,7 +362,7 @@
     }
     .camp-row-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
     .camp-pct { font-size: 16px; font-weight: 700; line-height: 21px; color: var(--black-100); }
-    .camp-no-goal-text { font-size: 12px; color: var(--neutral-60); }
+    .camp-no-goal-text { font-size: 12px; color: var(--neutral-80); }
     .camp-view-all {
       font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
       background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px;
@@ -379,7 +379,7 @@
     .config-item:last-child { border-bottom: none; }
     .config-item-info { flex: 1; }
     .config-item-name { font-size: 14px; font-weight: 700; color: var(--black-100); }
-    .config-item-meta { font-size: 12px; color: var(--neutral-60); }
+    .config-item-meta { font-size: 12px; color: var(--neutral-80); }
     .config-section-title { font-size: 16px; font-weight: 700; color: var(--black-100); margin-bottom: 12px; }
     .config-add-btn {
       font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--green-100);
@@ -430,7 +430,7 @@
     .dm-yoy .trend-icon.up { color: var(--green-100); }
     .dm-yoy .trend-icon.down { color: var(--red-100); }
     .dm-stake-icon { color: #FFC600; font-size: 20px; }
-    .dm-stake-label { font-size: 12px; color: var(--neutral-60); display: flex; align-items: center; gap: 4px; }
+    .dm-stake-label { font-size: 12px; color: var(--neutral-80); display: flex; align-items: center; gap: 4px; }
     .dm-subtitle { font-size: 12px; color: var(--neutral-80); line-height: 18px; margin-top: 2px; }
 
     /* ===== Donors by Level tile ===== */
@@ -517,7 +517,7 @@
     .gbl-period { font-size: 16px; font-weight: 400; line-height: 21px; color: var(--black-100); }
     .gbl-amount { font-size: 36px; font-weight: 700; line-height: 42px; color: var(--black-100); cursor: pointer; }
     .gbl-amount:hover { color: var(--green-100); text-decoration: underline; }
-    .gbl-info-icon { color: var(--neutral-40); font-size: 14px; cursor: help; margin-left: 4px; }
+    .gbl-info-icon { color: var(--neutral-60); font-size: 14px; cursor: help; margin-left: 4px; }
 
     /* ===== State Toggle (Has Data / Empty State) ===== */
     .state-toggle { display: flex; gap: 0; margin-top: 8px; }
@@ -644,7 +644,7 @@
     .has-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
     .info-icon-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      color: var(--neutral-40); font-size: 14px; cursor: pointer; margin-left: 2px; vertical-align: baseline;
+      color: var(--neutral-60); font-size: 14px; cursor: pointer; margin-left: 2px; vertical-align: baseline;
     }
     .info-icon-btn:hover { color: var(--black-100); }
 
@@ -784,11 +784,11 @@
           <div class="prior-totals">
             <span class="prior-total-item">
               <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>26%</strong> vs. FY25</span>
-              FY25: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy25')">$198,000</a></strong>
+              FY25: <span style="font-weight:500;"><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy25')">$198,000</a></span>
             </span>
             <span class="prior-total-item">
               <span class="prior-tooltip"><i class="fa-solid fa-caret-up"></i> <strong>43%</strong> vs. FY24</span>
-              FY24: <strong><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy24')">$174,500</a></strong>
+              FY24: <span style="font-weight:500;"><a href="#" class="clickable-value" onclick="event.preventDefault(); openUdfModal('yoy-fy24')">$174,500</a></span>
             </span>
           </div>
         </div>
@@ -1424,11 +1424,12 @@
     <div class="tile" id="tile-gbl">
       <div class="tile-header">
         <div class="tile-title">Totals by Level</div>
-        <div class="toggle-group">
-          <button class="toggle-btn active">Revenue</button>
-          <button class="toggle-btn">Raised</button>
-        </div>
-        <div class="gbl-filter-wrap">
+        <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
+          <div class="toggle-group">
+            <button class="toggle-btn active">Revenue</button>
+            <button class="toggle-btn">Raised</button>
+          </div>
+          <div class="gbl-filter-wrap">
           <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="toggleGblDropdown()">
             <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
             <span class="dr-edit-tooltip">Edit levels</span>
@@ -1447,6 +1448,7 @@
               General
             </div>
           </div>
+        </div>
         </div>
       </div>
 
@@ -1572,9 +1574,10 @@
     <div class="tile" id="tile-camp" style="overflow:visible;">
       <div class="tile-header">
         <div class="tile-title">Campaigns</div>
-        <a href="#" style="font-size:14px; font-weight:600; color:var(--green-100); text-decoration:none; margin-left:auto; margin-right:6px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.preventDefault(); alert('Navigate to Campaigns overview page')">View all</a>
-        <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
-        <div class="camp-filter-wrap" style="position:relative;">
+        <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
+          <a href="#" style="font-size:14px; font-weight:600; color:var(--green-100); text-decoration:none; margin-right:4px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.preventDefault(); alert('Navigate to Campaigns overview page')">View all</a>
+          <div class="toggle-group"><button class="toggle-btn active">Revenue</button><button class="toggle-btn">Raised</button></div>
+          <div class="camp-filter-wrap" style="position:relative;">
           <button class="dr-edit-btn" style="position:relative; right:auto; top:auto;" onclick="event.stopPropagation(); toggleCampDropdown()">
             <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
             <span class="dr-edit-tooltip">Configure campaigns</span>
@@ -1601,6 +1604,7 @@
               Year-End Appeal 2026
             </div>
           </div>
+        </div>
         </div>
       </div>
 
